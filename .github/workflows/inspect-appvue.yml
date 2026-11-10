@@ -1,0 +1,22 @@
+name: Inspect AppVue
+on:
+  workflow_dispatch: {}
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: FULL App.vue + pisah anchor selamat vs mati
+        run: |
+          echo "===== App.vue FULL (ber nomor) ====="
+          cat -n src/App.vue 2>/dev/null | sed -n '1,300p' || echo "TIDAK ADA src/App.vue"
+          echo
+          echo "===== ANCHOR HARUS SELAMAT (jangan senggol pas bedah TOP) ====="
+          grep -nE 'useHead|CToast|router-view|keep-alive|suspense|CLoading|useLoading|title:|description|author' src/App.vue 2>/dev/null || echo "NOL anchor selamat?!"
+          echo
+          echo "===== ANCHOR HARUS MATI (ini rumah TOP + listener-nya) ====="
+          grep -nE 'isScroll|scrollFunction|scrollToTop|fcircle|ITop|bounce|addEventListener|removeEventListener|onMounted|onUnmounted|scrollTop' src/App.vue 2>/dev/null || echo "NOL anchor mati?!"
+          echo
+          echo "===== ADakah onUnmounted / removeEventListener (penutup listener)? ====="
+          grep -nE 'onUnmounted|removeEventListener' src/App.vue 2>/dev/null || echo "TIDAK ADA onUnmounted/removeEventListener -> BERARTI listener numpang selamanya, wajib ikut diangkat"
+          echo "APPVUE_INSPECT=DONE (intip, bukan vonis)"
