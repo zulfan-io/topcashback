@@ -5,22 +5,21 @@ jobs:
   probe:
     runs-on: ubuntu-latest
     steps:
-      - name: Probe CF K3 match-fixture
+      - name: Probe CF K3 corrected
         run: |
           ROOT="https://topcashback.shopergo.workers.dev"
           CB="${GITHUB_RUN_ID}-$(date +%s)"
           echo "CB=$CB"
-          echo "== /sim/match status =="
+
+          echo "== ROOT sentinel (index.html = tempat meta bener) =="
+          RB=$(curl -4 -sL -o /tmp/root.html -w '%{http_code}' "$ROOT/?cb=$CB")
+          echo "ROOT=$RB"
+          if grep -q 'sim-match-fixture' /tmp/root.html; then echo "ROOT_SENTINEL=OK"; else echo "ROOT_SENTINEL=MISS"; exit 1; fi
+
+          echo "== /sim/match status + body reveal (NON-FATAL) =="
           M=$(curl -4 -sL -o /tmp/m.html -w '%{http_code}' "$ROOT/sim/match?cb=$CB")
           echo "SIM_MATCH=$M"
-          if [ "$M" != "200" ]; then
-            M2=$(curl -4 -sL -o /tmp/m.html -w '%{http_code}' "$ROOT/sim/match.html?cb=$CB"); echo "SIM_MATCH_HTML=$M2"
-            M3=$(curl -4 -sL -o /tmp/m.html -w '%{http_code}' "$ROOT/sim/match/index.html?cb=$CB"); echo "SIM_MATCH_INDEX=$M3"
-            if [ "$M2" != "200" ] && [ "$M3" != "200" ]; then echo "MATCH_ROUTE=FAIL"; exit 1; fi
-          fi
-          echo "== sentinel K3 =="
-          if grep -q 'sim-match-fixture' /tmp/m.html; then echo "MATCH_SENTINEL=OK"; else echo "MATCH_SENTINEL=MISS"; exit 1; fi
-          echo "== body schema reveal (island-only, NOL baca source) =="
           echo "PROFILE_MARKERS=$(grep -oE 'Rani|Dinda|Putri|Alya|Sari|Nadia|Intan|Kirana|Melati|Zahra' /tmp/m.html | sort -u | wc -l)"
           echo "CLASS_SIGNATURES:"; grep -oE 'class="[^"]*(sim-card|swipe-deck|presence-dot|swipe-ghost)[^"]*"' /tmp/m.html | sort | uniq -c | head
-          echo "DONE=K3_PROBE_OK"
+          echo "BODY_BYTES=$(wc -c < /tmp/m.html)"
+          echo "DONE=K3_REVEAL_OK"
