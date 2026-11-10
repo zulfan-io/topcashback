@@ -2,6 +2,7 @@
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import SimBottomNav from '~/components/sim/SimBottomNav.vue'
+
 const route = useRoute()
 const isSim = computed(() => route.path === '/sim' || route.path.startsWith('/sim/'))
 </script>
@@ -12,12 +13,8 @@ const isSim = computed(() => route.path === '/sim' || route.path.startsWith('/si
     <SimBottomNav />
   </main>
 
-  <main v-else class="px-4 py-10 text-center text-gray-700 dark:text-gray-200">
+  <main v-else class="px-4 py-10 text-center text-gray-700" data-app-chrome="clean">
     <router-view />
-    <CExtension />
-    <div class="mt-5 mx-auto text-center opacity-25 text-sm">
-      [Default Layout]
-    </div>
   </main>
 </template>
 
@@ -30,5 +27,9 @@ const isSim = computed(() => route.path === '/sim' || route.path.startsWith('/si
   text-align: left;
   color-scheme: light;
 }
-.sim-shell a { color: inherit; text-decoration: none; }
+
+.sim-shell a {
+  color: inherit;
+  text-decoration: none;
+}
 </style>

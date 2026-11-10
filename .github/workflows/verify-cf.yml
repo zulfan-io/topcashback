@@ -5,20 +5,45 @@ jobs:
   probe:
     runs-on: ubuntu-latest
     steps:
-      - name: Probe CF K9 navbar
+      - uses: actions/checkout@v4
+
+      - name: Source chrome assert
+        run: |
+          echo "== default.vue harus bersih dari sampah demo =="
+          if grep -n 'CExtension' src/layouts/default.vue; then
+            echo "JUNK_CEXTENSION_STILL_IN_SOURCE"
+            exit 1
+          fi
+          if grep -n 'Default Layout' src/layouts/default.vue; then
+            echo "JUNK_DEFAULT_LAYOUT_STILL_IN_SOURCE"
+            exit 1
+          fi
+          if ! grep -n 'data-app-chrome="clean"' src/layouts/default.vue; then
+            echo "MISSING_APP_CHROME_SENTINEL"
+            exit 1
+          fi
+          if ! grep -n 'SimBottomNav' src/layouts/default.vue; then
+            echo "MISSING_SIM_NAVBAR"
+            exit 1
+          fi
+          echo "SOURCE_CHROME=OK"
+
+      - name: Pulau buktiin chrome clean + intip TOP
         run: |
           ROOT="https://topcashback.shopergo.workers.dev"
           CB="${GITHUB_RUN_ID}-$(date +%s)"
           echo "CB=$CB"
 
-          echo "== non-sim: Default Layout ada, navbar TIDAK ada =="
+          echo "== ROOT non-sim: harus bersih, tanpa Default Layout, ada app-chrome clean =="
           RB=$(curl -4 -sL -o /tmp/root.html -w '%{http_code}' "$ROOT/?cb=$CB"); echo "ROOT=$RB"
-          ROOT_DL=$(grep -c 'Default Layout' /tmp/root.html || true); echo "ROOT_DEFAULT_LAYOUT=$ROOT_DL"
-          ROOT_NAV=$(grep -c 'data-sim-nav="1"' /tmp/root.html || true); echo "ROOT_NAV=$ROOT_NAV"
-          if [ "$ROOT_DL" -lt 1 ]; then echo "NON_SIM_LAYOUT=BROKEN"; exit 1; fi
-          if [ "$ROOT_NAV" -ne 0 ]; then echo "NAV_LEAKED_TO_NONSIM"; exit 1; fi
+          ROOT_DL=$(grep -c 'Default Layout' /tmp/root.html || true)
+          ROOT_CHROME=$(grep -c 'data-app-chrome="clean"' /tmp/root.html || true)
+          echo "ROOT_DEFAULT_LAYOUT=$ROOT_DL"
+          echo "ROOT_APP_CHROME=$ROOT_CHROME"
+          if [ "$ROOT_DL" -ne 0 ]; then echo "ROOT_JUNK_DEFAULT_LAYOUT_STILL_SERVED"; exit 1; fi
+          if [ "$ROOT_CHROME" -lt 1 ]; then echo "ROOT_CLEAN_CHROME_NOT_SERVED"; exit 1; fi
 
-          echo "== semua route sim: 200 + clean + navbar ada + Default Layout NOL =="
+          echo "== semua route sim: tetap clean + navbar + tanpa Default Layout =="
           FAIL=0
           for U in "/sim" "/sim/match" "/sim/stage" "/sim/wallet" "/sim/commerce" "/sim/profile"; do
             C=$(curl -4 -sL -o /tmp/r.html -w '%{http_code}' "$ROOT$U?cb=$CB")
@@ -32,11 +57,19 @@ jobs:
             if [ "$NV" -lt 1 ]; then FAIL=1; fi
           done
 
-          echo "== gate K7HUB dijaga: /sim hub tetap 5 link =="
+          echo "== gate K7HUB tetap dijaga =="
           S=$(curl -4 -sL -o /tmp/sim.html -w '%{http_code}' "$ROOT/sim?cb=$CB"); echo "ROUTE_sim=$S"
           echo "SIM_HUB_MARK=$(grep -c 'data-sim-hub="light-first"' /tmp/sim.html || true)"
           echo "HUB_LINKS=$(grep -oE '/sim/match|/sim/stage|/sim/wallet|/sim/commerce|/sim/profile' /tmp/sim.html | sort -u | wc -l || true)"
 
-          if [ "$FAIL" -ne 0 ]; then echo "K9_GATE=FAIL"; exit 1; fi
-          echo "K9_GATE=OK"
-          echo "DONE=K9_PROBE_OK"
+          echo "== INTIP SUMBER TOP / FLOATING BUTTON =="
+          echo "--- grep candidates ---"
+          grep -rnE 'TOP|back-to-top|scroll-top|scrollTop|toTop|floating' src/App.vue src/components src/layouts 2>/dev/null | head -50 || true
+          echo "--- App.vue head ---"
+          sed -n '1,220p' src/App.vue 2>/dev/null || echo "TIDAK ADA src/App.vue"
+          echo "--- candidate files ---"
+          find src/components src/layouts src/pages -maxdepth 3 -type f \( -iname '*top*' -o -iname '*extension*' -o -iname '*float*' -o -iname '*scroll*' \) 2>/dev/null | head -30 || true
+
+          if [ "$FAIL" -ne 0 ]; then echo "CHROME_GATE=FAIL"; exit 1; fi
+          echo "CHROME_GATE=OK"
+          echo "DONE=K_CHROME_PROBE_OK"
