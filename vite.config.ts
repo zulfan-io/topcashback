@@ -118,7 +118,7 @@ export default defineConfig({
       },
       manifest: {
         name: 'shoper',
-        short_name: 'Online shopping application and e-commerce trading platform.',
+        short_name: 'shoper katalog',
         theme_color: '#ffffff',
         icons: [
           {
