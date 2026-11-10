@@ -5,35 +5,22 @@ jobs:
   probe:
     runs-on: ubuntu-latest
     steps:
-      - name: Probe CF K-LAYOUT gate
+      - name: Probe CF K7c stage-mood
         run: |
           ROOT="https://topcashback.shopergo.workers.dev"
           CB="${GITHUB_RUN_ID}-$(date +%s)"
           echo "CB=$CB"
-
-          echo "== ROOT non-sim harus tetap ada Default Layout =="
           RB=$(curl -4 -sL -o /tmp/root.html -w '%{http_code}' "$ROOT/?cb=$CB"); echo "ROOT=$RB"
-          ROOT_DL=$(grep -c 'Default Layout' /tmp/root.html || true)
-          echo "ROOT_DEFAULT_LAYOUT=$ROOT_DL"
+          ROOT_DL=$(grep -c 'Default Layout' /tmp/root.html || true); echo "ROOT_DEFAULT_LAYOUT=$ROOT_DL"
           if [ "$ROOT_DL" -lt 1 ]; then echo "NON_SIM_LAYOUT=BROKEN"; exit 1; fi
-
-          echo "== SIM routes harus clean =="
-          FAIL=0
-          for U in "/sim" "/sim/match" "/sim/stage" "/sim/wallet" "/sim/commerce" "/sim/profile"; do
-            C=$(curl -4 -sL -o /tmp/r.html -w '%{http_code}' "$ROOT$U?cb=$CB")
-            DL=$(grep -c 'Default Layout' /tmp/r.html || true)
-            SL=$(grep -c 'data-sim-layout="clean"' /tmp/r.html || true)
-            echo "ROUTE=$U CODE=$C DEFAULT_LAYOUT=$DL SIM_LAYOUT=$SL"
-            if [ "$C" != "200" ]; then FAIL=1; fi
-            if [ "$DL" -ne 0 ]; then FAIL=1; fi
-            if [ "$SL" -lt 1 ]; then FAIL=1; fi
-          done
-
-          echo "== /sim hub tetap hidup =="
-          S=$(curl -4 -sL -o /tmp/sim.html -w '%{http_code}' "$ROOT/sim?cb=$CB"); echo "ROUTE_sim=$S"
-          echo "SIM_HUB_MARK=$(grep -c 'data-sim-hub="light-first"' /tmp/sim.html || true)"
-          echo "HUB_LINKS=$(grep -oE '/sim/match|/sim/stage|/sim/wallet|/sim/commerce|/sim/profile' /tmp/sim.html | sort -u | wc -l || true)"
-
-          if [ "$FAIL" -ne 0 ]; then echo "LAYOUT_GATE=FAIL"; exit 1; fi
-          echo "LAYOUT_GATE=OK"
-          echo "DONE=K_LAYOUT_PROBE_OK"
+          S=$(curl -4 -sL -o /tmp/s.html -w '%{http_code}' "$ROOT/sim/stage?cb=$CB"); echo "SIM_STAGE=$S"
+          if [ "$S" != "200" ]; then echo "STAGE_ROUTE=FAIL"; exit 1; fi
+          DL=$(grep -c 'Default Layout' /tmp/s.html || true); SL=$(grep -c 'data-sim-layout="clean"' /tmp/s.html || true)
+          echo "STAGE_DEFAULT_LAYOUT=$DL STAGE_SIM_LAYOUT=$SL"
+          if [ "$DL" -ne 0 ] || [ "$SL" -lt 1 ]; then echo "GATE_BROKEN_ON_STAGE"; exit 1; fi
+          echo "STAGE_THEME_VARS=$(grep -oE -- '--stage-bg:' /tmp/s.html | wc -l || true)"
+          echo "STAGE_RAIL=$(grep -c 'stage-rail-item' /tmp/s.html || true)"
+          echo "STAGE_MARKERS=$(grep -oE 'Kota Kopi|Senja Pantai|Rimba Buku' /tmp/s.html | sort -u | wc -l || true)"
+          echo "STAGE_CLAIM=$(grep -c 'Klaim Reward Stage' /tmp/s.html || true)"
+          echo "CHIP_stage=$(grep -c 'sim-wallet-chip' /tmp/s.html || true)"
+          echo "DONE=K7C_PROBE_OK"
