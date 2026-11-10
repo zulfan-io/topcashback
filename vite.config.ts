@@ -118,7 +118,7 @@ export default defineConfig({
       },
       manifest: {
         name: 'shoper',
-        short_name: 'shoper katalog',
+        short_name: 'shoper katalog', start_url: '/', display: 'standalone', id: '/',
         theme_color: '#ffffff',
         icons: [
           {
