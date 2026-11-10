@@ -1,0 +1,40 @@
+name: Inspect PWA
+on:
+  workflow_dispatch: {}
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Audit source PWA (lihat semua, NOL vonis)
+        run: |
+          echo "===== ls public/ ====="
+          ls -la public/ 2>/dev/null || echo "TIDAK ADA public/"
+          echo "===== isi public/ (manifest/icon/sw) ====="
+          for f in public/manifest.webmanifest public/manifest.json public/favicon.ico public/icon-192.png public/icon-512.png public/sw.js public/service-worker.js; do
+            if [ -f "$f" ]; then echo "--- ADA: $f ---"; sed -n '1,40p' "$f"; else echo "--- KOSONG: $f ---"; fi
+          done
+          echo "===== index.html: link/meta PWA ====="
+          grep -nE 'manifest|theme-color|apple-touch|viewport' index.html 2>/dev/null || echo "index.html: TIDAK ADA tag PWA"
+          echo "===== vite.config: plugin PWA / workbox ====="
+          sed -n '1,160p' vite.config.* 2>/dev/null || echo "TIDAK ADA vite.config"
+          grep -nE 'VitePWA|vite-plugin-pwa|workbox|registerSW|manifest|InjectManifest' vite.config.* 2>/dev/null || echo "vite.config: TIDAK ADA plugin PWA"
+          echo "===== src: registrasi service worker / pwa ====="
+          grep -rnE 'serviceWorker|registerSW|navigator.serviceWorker|pwa' src/ 2>/dev/null | head -20 || echo "src: TIDAK ADA registrasi SW"
+          echo "===== main.ts / App.vue: ada hook PWA? ====="
+          grep -nE 'pwa|manifest|serviceWorker|theme' src/main.ts src/App.vue 2>/dev/null || echo "main.ts/App.vue: TIDAK ADA hook PWA"
+          echo "===== package.json: dep PWA? ====="
+          grep -nE 'vite-plugin-pwa|workbox|pwa' package.json 2>/dev/null || echo "package.json: TIDAK ADA dep PWA"
+      - name: Pulau cek manifest ke-serve (SSR HTML)
+        run: |
+          ROOT="https://topcashback.shopergo.workers.dev"
+          CB="${GITHUB_RUN_ID}-$(date +%s)"
+          echo "CB=$CB"
+          for U in "/" "/sim"; do
+            curl -4 -sL "$ROOT$U?cb=$CB" -o /tmp/p.html 2>/dev/null || true
+            M=$(grep -c 'manifest' /tmp/p.html || true)
+            T=$(grep -c 'theme-color' /tmp/p.html || true)
+            V=$(grep -c 'viewport' /tmp/p.html || true)
+            echo "URL=$U MANIFEST_LINK=$M THEME_COLOR=$T VIEWPORT=$V"
+          done
+          echo "AUDIT=PWA_DONE (intip, bukan vonis)"
