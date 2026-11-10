@@ -15,3 +15,7 @@ session_vault.json
 __pycache__/
 android/app/src/main/assets/public/**
 android/app/src/main/assets/capacitor.config.json
+release.keystore
+keystore.b64
+*.keystore
+*.jks
