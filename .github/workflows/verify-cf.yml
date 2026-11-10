@@ -5,24 +5,35 @@ jobs:
   probe:
     runs-on: ubuntu-latest
     steps:
-      - name: Probe CF K7HUB sim-light-entry
+      - name: Probe CF K-LAYOUT gate
         run: |
           ROOT="https://topcashback.shopergo.workers.dev"
           CB="${GITHUB_RUN_ID}-$(date +%s)"
           echo "CB=$CB"
 
+          echo "== ROOT non-sim harus tetap ada Default Layout =="
           RB=$(curl -4 -sL -o /tmp/root.html -w '%{http_code}' "$ROOT/?cb=$CB"); echo "ROOT=$RB"
-          grep -q 'sim-match-fixture' /tmp/root.html && echo "ROOT_SENTINEL=OK" || { echo "ROOT_SENTINEL=MISS"; exit 1; }
+          ROOT_DL=$(grep -c 'Default Layout' /tmp/root.html || true)
+          echo "ROOT_DEFAULT_LAYOUT=$ROOT_DL"
+          if [ "$ROOT_DL" -lt 1 ]; then echo "NON_SIM_LAYOUT=BROKEN"; exit 1; fi
 
+          echo "== SIM routes harus clean =="
+          FAIL=0
+          for U in "/sim" "/sim/match" "/sim/stage" "/sim/wallet" "/sim/commerce" "/sim/profile"; do
+            C=$(curl -4 -sL -o /tmp/r.html -w '%{http_code}' "$ROOT$U?cb=$CB")
+            DL=$(grep -c 'Default Layout' /tmp/r.html || true)
+            SL=$(grep -c 'data-sim-layout="clean"' /tmp/r.html || true)
+            echo "ROUTE=$U CODE=$C DEFAULT_LAYOUT=$DL SIM_LAYOUT=$SL"
+            if [ "$C" != "200" ]; then FAIL=1; fi
+            if [ "$DL" -ne 0 ]; then FAIL=1; fi
+            if [ "$SL" -lt 1 ]; then FAIL=1; fi
+          done
+
+          echo "== /sim hub tetap hidup =="
           S=$(curl -4 -sL -o /tmp/sim.html -w '%{http_code}' "$ROOT/sim?cb=$CB"); echo "ROUTE_sim=$S"
-          if [ "$S" != "200" ]; then
-            S2=$(curl -4 -sL -o /tmp/sim.html -w '%{http_code}' "$ROOT/sim.html?cb=$CB"); echo "SIM_HTML=$S2"
-            S3=$(curl -4 -sL -o /tmp/sim.html -w '%{http_code}' "$ROOT/sim/index.html?cb=$CB"); echo "SIM_INDEX=$S3"
-            if [ "$S2" != "200" ] && [ "$S3" != "200" ]; then echo "SIM_ROUTE=FAIL"; exit 1; fi
-          fi
+          echo "SIM_HUB_MARK=$(grep -c 'data-sim-hub="light-first"' /tmp/sim.html || true)"
+          echo "HUB_LINKS=$(grep -oE '/sim/match|/sim/stage|/sim/wallet|/sim/commerce|/sim/profile' /tmp/sim.html | sort -u | wc -l || true)"
 
-          echo "SIM_HUB_MARK=$(grep -c 'data-sim-hub="light-first"' /tmp/sim.html)"
-          echo "SIM_HUB_TITLE=$(grep -c 'Sim Hub' /tmp/sim.html)"
-          echo "HUB_LINKS=$(grep -oE '/sim/match|/sim/stage|/sim/wallet|/sim/commerce|/sim/profile' /tmp/sim.html | sort -u | wc -l)"
-          echo "HUB_CARDS=$(grep -c 'hub-card sim-card spr-pop' /tmp/sim.html)"
-          echo "DONE=K7HUB_PROBE_OK"
+          if [ "$FAIL" -ne 0 ]; then echo "LAYOUT_GATE=FAIL"; exit 1; fi
+          echo "LAYOUT_GATE=OK"
+          echo "DONE=K_LAYOUT_PROBE_OK"
