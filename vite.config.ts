@@ -111,7 +111,7 @@ export default defineConfig({
 
     // https://github.com/antfu/vite-plugin-pwa
     VitePWA({
-      registerType: 'autoUpdate',
+      registerType: 'autoUpdate', injectRegister: 'autoUpdate',
       includeAssets: ['favicon.svg', 'robots.txt', 'safari-pinned-tab.svg'],
       workbox: {
         cleanupOutdatedCaches: true,
