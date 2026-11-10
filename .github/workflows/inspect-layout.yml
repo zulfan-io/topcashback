@@ -1,0 +1,37 @@
+name: Inspect Layout
+on:
+  workflow_dispatch: {}
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Source layout + global + router mechanism
+        run: |
+          echo "===== ls src/layouts ====="
+          ls -1 src/layouts 2>/dev/null || echo "TIDAK ADA src/layouts"
+          echo "===== default.vue (1-140) ====="
+          sed -n '1,140p' src/layouts/default.vue 2>/dev/null || echo "TIDAK ADA default.vue"
+          echo "===== App.vue (1-90) ====="
+          sed -n '1,90p' src/App.vue 2>/dev/null || echo "TIDAK ADA App.vue"
+          echo "===== main.ts import css global ====="
+          sed -n '1,60p' src/main.ts
+          echo "===== grep background/global di css ====="
+          grep -rnE 'background|--stage-bg|body\s*\{|html\s*\{' src/styles src/*.css 2>/dev/null | head -25 || true
+          echo "===== mekanisme layout di sim pages ====="
+          grep -rnE 'definePageMeta|layout' src/pages/sim 2>/dev/null | head -25 || true
+          echo "===== router/plugin config ====="
+          ls -1 vite.config.* 2>/dev/null || true
+          grep -rnE 'unplugin-vue-router|VueRouter|layout|routesFolder|extensions|createRouter' vite.config.* src/router* src/plugins* 2>/dev/null | head -25 || true
+      - name: Pulau buktiin permanent (curl semua route)
+        run: |
+          ROOT="https://topcashback.shopergo.workers.dev"
+          CB="${GITHUB_RUN_ID}-$(date +%s)"
+          for U in "/" "/sim" "/sim/match" "/sim/stage" "/sim/wallet" "/sim/commerce" "/sim/profile"; do
+            curl -4 -sL "$ROOT$U?cb=$CB" -o /tmp/r.html 2>/dev/null || true
+            DL=$(grep -c 'Default Layout' /tmp/r.html 2>/dev/null || echo 0)
+            TT=$(grep -cE 'theme-toggle|toggle-theme|data-theme|class="[^"]*(sun|moon|dark|light)' /tmp/r.html 2>/dev/null || echo 0)
+            TR=$(grep -cE 'translate|i18n|lang-switch|switch-lang' /tmp/r.html 2>/dev/null || echo 0)
+            echo "ROUTE=$U DEFAULT_LAYOUT=$DL THEME_TOGGLE=$TT TRANSLATE=$TR"
+          done
+          echo "DONE=INSPECT_OK"
