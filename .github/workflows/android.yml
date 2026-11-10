@@ -1,0 +1,36 @@
+name: Android Build
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch: {}
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: pnpm }
+      - run: corepack enable && corepack prepare pnpm@12.16.1 --activate
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm run build
+      - run: pnpm exec cap sync android
+      - uses: actions/setup-java@v4
+        with: { distribution: temurin, java-version: 17, cache: gradle }
+      - uses: android-actions/setup-android@v3
+      - name: Decode keystore
+        run: echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > "$RUNNER_TEMP/release.keystore"
+      - name: Build AAB + APK (signed)
+        env:
+          KS_FILE: ${{ runner.temp }}/release.keystore
+          KS_PASS: ${{ secrets.KEYSTORE_PASSWORD }}
+          KS_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KS_KEYPASS: ${{ secrets.KEY_PASSWORD }}
+        run: |
+          cd android && chmod +x gradlew
+          ./gradlew bundleRelease assembleRelease --no-daemon
+      - uses: actions/upload-artifact@v4
+        with:
+          name: shopergo-release
+          path: |
+            android/app/build/outputs/bundle/release/*.aab
+            android/app/build/outputs/apk/release/*.apk
