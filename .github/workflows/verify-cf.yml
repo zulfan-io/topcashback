@@ -5,7 +5,7 @@ jobs:
   probe:
     runs-on: ubuntu-latest
     steps:
-      - name: Probe CF K6b commerce-hook
+      - name: Probe CF K7b horizontal-commerce
         run: |
           ROOT="https://topcashback.shopergo.workers.dev"
           CB="${GITHUB_RUN_ID}-$(date +%s)"
@@ -18,11 +18,9 @@ jobs:
             C3=$(curl -4 -sL -o /tmp/c.html -w '%{http_code}' "$ROOT/sim/commerce/index.html?cb=$CB"); echo "COMMERCE_INDEX=$C3"
             if [ "$C2" != "200" ] && [ "$C3" != "200" ]; then echo "COMMERCE_ROUTE=FAIL"; exit 1; fi
           fi
+          echo "HORIZONTAL_SCROLL=$(grep -c 'commerce-scroll' /tmp/c.html)"
           echo "COMMERCE_MARKERS=$(grep -oE 'Kopi Susu Gula Aren|Sepatu Lari Ringan|Tumbler Stainless|Headphone Wireless|Skincare Serum|Snack Box Hemat' /tmp/c.html | sort -u | wc -l)"
-          echo "COMMERCE_BALDO=$(grep -c 'Saldo Dompet' /tmp/c.html)"
-          echo "MATCH_COUPON=$(grep -c 'Coupon Pair' /tmp/c.html)"
           echo "CHIP_commerce=$(grep -c 'sim-wallet-chip' /tmp/c.html)"
-          echo "== CLASS_SIGNATURES =="
-          grep -oE 'class="[^"]*(commerce-shell|commerce-grid|commerce-cart|commerce-voucher|commerce-coupon|sim-card|stage-badge|wallet-chip|social-rail|presence-dot|swipe-ghost|tx-list|spr-pop|pulse)[^"]*"' /tmp/c.html | sort | uniq -c | head -20
-          echo "BODY_BYTES=$(wc -c < /tmp/c.html)"
-          echo "DONE=K6B_PROBE_OK"
+          echo "MATCH_COUPON=$(grep -c 'Coupon Pair' /tmp/c.html)"
+          echo "COMMERCE_BALDO=$(grep -c 'Saldo Dompet' /tmp/c.html)"
+          echo "DONE=K7B_PROBE_OK"

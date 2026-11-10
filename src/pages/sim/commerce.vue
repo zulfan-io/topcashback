@@ -29,7 +29,7 @@ function doCheckout() {
     <div class="wallet-chip">Saldo Dompet Rp {{ balance }}</div>
     <div v-if="flash" class="swipe-ghost">{{ flash }}</div>
 
-    <div class="commerce-grid">
+    <div class="commerce-scroll">
       <div v-for="p in feed" :key="p.id" class="sim-card spr-pop">
         <span class="presence-dot pulse"></span>
         <h3>{{ p.name }}</h3>
@@ -70,3 +70,11 @@ function doCheckout() {
     </div>
   </div>
 </template>
+
+<style scoped>
+.commerce-scroll{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;padding:4px 2px 12px;scrollbar-width:thin}
+.commerce-scroll::-webkit-scrollbar{height:6px}
+.commerce-scroll::-webkit-scrollbar-thumb{background:rgba(0,184,169,.4);border-radius:9999px}
+.commerce-scroll>.sim-card{flex:0 0 78%;scroll-snap-align:center;min-width:0}
+@media (max-width:480px){.commerce-scroll>.sim-card{flex:0 0 82%}}
+</style>
