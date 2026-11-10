@@ -1,0 +1,26 @@
+name: Verify CF
+on:
+  workflow_dispatch: {}
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Probe workers.dev
+        run: |
+          URL="https://topcashback.shopergo.workers.dev"
+          echo "== headers =="
+          curl -4 -sSI "$URL" | sed -n '1,12p' || true
+          echo
+          echo "== body head =="
+          curl -4 -sL "$URL" | head -c 900 || true
+          echo
+          echo "== sentinel =="
+          if curl -4 -sL "$URL" | grep -q 'feel-spring'; then
+            echo "SENTINEL=OK"
+          else
+            echo "SENTINEL=MISS"
+            exit 1
+          fi
+          echo
+          echo "== final code =="
+          curl -4 -sS -o /dev/null -w 'code=%{http_code} size=%{size_download} ip=%{remote_ip}\n' "$URL"
