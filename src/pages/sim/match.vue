@@ -4,7 +4,7 @@ import SwipeDeck from '~/components/sim/SwipeDeck.vue'
 import WalletChip from '~/components/sim/WalletChip.vue'
 import profilesRaw from '~/data/simProfiles.json'
 const profiles = profilesRaw as any[]
-const deck = ref<{ like:()=>void; nope:()=>void; sup:()=>void; undo:()=>void } | null>(null)
+const deck = ref<Record<string, () => void> | null>(null)
 const swiped = ref(0)
 function onDecide(){ swiped.value++ }
 </script>
