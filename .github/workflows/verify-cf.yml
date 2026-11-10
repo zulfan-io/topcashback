@@ -5,27 +5,22 @@ jobs:
   probe:
     runs-on: ubuntu-latest
     steps:
-      - name: Probe CF K5B wallet-hook fixed
+      - name: Probe CF K6 commerce-stub
         run: |
           ROOT="https://topcashback.shopergo.workers.dev"
           CB="${GITHUB_RUN_ID}-$(date +%s)"
           echo "CB=$CB"
-
-          RB=$(curl -4 -sL -o /tmp/root.html -w '%{http_code}' "$ROOT/?cb=$CB")
-          echo "ROOT=$RB"
-          if grep -q 'sim-match-fixture' /tmp/root.html; then
-            echo "ROOT_SENTINEL=OK"
-          else
-            echo "ROOT_SENTINEL=MISS"
-            exit 1
+          RB=$(curl -4 -sL -o /tmp/root.html -w '%{http_code}' "$ROOT/?cb=$CB"); echo "ROOT=$RB"
+          grep -q 'sim-match-fixture' /tmp/root.html && echo "ROOT_SENTINEL=OK" || { echo "ROOT_SENTINEL=MISS"; exit 1; }
+          C=$(curl -4 -sL -o /tmp/c.html -w '%{http_code}' "$ROOT/sim/commerce?cb=$CB"); echo "ROUTE_commerce=$C"
+          if [ "$C" != "200" ]; then
+            C2=$(curl -4 -sL -o /tmp/c.html -w '%{http_code}' "$ROOT/sim/commerce.html?cb=$CB"); echo "COMMERCE_HTML=$C2"
+            C3=$(curl -4 -sL -o /tmp/c.html -w '%{http_code}' "$ROOT/sim/commerce/index.html?cb=$CB"); echo "COMMERCE_INDEX=$C3"
+            if [ "$C2" != "200" ] && [ "$C3" != "200" ]; then echo "COMMERCE_ROUTE=FAIL"; exit 1; fi
           fi
-
-          for R in match stage wallet; do
-            C=$(curl -4 -sL -o /tmp/$R.html -w '%{http_code}' "$ROOT/sim/$R?cb=$CB")
-            echo "ROUTE_$R=$C"
-            echo "CHIP_$R=$(grep -c 'sim-wallet-chip' /tmp/$R.html)"
-          done
-
-          echo "STAGE_CLAIM=$(grep -c 'Klaim Reward Stage' /tmp/stage.html)"
-          echo "MATCH_COST=$(grep -c 'belum diblokir' /tmp/match.html)"
-          echo "DONE=K5B_PROBE_OK"
+          echo "COMMERCE_MARKERS=$(grep -oE 'Kopi Susu Gula Aren|Sepatu Lari Ringan|Tumbler Stainless|Headphone Wireless|Skincare Serum|Snack Box Hemat' /tmp/c.html | sort -u | wc -l)"
+          echo "CHIP_commerce=$(grep -c 'sim-wallet-chip' /tmp/c.html)"
+          echo "== CLASS_SIGNATURES =="
+          grep -oE 'class="[^"]*(commerce-shell|commerce-grid|commerce-cart|commerce-voucher|sim-card|stage-badge|wallet-chip|social-rail|presence-dot|swipe-ghost|tx-list|spr-pop|pulse)[^"]*"' /tmp/c.html | sort | uniq -c | head -20
+          echo "BODY_BYTES=$(wc -c < /tmp/c.html)"
+          echo "DONE=K6_PROBE_OK"
