@@ -8,7 +8,7 @@ title: About
   <h3>About shoper</h3>
 </div>
 
-[shoper]() made by [@thuongtruong1009]() is an opinionated [Vite](https://github.com/vitejs/vite) starter template from [@antfu]() for mocking apps swiftly. With **file-based routing**, **components auto importing**, **markdown support**, I18n, PWA and uses **WindiCSS** for UI.
+[shoper]() — katalog affiliate + widget pintasan. With **file-based routing**, **components auto importing**, **markdown support**, I18n, PWA and uses **WindiCSS** for UI.
 
 ```js
 // syntax highlighting example

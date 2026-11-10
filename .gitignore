@@ -19,3 +19,6 @@ release.keystore
 keystore.b64
 *.keystore
 *.jks
+
+*.bak
+*.bak2

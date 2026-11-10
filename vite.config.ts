@@ -117,7 +117,7 @@ export default defineConfig({
         cleanupOutdatedCaches: true,
       },
       manifest: {
-        name: 'e-shopee',
+        name: 'shoper',
         short_name: 'Online shopping application and e-commerce trading platform.',
         theme_color: '#ffffff',
         icons: [

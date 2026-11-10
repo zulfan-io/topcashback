@@ -77,7 +77,6 @@ const { t } = useI18n()
         </div>
       </div>
       <div class="payment">
-        <a href="https://paypal.me/thuongtruong1009"><img src="/img/payment/1.png" alt="payment" class="max-w-70"></a>
       </div>
     </div>
   </div>
