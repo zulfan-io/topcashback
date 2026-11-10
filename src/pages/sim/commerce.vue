@@ -1,13 +1,34 @@
 <script setup lang="ts">
+import { ref } from 'vue'
 import SimWalletChip from '~/components/sim/SimWalletChip.vue'
 import { useSimCommerce } from '~/stores/simCommerce'
-const { feed, cart, vouchers, cartTotal, cartCount, addToCart, removeFromCart, clearCart, checkout } = useSimCommerce()
+import { useSimWallet } from '~/stores/simWallet'
+import { useSimMatch } from '~/stores/simMatch'
+
+const { feed, cart, vouchers, cartTotal, cartCount, addToCart, removeFromCart, clearCart } = useSimCommerce()
+const { balance, spend } = useSimWallet()
+const { matchQueue } = useSimMatch()
+
+const flash = ref('')
+
+function doCheckout() {
+  if (cartCount.value === 0) { flash.value = 'Keranjang kosong'; return }
+  if (spend(cartTotal.value, 'checkout commerce')) {
+    clearCart()
+    flash.value = 'Pembayaran berhasil (saldo dipotong)'
+  } else {
+    flash.value = 'Saldo kurang — top-up dulu'
+  }
+}
 </script>
 
 <template>
   <SimWalletChip />
   <div class="commerce-shell">
     <h2>Feeds Sim</h2>
+    <div class="wallet-chip">Saldo Dompet Rp {{ balance }}</div>
+    <div v-if="flash" class="swipe-ghost">{{ flash }}</div>
+
     <div class="commerce-grid">
       <div v-for="p in feed" :key="p.id" class="sim-card spr-pop">
         <span class="presence-dot pulse"></span>
@@ -17,6 +38,7 @@ const { feed, cart, vouchers, cartTotal, cartCount, addToCart, removeFromCart, c
         <button class="stage-badge" @click="addToCart(p)" aria-label="Tambah">+ Keranjang</button>
       </div>
     </div>
+
     <div class="commerce-cart">
       <div class="wallet-chip">Keranjang {{ cartCount }} · Rp {{ cartTotal }}</div>
       <ul v-if="cart.length" class="tx-list">
@@ -27,10 +49,19 @@ const { feed, cart, vouchers, cartTotal, cartCount, addToCart, removeFromCart, c
       </ul>
       <div v-else class="swipe-ghost">Keranjang kosong.</div>
       <div class="social-rail">
-        <button class="stage-badge" @click="checkout()" aria-label="Checkout">Checkout</button>
+        <button class="stage-badge" @click="doCheckout()" aria-label="Bayar">Bayar</button>
         <button class="stage-badge" @click="clearCart()" aria-label="Kosongkan">Kosongkan</button>
       </div>
     </div>
+
+    <div v-if="matchQueue.length > 0" class="commerce-coupon">
+      <h3>Coupon Pair (match celebration)</h3>
+      <div class="social-rail">
+        <button class="stage-badge" aria-label="Coupon pair 1">DISKON10</button>
+        <button class="stage-badge" aria-label="Coupon pair 2">CASHBACK5</button>
+      </div>
+    </div>
+
     <div class="commerce-voucher">
       <h3>Voucher Stub</h3>
       <div class="social-rail">

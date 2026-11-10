@@ -6,7 +6,7 @@ import profilesRaw from '~/data/simProfiles.json'
 const list = profilesRaw as any[]
 const currentIdx = ref(0)
 const swipeHistory = ref<{ id: string; dir: 'like' | 'nope' | 'sup' | 'undo' }[]>([])
-const matchQueue = ref<string[]>([])
+const matchQueue = ref<string[]>(['p01'])
 const moneyGated = ref(false) // FASE 1: super-like/undo GRATIS dulu (wallet = FASE 3)
 let undoUsedThisSession = false
 
