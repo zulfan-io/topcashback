@@ -1,0 +1,33 @@
+name: Inspect PWA2
+on:
+  workflow_dispatch: {}
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: A1 config VitePWA (range pasti, NOL kepotong)
+        run: |
+          echo "===== vite.config line dengan VitePWA ====="
+          grep -n 'VitePWA' vite.config.* 2>/dev/null || echo "NOL ketemu VitePWA("
+          echo "===== vite.config dari VitePWA sampe +70 line ====="
+          START=$(grep -n 'VitePWA(' vite.config.* 2>/dev/null | head -1 | cut -d: -f1)
+          if [ -n "$START" ]; then sed -n "${START},$((START+70))p" vite.config.*; else echo "NOL ada VitePWA("; fi
+      - name: A2 _headers + icon PNG yang ADA
+        run: |
+          echo "===== public/_headers ====="
+          cat public/_headers 2>/dev/null || echo "NOL ada _headers"
+          echo "===== PNG di public/Logo ====="
+          ls -la public/Logo/ 2>/dev/null | grep -iE '\.png|\.svg' || echo "NOL PNG/SVG di Logo"
+          echo "===== PNG 192/512 di public/img (cari) ====="
+          find public/img -maxdepth 2 -iname '*.png' 2>/dev/null | head -20 || echo "NOL png di img"
+          echo "===== pwa-192x192.png ada? ====="
+          [ -f public/pwa-192x192.png ] && echo "ADA pwa-192x192.png" || echo "ILANG pwa-192x192.png (broken link index.html:11)"
+      - name: A3 risiko index.html global (apple-touch ke-serve non-sim?)
+        run: |
+          ROOT="https://topcashback.shopergo.workers.dev"
+          CB="${GITHUB_RUN_ID}-$(date +%s)"
+          curl -4 -sL "$ROOT/?cb=$CB" -o /tmp/n.html 2>/dev/null || true
+          echo "NONSIM_APPLE_TOUCH=$(grep -c 'apple-touch-icon' /tmp/n.html || true)"
+          echo "NONSIM_THEME_COLOR=$(grep -c 'theme-color' /tmp/n.html || true)"
+          echo "MICRO_INSPECT=DONE (intip, bukan vonis)"
