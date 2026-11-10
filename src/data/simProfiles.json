@@ -1,0 +1,12 @@
+[
+ {"id":1,"name":"Raka","age":27,"bio":"kopi hitam, hujan, dan lagu lama.","images":[],"tags":["kopi","musik"],"stage":1,"presence":"online"},
+ {"id":2,"name":"Sena","age":24,"bio":"naik gunung tiap weekend.","images":[],"tags":["outdoor"],"stage":1,"presence":"idle"},
+ {"id":3,"name":"Mila","age":26,"bio":"film indie dan buku second-hand.","images":[],"tags":["film","buku"],"stage":1,"presence":"online"},
+ {"id":4,"name":"Dio","age":29,"bio":"masak simple, makan bareng.","images":[],"tags":["kuliner"],"stage":1,"presence":"offline"},
+ {"id":5,"name":"Nara","age":23,"bio":"foto jalanan sore hari.","images":[],"tags":["fotografi"],"stage":1,"presence":"online"},
+ {"id":6,"name":"Yoga","age":28,"bio":"gym pagi, ngopi siang.","images":[],"tags":["fitness"],"stage":1,"presence":"idle"},
+ {"id":7,"name":"Tara","age":25,"bio":"tanaman indoor dan podcast.","images":[],"tags":["plant","audio"],"stage":1,"presence":"offline"},
+ {"id":8,"name":"Bayu","age":30,"bio":"sepeda lipat, rute baru.","images":[],"tags":["sepeda"],"stage":1,"presence":"online"},
+ {"id":9,"name":"Vina","age":22,"bio":"lukis cat air akhir pekan.","images":[],"tags":["art"],"stage":1,"presence":"idle"},
+ {"id":10,"name":"Ardi","age":27,"bio":"boardgame dan teh manis.","images":[],"tags":["game"],"stage":1,"presence":"offline"}
+]

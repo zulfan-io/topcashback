@@ -1,0 +1,11 @@
+:root{
+  --sim-joy:#FF7A45; --sim-action:#FF4D3D; --sim-alarm:#E63946; --sim-cool:#00B8A9; --sim-cream:#FFF7EC;
+  --sim-online:var(--sim-cool); --sim-idle:var(--sim-joy); --sim-offline:#5b5b66;
+  --sim-bg:#0d0d12; --sim-surface:#15151d; --sim-surface-2:#1d1d27; --sim-border:#2a2a36;
+  --sim-text:#f4f4f7; --sim-dim:#9a9aa6;
+  --sp-1:8px; --sp-2:16px; --sp-3:24px; --sp-4:32px; --sp-6:48px;
+  --t-xs:12px; --t-sm:14px; --t-md:16px; --t-lg:20px; --t-xl:28px; --t-2xl:36px;
+  --r-card:24px; --r-pill:999px; --r-ctl:16px;
+  --spring:cubic-bezier(.2,0,0,1); --spring-bounce:cubic-bezier(.34,1.56,.64,1);
+}
+@keyframes sim-pulse{0%{box-shadow:0 0 0 0 rgba(0,184,169,.5)}70%{box-shadow:0 0 0 6px rgba(0,184,169,0)}100%{box-shadow:0 0 0 0 rgba(0,184,169,0)}}
