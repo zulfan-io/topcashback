@@ -1,0 +1,26 @@
+[
+  {
+    "id": "s1",
+    "name": "Kota Kopi",
+    "theme": "Jakarta sunrise, ngobrol ringan, swipe hangat",
+    "badgeCost": 10,
+    "dailyCap": 3,
+    "unlockCondition": "selesai 5 swipe"
+  },
+  {
+    "id": "s2",
+    "name": "Senja Pantai",
+    "theme": "Denpasar sunset, badge lebih langka, ritme lebih pelan",
+    "badgeCost": 25,
+    "dailyCap": 2,
+    "unlockCondition": "match minimal 3"
+  },
+  {
+    "id": "s3",
+    "name": "Rimba Buku",
+    "theme": "Banjarmasin adventure, stage penutup stub, rasa eksklusif",
+    "badgeCost": 50,
+    "dailyCap": 1,
+    "unlockCondition": "stage 2 progres 100%"
+  }
+]

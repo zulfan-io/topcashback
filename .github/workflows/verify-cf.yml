@@ -5,18 +5,41 @@ jobs:
   probe:
     runs-on: ubuntu-latest
     steps:
-      - name: Probe CF K3b wired
+      - name: Probe CF K4 stage-stub
         run: |
           ROOT="https://topcashback.shopergo.workers.dev"
           CB="${GITHUB_RUN_ID}-$(date +%s)"
           echo "CB=$CB"
+
+          echo "== ROOT sentinel =="
           RB=$(curl -4 -sL -o /tmp/root.html -w '%{http_code}' "$ROOT/?cb=$CB")
           echo "ROOT=$RB"
-          if grep -q 'sim-match-fixture' /tmp/root.html; then echo "ROOT_SENTINEL=OK"; else echo "ROOT_SENTINEL=MISS"; exit 1; fi
-          M=$(curl -4 -sL -o /tmp/m.html -w '%{http_code}' "$ROOT/sim/match?cb=$CB")
-          echo "SIM_MATCH=$M"
-          echo "PROFILE_MARKERS=$(grep -oE 'Rani|Dinda|Putri|Alya|Sari|Nadia|Intan|Kirana|Melati|Zahra' /tmp/m.html | sort -u | wc -l)"
-          echo "CLASS_SIGNATURES:"
-          grep -oE 'class="[^"]*(sim-card|swipe-deck|presence-dot|swipe-ghost|social-rail|wallet-chip|stage-badge|spr-pop|pulse)[^"]*"' /tmp/m.html | sort | uniq -c | head -20
-          echo "BODY_BYTES=$(wc -c < /tmp/m.html)"
-          echo "DONE=K3B_PROBE_OK"
+          if grep -q 'sim-match-fixture' /tmp/root.html; then
+            echo "ROOT_SENTINEL=OK"
+          else
+            echo "ROOT_SENTINEL=MISS"
+            exit 1
+          fi
+
+          echo "== /sim/stage status =="
+          S=$(curl -4 -sL -o /tmp/s.html -w '%{http_code}' "$ROOT/sim/stage?cb=$CB")
+          echo "SIM_STAGE=$S"
+          if [ "$S" != "200" ]; then
+            S2=$(curl -4 -sL -o /tmp/s.html -w '%{http_code}' "$ROOT/sim/stage.html?cb=$CB")
+            echo "SIM_STAGE_HTML=$S2"
+            S3=$(curl -4 -sL -o /tmp/s.html -w '%{http_code}' "$ROOT/sim/stage/index.html?cb=$CB")
+            echo "SIM_STAGE_INDEX=$S3"
+            if [ "$S2" != "200" ] && [ "$S3" != "200" ]; then
+              echo "STAGE_ROUTE=FAIL"
+              exit 1
+            fi
+          fi
+
+          echo "== STAGE_MARKERS =="
+          echo "STAGE_MARKERS=$(grep -oE 'Kota Kopi|Senja Pantai|Rimba Buku' /tmp/s.html | sort -u | wc -l)"
+
+          echo "== CLASS_SIGNATURES =="
+          grep -oE 'class="[^"]*(sim-card|swipe-deck|presence-dot|swipe-ghost|social-rail|wallet-chip|stage-badge|spr-pop|pulse|stage-shell|stage-card)[^"]*"' /tmp/s.html | sort | uniq -c | head -20
+
+          echo "BODY_BYTES=$(wc -c < /tmp/s.html)"
+          echo "DONE=K4_PROBE_OK"
