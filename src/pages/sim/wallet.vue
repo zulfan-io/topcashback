@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import SimWalletChip from \'~/components/sim/SimWalletChip.vue\'
 import { useSimWallet } from '~/stores/simWallet'
 
 const {
@@ -14,6 +15,7 @@ const {
 </script>
 
 <template>
+  <SimWalletChip />
   <div class="wallet-shell">
     <div class="sim-card spr-pop wallet-card">
       <div class="presence-dot pulse"></div>

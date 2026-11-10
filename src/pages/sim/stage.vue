@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import SimWalletChip from '~/components/sim/SimWalletChip.vue'
+import { useSimWallet } from '~/stores/simWallet'
+const w = useSimWallet()
 import { useSimStage } from '~/stores/simStage'
 
 const {
@@ -15,6 +18,7 @@ const {
 </script>
 
 <template>
+  <SimWalletChip />
   <div class="stage-shell">
     <div v-if="current" class="sim-card spr-pop stage-card">
       <div class="presence-dot pulse"></div>
@@ -39,6 +43,7 @@ const {
         <button class="stage-badge" @click="resetDay()" aria-label="Reset harian">
           Reset Harian
         </button>
+        <button class="stage-badge" @click="w.reward(1000); w.claimReward()" aria-label="Klaim Reward Stage">Klaim Reward Stage</button>
         <button class="stage-badge" @click="resetAll()" aria-label="Reset semua">
           Reset Semua
         </button>

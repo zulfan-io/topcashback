@@ -1,9 +1,11 @@
 <script setup lang="ts">
+import SimWalletChip from \'~/components/sim/SimWalletChip.vue\'
 import { useSimMatch } from '~/stores/simMatch'
 const { current, remaining, swipeHistory, matchQueue, decide, undo, reset } = useSimMatch()
 </script>
 
 <template>
+  <SimWalletChip />
   <div class="swipe-deck">
     <div v-if="remaining > 1" class="sim-card swipe-ghost" aria-hidden="true">
       <div class="presence-dot"></div>
@@ -29,6 +31,7 @@ const { current, remaining, swipeHistory, matchQueue, decide, undo, reset } = us
       <button class="stage-badge" @click="decide('sup')" aria-label="Super Like">&#9733;</button>
     </div>
 
+    <div class="wallet-chip">Super-like 50 · Undo 20 <span class="swipe-ghost">(belum diblokir)</span></div>
     <div class="wallet-chip">
       Sisa {{ remaining }} · Match {{ matchQueue.length }} · Swipe {{ swipeHistory.length }}
     </div>
