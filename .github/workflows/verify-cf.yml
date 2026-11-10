@@ -5,21 +5,18 @@ jobs:
   probe:
     runs-on: ubuntu-latest
     steps:
-      - name: Probe CF K3 corrected
+      - name: Probe CF K3b wired
         run: |
           ROOT="https://topcashback.shopergo.workers.dev"
           CB="${GITHUB_RUN_ID}-$(date +%s)"
           echo "CB=$CB"
-
-          echo "== ROOT sentinel (index.html = tempat meta bener) =="
           RB=$(curl -4 -sL -o /tmp/root.html -w '%{http_code}' "$ROOT/?cb=$CB")
           echo "ROOT=$RB"
           if grep -q 'sim-match-fixture' /tmp/root.html; then echo "ROOT_SENTINEL=OK"; else echo "ROOT_SENTINEL=MISS"; exit 1; fi
-
-          echo "== /sim/match status + body reveal (NON-FATAL) =="
           M=$(curl -4 -sL -o /tmp/m.html -w '%{http_code}' "$ROOT/sim/match?cb=$CB")
           echo "SIM_MATCH=$M"
           echo "PROFILE_MARKERS=$(grep -oE 'Rani|Dinda|Putri|Alya|Sari|Nadia|Intan|Kirana|Melati|Zahra' /tmp/m.html | sort -u | wc -l)"
-          echo "CLASS_SIGNATURES:"; grep -oE 'class="[^"]*(sim-card|swipe-deck|presence-dot|swipe-ghost)[^"]*"' /tmp/m.html | sort | uniq -c | head
+          echo "CLASS_SIGNATURES:"
+          grep -oE 'class="[^"]*(sim-card|swipe-deck|presence-dot|swipe-ghost|social-rail|wallet-chip|stage-badge|spr-pop|pulse)[^"]*"' /tmp/m.html | sort | uniq -c | head -20
           echo "BODY_BYTES=$(wc -c < /tmp/m.html)"
-          echo "DONE=K3_REVEAL_OK"
+          echo "DONE=K3B_PROBE_OK"
