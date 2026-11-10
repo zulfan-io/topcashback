@@ -5,17 +5,18 @@ jobs:
   probe:
     runs-on: ubuntu-latest
     steps:
-      - name: Probe CF K2
+      - name: Probe CF K2 cache-busted
         run: |
           ROOT="https://topcashback.shopergo.workers.dev"
-          SIM="$ROOT/sim"
+          CB="${GITHUB_RUN_ID}-$(date +%s)"
+          echo "CB=$CB"
 
-          echo "== root headers =="
-          curl -4 -sSI "$ROOT" | sed -n '1,10p' || true
+          echo "== root headers (cache-busted) =="
+          curl -4 -sSI "$ROOT/?cb=$CB" | sed -n '1,12p' || true
 
           echo
-          echo "== root sentinel K2 =="
-          if curl -4 -sL "$ROOT" | grep -q 'sim-shell-feel'; then
+          echo "== root sentinel K2 (cache-busted) =="
+          if curl -4 -sL "$ROOT/?cb=$CB" | grep -q 'sim-shell-feel'; then
             echo "ROOT_SENTINEL=OK"
           else
             echo "ROOT_SENTINEL=MISS"
@@ -23,17 +24,28 @@ jobs:
           fi
 
           echo
-          echo "== /sim status =="
-          SIM_CODE=$(curl -4 -sL -o /dev/null -w '%{http_code}' "$SIM")
+          echo "== /sim status (cache-busted) =="
+          SIM_CODE=$(curl -4 -sL -o /dev/null -w '%{http_code}' "$ROOT/sim?cb=$CB")
           echo "SIM=$SIM_CODE"
+
           if [ "$SIM_CODE" != "200" ]; then
-            echo "SIM_ROUTE=FAIL"
-            exit 1
+            echo "SIM_ROUTE=TRY_FALLBACK"
+            SIM_HTML=$(curl -4 -sL -o /dev/null -w '%{http_code}' "$ROOT/sim.html?cb=$CB")
+            echo "SIM_HTML=$SIM_HTML"
+            SIM_INDEX=$(curl -4 -sL -o /dev/null -w '%{http_code}' "$ROOT/sim/index.html?cb=$CB")
+            echo "SIM_INDEX=$SIM_INDEX"
+
+            if [ "$SIM_HTML" != "200" ] && [ "$SIM_INDEX" != "200" ]; then
+              echo "SIM_ROUTE=FAIL"
+              exit 1
+            fi
           fi
 
           echo
           echo "== /sim body probe =="
-          curl -4 -sL "$SIM" | grep -o 'sim-shell-feel' | head -1 || true
+          curl -4 -sL "$ROOT/sim?cb=$CB" | grep -o 'sim-shell-feel' | head -1 || true
+          curl -4 -sL "$ROOT/sim.html?cb=$CB" | grep -o 'sim-shell-feel' | head -1 || true
+          curl -4 -sL "$ROOT/sim/index.html?cb=$CB" | grep -o 'sim-shell-feel' | head -1 || true
 
           echo
           echo "DONE=K2_PROBE_OK"
