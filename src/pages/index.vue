@@ -52,7 +52,7 @@ function mapOffer(o) {
   }
 }
 const feed = ref(placeholderFeed())
-const src = ref('demo')
+const src = ref('live')
 const rowLabels = ['Rekomendasi Untukmu', 'Produk Terlaris', 'Flash Sale', 'Baru Datang']
 const feedAll = computed(() => { const f = feed.value; return f.length >= 15 ? f : [...f, ...f, ...f] })
 const feedRows = computed(() => { const out = []; for (let i = 0; i < feedAll.value.length; i += 5) out.push(feedAll.value.slice(i, i + 5)); return out })
