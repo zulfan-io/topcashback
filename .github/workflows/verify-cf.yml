@@ -5,13 +5,20 @@ jobs:
   probe:
     runs-on: ubuntu-latest
     steps:
-      - name: Probe CF K5B wallet-hook
+      - name: Probe CF K5B wallet-hook fixed
         run: |
           ROOT="https://topcashback.shopergo.workers.dev"
           CB="${GITHUB_RUN_ID}-$(date +%s)"
           echo "CB=$CB"
-          RB=$(curl -4 -sL -o /tmp/root.html -w '%{http_code}' "$ROOT/?cb=$CB"); echo "ROOT=$RB"
-          grep -q 'sim-match-fixture' /tmp/root.html && echo "ROOT_SENTINEL=OK" || { echo "ROOT_SENTINEL=MISS"; exit 1; }
+
+          RB=$(curl -4 -sL -o /tmp/root.html -w '%{http_code}' "$ROOT/?cb=$CB")
+          echo "ROOT=$RB"
+          if grep -q 'sim-match-fixture' /tmp/root.html; then
+            echo "ROOT_SENTINEL=OK"
+          else
+            echo "ROOT_SENTINEL=MISS"
+            exit 1
+          fi
 
           for R in match stage wallet; do
             C=$(curl -4 -sL -o /tmp/$R.html -w '%{http_code}' "$ROOT/sim/$R?cb=$CB")
