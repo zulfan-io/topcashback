@@ -1,0 +1,74 @@
+/* KANTONG 2 — SIM SHELL FEEL */
+:root{
+  --sim-spring:cubic-bezier(.34,1.56,.64,1);
+  --sim-in:260ms var(--sim-spring);
+  --sim-out:180ms ease-in;
+  --fusion-action:#FF4D3D;
+  --fusion-presence:#00B8A9;
+  --fusion-alarm:#E63946;
+  --fusion-krem:#FFF7EC;
+}
+
+.sim-card,
+.swipe-deck,
+.stage-badge,
+.wallet-chip,
+.social-rail{
+  transition: transform var(--sim-in), opacity var(--sim-in), box-shadow var(--sim-in);
+  will-change: transform, opacity;
+}
+
+.sim-card:hover,
+.swipe-deck:hover{
+  transform: translateY(-2px) scale(1.01);
+}
+
+.sim-card.spr-pop,
+.swipe-deck.spr-pop{
+  animation: sim-pop var(--sim-in) both;
+}
+
+@keyframes sim-pop{
+  0%{ transform: scale(.94); opacity:.65; }
+  62%{ transform: scale(1.035); }
+  100%{ transform: scale(1); opacity:1; }
+}
+
+.presence-dot{
+  position:relative;
+}
+
+.presence-dot::after{
+  content:"";
+  position:absolute;
+  inset:-4px;
+  border-radius:9999px;
+  box-shadow:0 0 0 0 rgba(0,184,169,.55);
+  animation: presence-pulse 2s infinite;
+}
+
+@keyframes presence-pulse{
+  0%{ box-shadow:0 0 0 0 rgba(0,184,169,.55); }
+  70%{ box-shadow:0 0 0 8px rgba(0,184,169,0); }
+  100%{ box-shadow:0 0 0 0 rgba(0,184,169,0); }
+}
+
+.swipe-ghost{
+  opacity:.35;
+  filter: blur(.2px);
+  transform: scale(.98);
+}
+
+@media (prefers-reduced-motion: reduce){
+  .sim-card,
+  .swipe-deck,
+  .stage-badge,
+  .wallet-chip,
+  .social-rail,
+  .presence-dot::after,
+  .sim-card.spr-pop,
+  .swipe-deck.spr-pop{
+    animation:none !important;
+    transition:none !important;
+  }
+}
