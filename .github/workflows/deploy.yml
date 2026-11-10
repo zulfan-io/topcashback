@@ -13,6 +13,8 @@ jobs:
           node-version: 22
           cache: pnpm
       - run: pnpm install --frozen-lockfile
+      - run: sudo apt-get update -y && sudo apt-get install -y librsvg2-bin
+      - run: rsvg-convert -w 192 -h 192 public/favicon.svg -o public/pwa-192x192.png && rsvg-convert -w 512 -h 512 public/favicon.svg -o public/pwa-512x512.png && test -s public/pwa-192x192.png && test -s public/pwa-512x512.png
       - run: pnpm run build
       - run: pnpm dlx wrangler deploy
         env:
