@@ -5,22 +5,24 @@ jobs:
   probe:
     runs-on: ubuntu-latest
     steps:
-      - name: Probe CF K7b horizontal-commerce
+      - name: Probe CF K7HUB sim-light-entry
         run: |
           ROOT="https://topcashback.shopergo.workers.dev"
           CB="${GITHUB_RUN_ID}-$(date +%s)"
           echo "CB=$CB"
+
           RB=$(curl -4 -sL -o /tmp/root.html -w '%{http_code}' "$ROOT/?cb=$CB"); echo "ROOT=$RB"
           grep -q 'sim-match-fixture' /tmp/root.html && echo "ROOT_SENTINEL=OK" || { echo "ROOT_SENTINEL=MISS"; exit 1; }
-          C=$(curl -4 -sL -o /tmp/c.html -w '%{http_code}' "$ROOT/sim/commerce?cb=$CB"); echo "ROUTE_commerce=$C"
-          if [ "$C" != "200" ]; then
-            C2=$(curl -4 -sL -o /tmp/c.html -w '%{http_code}' "$ROOT/sim/commerce.html?cb=$CB"); echo "COMMERCE_HTML=$C2"
-            C3=$(curl -4 -sL -o /tmp/c.html -w '%{http_code}' "$ROOT/sim/commerce/index.html?cb=$CB"); echo "COMMERCE_INDEX=$C3"
-            if [ "$C2" != "200" ] && [ "$C3" != "200" ]; then echo "COMMERCE_ROUTE=FAIL"; exit 1; fi
+
+          S=$(curl -4 -sL -o /tmp/sim.html -w '%{http_code}' "$ROOT/sim?cb=$CB"); echo "ROUTE_sim=$S"
+          if [ "$S" != "200" ]; then
+            S2=$(curl -4 -sL -o /tmp/sim.html -w '%{http_code}' "$ROOT/sim.html?cb=$CB"); echo "SIM_HTML=$S2"
+            S3=$(curl -4 -sL -o /tmp/sim.html -w '%{http_code}' "$ROOT/sim/index.html?cb=$CB"); echo "SIM_INDEX=$S3"
+            if [ "$S2" != "200" ] && [ "$S3" != "200" ]; then echo "SIM_ROUTE=FAIL"; exit 1; fi
           fi
-          echo "HORIZONTAL_SCROLL=$(grep -c 'commerce-scroll' /tmp/c.html)"
-          echo "COMMERCE_MARKERS=$(grep -oE 'Kopi Susu Gula Aren|Sepatu Lari Ringan|Tumbler Stainless|Headphone Wireless|Skincare Serum|Snack Box Hemat' /tmp/c.html | sort -u | wc -l)"
-          echo "CHIP_commerce=$(grep -c 'sim-wallet-chip' /tmp/c.html)"
-          echo "MATCH_COUPON=$(grep -c 'Coupon Pair' /tmp/c.html)"
-          echo "COMMERCE_BALDO=$(grep -c 'Saldo Dompet' /tmp/c.html)"
-          echo "DONE=K7B_PROBE_OK"
+
+          echo "SIM_HUB_MARK=$(grep -c 'data-sim-hub="light-first"' /tmp/sim.html)"
+          echo "SIM_HUB_TITLE=$(grep -c 'Sim Hub' /tmp/sim.html)"
+          echo "HUB_LINKS=$(grep -oE '/sim/match|/sim/stage|/sim/wallet|/sim/commerce|/sim/profile' /tmp/sim.html | sort -u | wc -l)"
+          echo "HUB_CARDS=$(grep -c 'hub-card sim-card spr-pop' /tmp/sim.html)"
+          echo "DONE=K7HUB_PROBE_OK"
