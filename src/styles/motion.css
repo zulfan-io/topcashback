@@ -1,0 +1,9 @@
+:root{--spr-ease:cubic-bezier(.34,1.56,.64,1);--spr-in:260ms var(--spr-ease);--spr-out:180ms ease-in}
+@keyframes spr-pop{0%{transform:scale(.92);opacity:.6}60%{transform:scale(1.04)}100%{transform:scale(1);opacity:1}}
+@keyframes spr-in{from{transform:translateY(8px);opacity:0}to{transform:translateY(0);opacity:1}}
+@keyframes pulse-dot{0%,100%{box-shadow:0 0 0 0 rgba(0,184,169,.5)}50%{box-shadow:0 0 0 6px rgba(0,184,169,0)}}
+.spr{transition:transform var(--spr-in),opacity var(--spr-in)}
+.spr-pop{animation:spr-pop var(--spr-in) both}
+.spr-in{animation:spr-in var(--spr-in) both}
+.pulse{animation:pulse-dot 2s infinite}
+@media (prefers-reduced-motion:reduce){.spr,.spr-pop,.spr-in,.pulse{animation:none;transition:none}}
