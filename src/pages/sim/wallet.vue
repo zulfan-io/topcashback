@@ -1,26 +1,63 @@
 <script setup lang="ts">
-import WalletChip from '~/components/sim/WalletChip.vue'
-const bal = 0
-const tx: any[] = []
+import { useSimWallet } from '~/stores/simWallet'
+
+const {
+  balance,
+  pendingReward,
+  txLog,
+  topUp,
+  spend,
+  reward,
+  claimReward,
+  resetWallet
+} = useSimWallet()
 </script>
+
 <template>
-  <div class="wl">
-    <div class="big"><span class="cur">Rp</span><span class="num">{{ bal.toLocaleString('id-ID') }}</span></div>
-    <div class="hint">top-up & earn = FASE 3 (Midtrans/Xendit sandbox). NOL free path.</div>
-    <div class="list">
-      <div v-if="!tx.length" class="empty">Belum ada transaksi.</div>
+  <div class="wallet-shell">
+    <div class="sim-card spr-pop wallet-card">
+      <div class="presence-dot pulse"></div>
+      <h2>Dompet Sim</h2>
+
+      <div class="wallet-chip">
+        Saldo Rp {{ balance }}
+      </div>
+
+      <div class="wallet-chip">
+        Pending reward Rp {{ pendingReward }}
+      </div>
+
+      <div class="social-rail">
+        <button class="stage-badge" @click="topUp(10000)" aria-label="Top-up 10K">
+          Top-up 10K
+        </button>
+        <button class="stage-badge" @click="reward(1000)" aria-label="Reward 1K">
+          +Reward 1K
+        </button>
+        <button class="stage-badge" @click="claimReward()" aria-label="Claim reward">
+          Claim
+        </button>
+        <button class="stage-badge" @click="spend(500, 'belanja stub')" aria-label="Belanja 500">
+          Belanja 500
+        </button>
+        <button class="stage-badge" @click="resetWallet()" aria-label="Reset wallet">
+          Reset
+        </button>
+      </div>
+
+      <ul v-if="txLog.length" class="tx-list">
+        <li
+          v-for="(tx, i) in txLog.slice(0, 5)"
+          :key="i"
+          class="swipe-ghost"
+        >
+          {{ tx.note }} · {{ tx.amount > 0 ? '+' : '' }}{{ tx.amount }}
+        </li>
+      </ul>
+
+      <div v-else class="swipe-ghost">
+        Belum ada transaksi stub.
+      </div>
     </div>
-    <div class="foot"><WalletChip :balance="bal" /></div>
   </div>
 </template>
-<style scoped>
-@import '../../styles/sim.css';
-.wl{min-height:100%;background:var(--sim-bg);color:var(--sim-text);padding:var(--sp-4) var(--sp-3);display:flex;flex-direction:column;gap:var(--sp-3)}
-.big{display:flex;align-items:baseline;gap:6px}
-.cur{font:700 var(--t-lg) system-ui;color:var(--sim-dim)}
-.num{font:800 var(--t-2xl) system-ui;color:var(--sim-cream)}
-.hint{font:500 var(--t-sm) system-ui;color:var(--sim-dim)}
-.list{flex:1;border:1px dashed var(--sim-border);border-radius:var(--r-card);padding:var(--sp-3)}
-.empty{color:var(--sim-dim);font:500 var(--t-sm) system-ui}
-.foot{display:flex;justify-content:center}
-</style>

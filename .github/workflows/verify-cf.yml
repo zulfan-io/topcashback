@@ -5,7 +5,7 @@ jobs:
   probe:
     runs-on: ubuntu-latest
     steps:
-      - name: Probe CF K4 stage-stub
+      - name: Probe CF K5 wallet-stub
         run: |
           ROOT="https://topcashback.shopergo.workers.dev"
           CB="${GITHUB_RUN_ID}-$(date +%s)"
@@ -21,25 +21,26 @@ jobs:
             exit 1
           fi
 
-          echo "== /sim/stage status =="
-          S=$(curl -4 -sL -o /tmp/s.html -w '%{http_code}' "$ROOT/sim/stage?cb=$CB")
-          echo "SIM_STAGE=$S"
-          if [ "$S" != "200" ]; then
-            S2=$(curl -4 -sL -o /tmp/s.html -w '%{http_code}' "$ROOT/sim/stage.html?cb=$CB")
-            echo "SIM_STAGE_HTML=$S2"
-            S3=$(curl -4 -sL -o /tmp/s.html -w '%{http_code}' "$ROOT/sim/stage/index.html?cb=$CB")
-            echo "SIM_STAGE_INDEX=$S3"
-            if [ "$S2" != "200" ] && [ "$S3" != "200" ]; then
-              echo "STAGE_ROUTE=FAIL"
+          echo "== /sim/wallet status =="
+          W=$(curl -4 -sL -o /tmp/w.html -w '%{http_code}' "$ROOT/sim/wallet?cb=$CB")
+          echo "SIM_WALLET=$W"
+
+          if [ "$W" != "200" ]; then
+            W2=$(curl -4 -sL -o /tmp/w.html -w '%{http_code}' "$ROOT/sim/wallet.html?cb=$CB")
+            echo "SIM_WALLET_HTML=$W2"
+            W3=$(curl -4 -sL -o /tmp/w.html -w '%{http_code}' "$ROOT/sim/wallet/index.html?cb=$CB")
+            echo "SIM_WALLET_INDEX=$W3"
+            if [ "$W2" != "200" ] && [ "$W3" != "200" ]; then
+              echo "WALLET_ROUTE=FAIL"
               exit 1
             fi
           fi
 
-          echo "== STAGE_MARKERS =="
-          echo "STAGE_MARKERS=$(grep -oE 'Kota Kopi|Senja Pantai|Rimba Buku' /tmp/s.html | sort -u | wc -l)"
+          echo "== WALLET_MARKERS =="
+          echo "WALLET_MARKERS=$(grep -oE 'Dompet Sim|Saldo Rp|Pending reward|Top-up 10K|Claim|Belanja 500' /tmp/w.html | sort -u | wc -l)"
 
           echo "== CLASS_SIGNATURES =="
-          grep -oE 'class="[^"]*(sim-card|swipe-deck|presence-dot|swipe-ghost|social-rail|wallet-chip|stage-badge|spr-pop|pulse|stage-shell|stage-card)[^"]*"' /tmp/s.html | sort | uniq -c | head -20
+          grep -oE 'class="[^"]*(sim-card|swipe-deck|presence-dot|swipe-ghost|social-rail|wallet-chip|stage-badge|spr-pop|pulse|wallet-shell|wallet-card|tx-list)[^"]*"' /tmp/w.html | sort | uniq -c | head -20
 
-          echo "BODY_BYTES=$(wc -c < /tmp/s.html)"
-          echo "DONE=K4_PROBE_OK"
+          echo "BODY_BYTES=$(wc -c < /tmp/w.html)"
+          echo "DONE=K5_PROBE_OK"
