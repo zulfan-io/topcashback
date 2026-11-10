@@ -1,6 +1,9 @@
 <script setup>
 import { useLoading } from '~/stores/loading'
 
+const appRoute = useRoute()
+const isSim = computed(() => appRoute.path === '/sim' || appRoute.path.startsWith('/sim/'))
+
 const loading = useLoading()
 onMounted(() => {
   window.addEventListener('scroll', scrollFunction)
@@ -32,7 +35,7 @@ const scrollFunction = () => {
 </script>
 
 <template>
-  <Transition name="bounce">
+  <Transition name="bounce" v-if="!isSim">
     <div v-if="isScroll" id="fcircle" class="fixed z-30 w-13 h-13 bottom-5 right-5 bg-orange-500 border-3 border-solid border-green-600 text-white rounded-full border shadow-lg shadow-gray-500/50 flex justify-center items-center cursor-pointer hover:bg-orange-600" @click="scrollToTop">
       <ITop />
     </div>

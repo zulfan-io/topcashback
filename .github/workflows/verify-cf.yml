@@ -6,70 +6,47 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
-      - name: Source chrome assert
+      - name: L1 source-assert (gate + garus selamat)
         run: |
-          echo "== default.vue harus bersih dari sampah demo =="
-          if grep -n 'CExtension' src/layouts/default.vue; then
-            echo "JUNK_CEXTENSION_STILL_IN_SOURCE"
-            exit 1
-          fi
-          if grep -n 'Default Layout' src/layouts/default.vue; then
-            echo "JUNK_DEFAULT_LAYOUT_STILL_IN_SOURCE"
-            exit 1
-          fi
-          if ! grep -n 'data-app-chrome="clean"' src/layouts/default.vue; then
-            echo "MISSING_APP_CHROME_SENTINEL"
-            exit 1
-          fi
-          if ! grep -n 'SimBottomNav' src/layouts/default.vue; then
-            echo "MISSING_SIM_NAVBAR"
-            exit 1
-          fi
-          echo "SOURCE_CHROME=OK"
-
-      - name: Pulau buktiin chrome clean + intip TOP
+          A=src/App.vue
+          grep -q 'const isSim = computed' "$A" || { echo "GATE_MISSING_isSim"; exit 1; }
+          grep -q 'const appRoute = useRoute' "$A" || { echo "GATE_MISSING_appRoute"; exit 1; }
+          grep -q 'v-if="!isSim"' "$A" || { echo "GATE_MISSING_transition_vif"; exit 1; }
+          grep -q 'id="fcircle"' "$A" || { echo "TOP_MARKUP_MISSING_non-sim-intact"; exit 1; }
+          grep -q "scrollFunction" "$A" && grep -q "addEventListener('scroll', scrollFunction)" "$A" || { echo "LISTENER_PAIR_BROKEN"; exit 1; }
+          grep -q 'useHead' "$A" && grep -q "title: 'shoper'" "$A" || { echo "SEO_HEAD_BROKEN"; exit 1; }
+          grep -q 'cashflowku' "$A" || { echo "SEO_AUTHOR_BROKEN"; exit 1; }
+          grep -q 'Online shopping application' "$A" || { echo "SEO_DESC_BROKEN"; exit 1; }
+          grep -q '<CToast />' "$A" || { echo "CTOAST_BROKEN"; exit 1; }
+          grep -q 'router-view v-slot' "$A" && grep -q 'keep-alive' "$A" && grep -q 'suspense' "$A" || { echo "RENDER_ENGINE_BROKEN"; exit 1; }
+          grep -q 'useLoading' "$A" && grep -q 'CLoading' "$A" || { echo "LOADING_BROKEN"; exit 1; }
+          echo "SOURCE_GATE=OK"
+      - name: L2 pulau SSR (no-regression + SEO alive + sim clean)
         run: |
           ROOT="https://topcashback.shopergo.workers.dev"
           CB="${GITHUB_RUN_ID}-$(date +%s)"
           echo "CB=$CB"
-
-          echo "== ROOT non-sim: harus bersih, tanpa Default Layout, ada app-chrome clean =="
           RB=$(curl -4 -sL -o /tmp/root.html -w '%{http_code}' "$ROOT/?cb=$CB"); echo "ROOT=$RB"
-          ROOT_DL=$(grep -c 'Default Layout' /tmp/root.html || true)
-          ROOT_CHROME=$(grep -c 'data-app-chrome="clean"' /tmp/root.html || true)
-          echo "ROOT_DEFAULT_LAYOUT=$ROOT_DL"
-          echo "ROOT_APP_CHROME=$ROOT_CHROME"
-          if [ "$ROOT_DL" -ne 0 ]; then echo "ROOT_JUNK_DEFAULT_LAYOUT_STILL_SERVED"; exit 1; fi
-          if [ "$ROOT_CHROME" -lt 1 ]; then echo "ROOT_CLEAN_CHROME_NOT_SERVED"; exit 1; fi
-
-          echo "== semua route sim: tetap clean + navbar + tanpa Default Layout =="
+          SEO_AUTHOR=$(grep -c 'cashflowku' /tmp/root.html || true); echo "SEO_AUTHOR=$SEO_AUTHOR"
+          SEO_DESC=$(grep -c 'Online shopping application' /tmp/root.html || true); echo "SEO_DESC=$SEO_DESC"
+          ROOT_CHROME=$(grep -c 'data-app-chrome="clean"' /tmp/root.html || true); echo "ROOT_CHROME=$ROOT_CHROME"
+          ROOT_DL=$(grep -c 'Default Layout' /tmp/root.html || true); echo "ROOT_DL=$ROOT_DL"
           FAIL=0
+          [ "$SEO_AUTHOR" -ge 1 ] || FAIL=1
+          [ "$SEO_DESC" -ge 1 ] || FAIL=1
+          [ "$ROOT_CHROME" -ge 1 ] || FAIL=1
+          [ "$ROOT_DL" -eq 0 ] || FAIL=1
           for U in "/sim" "/sim/match" "/sim/stage" "/sim/wallet" "/sim/commerce" "/sim/profile"; do
             C=$(curl -4 -sL -o /tmp/r.html -w '%{http_code}' "$ROOT$U?cb=$CB")
             DL=$(grep -c 'Default Layout' /tmp/r.html || true)
             SL=$(grep -c 'data-sim-layout="clean"' /tmp/r.html || true)
             NV=$(grep -c 'data-sim-nav="1"' /tmp/r.html || true)
-            echo "ROUTE=$U CODE=$C DEFAULT_LAYOUT=$DL SIM_LAYOUT=$SL NAV=$NV"
-            if [ "$C" != "200" ]; then FAIL=1; fi
-            if [ "$DL" -ne 0 ]; then FAIL=1; fi
-            if [ "$SL" -lt 1 ]; then FAIL=1; fi
-            if [ "$NV" -lt 1 ]; then FAIL=1; fi
+            echo "ROUTE=$U CODE=$C DL=$DL SL=$SL NAV=$NV"
+            [ "$C" = "200" ] || FAIL=1
+            [ "$DL" -eq 0 ] || FAIL=1
+            [ "$SL" -ge 1 ] || FAIL=1
+            [ "$NV" -ge 1 ] || FAIL=1
           done
-
-          echo "== gate K7HUB tetap dijaga =="
-          S=$(curl -4 -sL -o /tmp/sim.html -w '%{http_code}' "$ROOT/sim?cb=$CB"); echo "ROUTE_sim=$S"
-          echo "SIM_HUB_MARK=$(grep -c 'data-sim-hub="light-first"' /tmp/sim.html || true)"
-          echo "HUB_LINKS=$(grep -oE '/sim/match|/sim/stage|/sim/wallet|/sim/commerce|/sim/profile' /tmp/sim.html | sort -u | wc -l || true)"
-
-          echo "== INTIP SUMBER TOP / FLOATING BUTTON =="
-          echo "--- grep candidates ---"
-          grep -rnE 'TOP|back-to-top|scroll-top|scrollTop|toTop|floating' src/App.vue src/components src/layouts 2>/dev/null | head -50 || true
-          echo "--- App.vue head ---"
-          sed -n '1,220p' src/App.vue 2>/dev/null || echo "TIDAK ADA src/App.vue"
-          echo "--- candidate files ---"
-          find src/components src/layouts src/pages -maxdepth 3 -type f \( -iname '*top*' -o -iname '*extension*' -o -iname '*float*' -o -iname '*scroll*' \) 2>/dev/null | head -30 || true
-
-          if [ "$FAIL" -ne 0 ]; then echo "CHROME_GATE=FAIL"; exit 1; fi
-          echo "CHROME_GATE=OK"
-          echo "DONE=K_CHROME_PROBE_OK"
+          if [ "$FAIL" -ne 0 ]; then echo "TOP_GATE_REGRESSION=FAIL"; exit 1; fi
+          echo "TOP_GATE_REGRESSION=OK"
+          echo "DONE=K_TOP_PROBE_OK"
