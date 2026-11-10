@@ -9,7 +9,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
-        with: { node-version: 22, cache: pnpm }
+        with: { node-version: 22 }
       - run: corepack enable && corepack prepare pnpm@12.16.1 --activate
       - run: pnpm install --frozen-lockfile
       - run: pnpm run build
