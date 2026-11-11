@@ -21,3 +21,5 @@
 /* press feedback util ala IG */
 .press{transition:transform .18s cubic-bezier(.34,1.56,.64,1)}
 .press:active{transform:scale(.96)}
+
+main[data-app-chrome="clean"]{padding-top:calc(2.5rem + env(safe-area-inset-top));}

@@ -32,7 +32,7 @@ const active = computed(() => route.path)
 .sim-bottom-nav{
   position:fixed; left:0; right:0; bottom:0; z-index:50;
   display:flex; justify-content:space-around; align-items:center;
-  height:64px; padding:0 4px;
+  height:calc(64px + env(safe-area-inset-bottom)); padding:0 4px env(safe-area-inset-bottom);
   background:#fff; border-top:1px solid rgba(255,122,69,.18);
   box-shadow:0 -6px 20px rgba(34,34,34,.08);
   backdrop-filter:saturate(1.1);

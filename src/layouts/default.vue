@@ -23,7 +23,7 @@ const isSim = computed(() => route.path === '/sim' || route.path.startsWith('/si
   background: #FFF7EC;
   color: #222;
   min-height: 100vh;
-  padding: 16px 16px 80px;
+  padding: calc(16px + env(safe-area-inset-top)) 16px calc(80px + env(safe-area-inset-bottom));
   text-align: left;
   color-scheme: light;
 }
