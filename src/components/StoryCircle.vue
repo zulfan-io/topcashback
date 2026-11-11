@@ -42,9 +42,7 @@ const ini = computed(() => (props.label || '?').slice(0, 1).toUpperCase())
 .sc-wrap.read .sc-ring {
   border-color: #ddd;
 }
-.sc-wrap:hover .sc-ring {
-  transform: scale(1.03);
-}
+@media (hover:hover){ .sc-wrap:hover .sc-ring { transform: scale(1.03); } }
 .sc-img {
   width: 100%;
   height: 100%;

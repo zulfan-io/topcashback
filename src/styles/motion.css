@@ -23,3 +23,13 @@
 .press:active{transform:scale(.96)}
 
 main[data-app-chrome="clean"]{padding-top:calc(2.5rem + env(safe-area-inset-top));}
+
+/* tahap6 native-feel: touch-first, affordance web dibuang */
+*{-webkit-tap-highlight-color:transparent}
+html{overscroll-behavior-y:none}
+a,button,.sim-nav-item,.press{touch-action:manipulation;-webkit-touch-callout:none}
+.sim-shell,.sim-bottom-nav,.botnav,.bnav,.cnav{user-select:none;-webkit-user-select:none}
+@media (hover:none){ *{cursor:default} .card-title:hover{color:inherit} }
+:focus{outline:none}
+:focus-visible{outline:2px solid #FF7A45;outline-offset:2px}
+.sim-swipe{min-height:100%}
