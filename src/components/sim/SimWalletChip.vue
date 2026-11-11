@@ -5,7 +5,6 @@ const { balance, pendingReward } = useSimWallet()
 
 <template>
   <div class="sim-wallet-chip wallet-chip spr" data-simchip="1">
-    <span class="presence-dot pulse"></span>
     <strong>Dompet Rp {{ balance }}</strong>
     <span v-if="pendingReward > 0" class="swipe-ghost"> (+{{ pendingReward }} pending)</span>
   </div>
