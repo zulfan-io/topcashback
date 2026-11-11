@@ -48,6 +48,12 @@ const signOut = async() => {
             <ILogout />
           </div>
         </div>
+        <nav class="admin-menu">
+          <router-link to="/admin/dashboard" active-class="am-on" class="am-item"><span class="am-ic">▦</span> Dashboard</router-link>
+          <router-link to="/admin/affiliate" active-class="am-on" class="am-item"><span class="am-ic">🔗</span> Affiliate CRUD</router-link>
+          <router-link to="/admin/category/attributes" active-class="am-on" class="am-item"><span class="am-ic">☰</span> Kategori</router-link>
+          <router-link to="/admin/account/reset" active-class="am-on" class="am-item"><span class="am-ic">↺</span> Reset</router-link>
+        </nav>
       </div>
       <div class="flex justify-center w-full p-3">
         <router-view />
@@ -55,3 +61,11 @@ const signOut = async() => {
     </div>
   </main>
 </template>
+
+<style scoped>
+.admin-menu{ display:flex; flex-direction:column; gap:6px; padding:12px 8px 4px; margin-top:10px; border-top:1px solid #eee; }
+.am-item{ display:flex; align-items:center; gap:8px; padding:9px 12px; border-radius:10px; font-size:13px; font-weight:600; color:#666; text-decoration:none; transition:background .15s, color .15s, transform .15s; }
+.am-item:active{ transform:scale(.98); }
+.am-item.am-on{ background:#FFF3E9; color:#FF7A45; }
+.am-ic{ font-size:15px; width:18px; text-align:center; }
+</style>
