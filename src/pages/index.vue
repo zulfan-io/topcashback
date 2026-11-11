@@ -16,7 +16,8 @@ function biStyle(t: any) {
 }
 
 import { ref, computed, onMounted } from 'vue'
-import { supabase } from '~/utils/supabase'
+import { storeToRefs } from 'pinia'
+import { useCatalog } from '~/stores/catalog'
 import { useRouter } from 'vue-router'
 import type { Product } from '~/schema/catalog'
 import CProductCardThin from '~/components/CProductCardThin.vue'
@@ -51,24 +52,9 @@ function mapOffer(o) {
     models: price != null ? [{ id: o.id, sku: 'AFF' + o.id, price, stock: 0, variation_index: [], is_default: true, product_id: o.id }] : []
   }
 }
-const feed = ref(placeholderFeed())
-const src = ref('live')
-const rowLabels = ['Rekomendasi Untukmu', 'Produk Terlaris', 'Flash Sale', 'Baru Datang']
-const feedAll = computed(() => { const f = feed.value; return f.length >= 15 ? f : [...f, ...f, ...f] })
-const feedRows = computed(() => { const out = []; for (let i = 0; i < feedAll.value.length; i += 5) out.push(feedAll.value.slice(i, i + 5)); return out })
-onMounted(async () => {
-  try {
-    const { data, error } = await supabase
-      .from('shoper_offers')
-      .select('*')
-      .eq('active', true)
-      .limit(24)
-    if (!error && data && data.length) {
-      feed.value = data.map(mapOffer)
-      src.value = 'live'
-    }
-  } catch (e) {}
-})
+const catalog = useCatalog()
+const { feed, src, rowLabels, feedAll, feedRows, loveCounts, shareCounts } = storeToRefs(catalog)
+onMounted(() => catalog.loadOffers())
 
 const storyFaces = ['A','B','C','D','E','F','G']
 const chips = Object.values(brands).slice(0, 12)
@@ -93,20 +79,9 @@ const tabs = [
 ]
 
 const router = useRouter()
-const loveCounts = ref({})
-const shareCounts = ref({})
-async function onLove(p) {
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) { console.log('login dulu buat love'); return }
-  const { data: mem } = await supabase.from('shoper_members').select('id').eq('user_id', user.id).single()
-  if (!mem) { console.log('belum jadi member'); return }
-  const { error } = await supabase.from('shoper_loves').insert({ member_id: mem.id, target_type: 'offer', target_id: String(p.id) })
-  if (!error) loveCounts.value[p.id] = (loveCounts.value[p.id] || 0) + 1
-}
-async function onShare(p) {
-  const { error } = await supabase.from('shoper_shares').insert({ target_type: 'offer', target_id: String(p.id), channel: 'app' })
-  if (!error) shareCounts.value[p.id] = (shareCounts.value[p.id] || 0) + 1
-}
+
+async function onLove(p) { await catalog.love(p) }
+async function onShare(p) { await catalog.share(p) }
 function onSelect(p) {
   router.push('/list')
 }
