@@ -2,6 +2,10 @@
 import SimWalletChip from '~/components/sim/SimWalletChip.vue'
 import { useSimStage } from '~/stores/simStage'
 import { useSimWallet } from '~/stores/simWallet'
+import { useRoute } from 'vue-router'
+import { computed } from 'vue'
+const route = useRoute()
+const dev = computed(() => route.query.dev !== undefined)
 const { stages, current, progress, canUnlock, dailyUsed, dailyCap, nextStage, addProgress, resetDay, resetAll } = useSimStage()
 const wallet = useSimWallet()
 function claimStageReward(){ wallet.reward(1000); wallet.claimReward() }
@@ -17,12 +21,15 @@ const activeTheme = () => (current.value ? themeFor(current.value.id) : stageThe
   <SimWalletChip />
   <div class="stage-page">
     <div v-if="current" class="stage-card sim-card spr-pop" :style="activeTheme()">
+      <span class="paper p2" aria-hidden="true"></span>
+      <span class="paper p1" aria-hidden="true"></span>
+      <span class="paper p0" aria-hidden="true"></span>
       <div class="presence-dot pulse"></div>
       <h2 :style="{color:'var(--stage-accent)'}">{{ current.name }}</h2>
       <p>{{ current.theme }}</p>
       <div class="wallet-chip">Progres {{ progress }}%</div>
       <div class="wallet-chip">Badge harian {{ dailyUsed }} / {{ dailyCap }}</div>
-      <div class="social-rail">
+      <div v-if="dev" class="social-rail">
         <button class="stage-badge" @click="addProgress(10)" aria-label="Tambah progres">+10%</button>
         <button class="stage-badge" @click="nextStage()" aria-label="Naik stage">Naik Stage</button>
         <button class="stage-badge" @click="claimStageReward()" aria-label="Klaim Reward Stage">Klaim Reward Stage</button>
@@ -43,10 +50,15 @@ const activeTheme = () => (current.value ? themeFor(current.value.id) : stageThe
 </template>
 <style scoped>
 .stage-page{padding:4px 0}
-.stage-card{background:var(--stage-bg,#FFF7EC);color:var(--stage-fg,#2b2b2b);border:1px solid var(--stage-accent,#FF7A45);padding:14px;border-radius:22px;transition:background 260ms,color 260ms,border-color 260ms}
+.stage-card{position:relative;z-index:0;background:transparent;color:var(--stage-fg,#2b2b2b);padding:14px;border-radius:22px;transition:color 260ms}
+.stage-card > :not(.paper){position:relative;z-index:1}
+.paper{position:absolute;inset:0;border-radius:22px;background:var(--stage-bg,#FFF7EC);border:1px solid var(--stage-accent,#FF7A45)}
+.paper.p0{box-shadow:0 10px 24px rgba(34,34,34,.14)}
+.paper.p1{transform:rotate(-2deg) translate(-5px,7px);opacity:.5}
+.paper.p2{transform:rotate(1.6deg) translate(6px,11px);opacity:.28}
 .stage-card h2{margin:6px 0 4px;font-size:22px}
 .stage-card p{margin:0 0 10px;font-size:14px;opacity:.85}
 .stage-rail{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;margin-top:16px;padding-bottom:8px;-webkit-overflow-scrolling:touch}
-.stage-rail-item{flex:0 0 60%;scroll-snap-align:center;background:var(--stage-bg);color:var(--stage-fg);border:1px solid var(--stage-accent);padding:12px;border-radius:18px}
+.stage-rail-item{flex:0 0 60%;scroll-snap-align:center;background:var(--stage-bg);color:var(--stage-fg);border:1px solid var(--stage-accent);padding:12px;border-radius:18px;box-shadow:0 4px 0 -1px var(--stage-bg),0 4px 0 0 var(--stage-accent),0 10px 0 -4px var(--stage-bg),0 10px 0 -3px var(--stage-accent);transition:transform 260ms cubic-bezier(.34,1.56,.64,1)}
 .stage-rail-item strong{font-size:16px}
 </style>
