@@ -110,8 +110,10 @@ async function onShare(p) {
 function onSelect(p) {
   router.push('/list')
 }
+const TAB_ROUTE = { home:'/', kat:'/buyer/home', game:'/sim', notif:'/buyer/notifications', saya:'/buyer/login' }
 function onTab(t) {
-  console.log('tab', t.id)
+  const to = TAB_ROUTE[t.id]
+  if (to) router.push(to)
 }
 </script>
 
