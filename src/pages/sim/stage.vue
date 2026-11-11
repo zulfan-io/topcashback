@@ -24,7 +24,6 @@ const activeTheme = () => (current.value ? themeFor(current.value.id) : stageThe
       <span class="paper p2" aria-hidden="true"></span>
       <span class="paper p1" aria-hidden="true"></span>
       <span class="paper p0" aria-hidden="true"></span>
-      <div class="presence-dot pulse"></div>
       <h2 :style="{color:'var(--stage-accent)'}">{{ current.name }}</h2>
       <p>{{ current.theme }}</p>
       <div class="wallet-chip">Progres {{ progress }}%</div>
@@ -41,7 +40,6 @@ const activeTheme = () => (current.value ? themeFor(current.value.id) : stageThe
     <div v-else class="stage-card sim-card swipe-ghost">Semua stage stub selesai.</div>
     <div class="stage-rail">
       <div v-for="s in stages" :key="s.id" class="stage-rail-item sim-card" :style="themeFor(s.id)" :class="{ 'spr-pop': current && current.id === s.id }">
-        <span class="presence-dot pulse"></span>
         <strong :style="{color:'var(--stage-accent)'}">{{ s.name }}</strong>
         <span class="swipe-ghost">{{ s.badgeCost }} badge</span>
       </div>
