@@ -124,7 +124,7 @@ function onTab(t) {
     </header>
 
     <div class="storyrail">
-      <StoryCircle v-for="(f, i) in storyFaces" :key="f" :label="f" :src="'https://picsum.photos/seed/dstory-' + f + '/120/120'" :read="i < 1" :size="54" ring="#0095F6" />
+      <StoryCircle v-for="(f, i) in storyFaces" :key="f" :label="f" :src="null" :read="i < 1" :size="54" ring="#FF7A45" />
     </div>
     <section class="chips">
       <button v-for="b in chips" :key="b" class="chip">{{ b }}</button>
@@ -207,7 +207,8 @@ function onTab(t) {
 .btab { flex: 1; border: 0; background: transparent; font-size: 10px; font-weight: 700; letter-spacing: .5px; color: #888; padding: 4px 0; cursor: pointer; transition: color .15s; }
 .btab.act { color: #FF7A45; }
 .gate { text-align: center; font-size: 12px; color: #666; padding: 10px; border-top: 1px solid #e6e6e6; }
-.storyrail { display: flex; gap: 10px; overflow-x: auto; padding: 10px clamp(12px,3vw,32px); scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+.storyrail { display: flex; gap: 10px; overflow-x: auto; padding: 10px clamp(12px,3vw,32px); scrollbar-width: none; -webkit-overflow-scrolling: touch; scroll-snap-type: x mandatory; overscroll-behavior-x: contain; -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 12px, #000 calc(100% - 12px), transparent 100%); mask-image: linear-gradient(90deg, transparent 0, #000 12px, #000 calc(100% - 12px), transparent 100%); }
+.storyrail > * { scroll-snap-align: start; }
 .storyrail::-webkit-scrollbar { display: none; }
 
 .bi { display: inline-flex; width: 24px; height: 24px; -webkit-mask: var(--m) center / contain no-repeat; mask: var(--m) center / contain no-repeat; background: linear-gradient(180deg, var(--lite), var(--base)); transition: transform .26s cubic-bezier(.34,1.56,.64,1), filter .22s, opacity .2s; }
