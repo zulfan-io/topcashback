@@ -72,7 +72,7 @@ const cards = reactive([
     image: '/img/gen/gift-box-open.webp',
     reward: 'Diskon 80%',
     note: 'Kode: AI45IUY',
-    affiliateLink: 'http://click.accesstrade.co.id/adv.php?rk=00000p000003',
+    affiliateLink: 'https://click.accesstrade.co.id/adv.php?rk=00000p000003',
     opened: false
   }
 ])
