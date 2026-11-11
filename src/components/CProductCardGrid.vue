@@ -28,6 +28,7 @@ const props = defineProps({
 
 const productPrice = ref()
 const productStock = ref()
+const starVal = computed(() => { const r = Number(props.card?.rating ?? props.card?.rate ?? 0); return Number.isFinite(r) ? Math.max(0, Math.min(5, r)) : 0 })
 
 // ------------------------------------------
 watchEffect(async() => {
@@ -92,9 +93,11 @@ const onVisitProduct = (prod_id, shop_id) => {
       </h6>
     </div>
     <div class="flex justify-between">
-      <div class="star-rating flex justify-start">
-        <img v-for="i in 5" :key="i" src="https://img.icons8.com/fluency/48/ffffff/star.png" class="max-w-4 max-h-4">
+      <div v-if="starVal > 0" class="star-rating flex justify-start items-center gap-0.5">
+        <svg v-for="i in 5" :key="i" width="12" height="12" viewBox="0 0 24 24" :fill="i <= starVal ? '#FFB300' : 'none'" :stroke="i <= starVal ? '#FFB300' : '#ccc'" stroke-width="1.75" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z"/></svg>
+        <span class="text-xs text-gray-500 ml-1">{{ starVal.toFixed(1) }}</span>
       </div>
+      <span v-else class="text-xs text-gray-400">Belum ada rating</span>
       <h6 class="text-xs dark:text-gray-300">
         Solded {{ props.card.sold }}
       </h6>
