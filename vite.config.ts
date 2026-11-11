@@ -115,11 +115,13 @@ export default defineConfig({
       includeAssets: ['favicon.svg', 'robots.txt', 'safari-pinned-tab.svg'],
       workbox: {
         cleanupOutdatedCaches: true,
+        skipWaiting: true,
+        clientsClaim: true,
       },
       manifest: {
-        name: 'shoper',
-        short_name: 'shoper katalog', start_url: '/', display: 'standalone', id: '/',
-        theme_color: '#ffffff',
+        name: 'shopergo',
+        short_name: 'shopergo katalog', start_url: '/', display: 'standalone', id: '/',
+        theme_color: '#FFF7EC',
         icons: [
           {
             src: '/pwa-192x192.png',
