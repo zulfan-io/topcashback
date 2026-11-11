@@ -74,7 +74,7 @@ const onVisitProduct = (prod_id, shop_id) => {
     <span class="bg-green-600 text-white font-bold capitalize text-xs rounded p-0.75">-10%</span>
     <span class="bg-orange-400 text-white font-bold capitalize text-xs rounded p-0.75">{{ t('search.new') }}</span>
   </div>
-  <div class="split third rounded-lg shadow-md z-0" @click="onVisitProduct(props.card.id, props.card.shop_id)">
+  <div class="split third rounded-lg shadow-md z-0 press" @click="onVisitProduct(props.card.id, props.card.shop_id)">
     <div class="cover">
       <img class="first-img rounded-t-lg w-full max-h-80" :src="`${getResources(props.card.images[0])}_tn`" alt="product_img">
     </div>
