@@ -3,24 +3,15 @@ meta:
   layout: admin/LADashboard
 </route>
 
-<script setup lang="ts">
+<script setup>
 import { ref, onMounted } from 'vue'
 import { supabase } from '~/utils/supabase'
 
-type Offer = {
-  id: number | string
-  title: string | null
-  price: number | null
-  image_url: string | null
-  affiliate_link: string | null
-  active: boolean | null
-}
-
-const offers = ref<Offer[]>([])
+const offers = ref([])
 const loading = ref(true)
 const err = ref('')
 const ok = ref('')
-const editing = ref<Record<string, string>>({})
+const editing = ref({})
 const draft = ref({ title: '', price: '', image_url: '', affiliate_link: '', active: true })
 
 async function load() {
@@ -28,24 +19,24 @@ async function load() {
   err.value = ''
   const { data, error } = await supabase.from('shoper_offers').select('*').order('id')
   if (error) err.value = error.message
-  else offers.value = (data || []) as Offer[]
+  else offers.value = data || []
   loading.value = false
 }
-function startEdit(o: Offer) { editing.value[String(o.id)] = o.affiliate_link || '' }
-function setLink(o: Offer, e: Event) { editing.value[String(o.id)] = (e.target as HTMLInputElement).value }
-async function saveLink(o: Offer) {
+function startEdit(o) { editing.value[String(o.id)] = o.affiliate_link || '' }
+function setLink(o, e) { editing.value[String(o.id)] = e.target.value }
+async function saveLink(o) {
   const val = editing.value[String(o.id)]
   const { error } = await supabase.from('shoper_offers').update({ affiliate_link: val }).eq('id', o.id)
   if (error) err.value = 'save gagal: ' + error.message
   else { ok.value = 'link tersimpan #' + o.id; o.affiliate_link = val }
 }
-async function toggleActive(o: Offer) {
+async function toggleActive(o) {
   const next = !o.active
   const { error } = await supabase.from('shoper_offers').update({ active: next }).eq('id', o.id)
   if (error) err.value = 'toggle gagal: ' + error.message
   else { o.active = next; ok.value = (next ? 'aktif' : 'nonaktif') + ' #' + o.id }
 }
-async function del(o: Offer) {
+async function del(o) {
   const { error } = await supabase.from('shoper_offers').delete().eq('id', o.id)
   if (error) err.value = 'hapus gagal: ' + error.message
   else { offers.value = offers.value.filter(x => x.id !== o.id); ok.value = 'hapus #' + o.id }
@@ -61,9 +52,9 @@ async function add() {
   const { data, error } = await supabase.from('shoper_offers').insert(payload).select().single()
   if (error) err.value = 'tambah gagal: ' + error.message
   else {
-    offers.value = [data as Offer, ...offers.value]
+    offers.value = [data, ...offers.value]
     draft.value = { title: '', price: '', image_url: '', affiliate_link: '', active: true }
-    ok.value = 'offer baru #' + (data as any).id
+    ok.value = 'offer baru #' + data.id
   }
 }
 onMounted(load)
