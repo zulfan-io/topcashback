@@ -50,7 +50,7 @@ const activeTheme = () => (current.value ? themeFor(current.value.id) : stageThe
 </template>
 <style scoped>
 .stage-page{padding:4px 0}
-.stage-card{position:relative;z-index:0;background:transparent;color:var(--stage-fg,#2b2b2b);padding:14px;border-radius:22px;transition:color 260ms}
+.stage-card{position:relative;z-index:0;overflow:hidden;background:transparent;color:var(--stage-fg,#2b2b2b);padding:14px;border-radius:22px;transition:color 260ms}
 .stage-card > :not(.paper){position:relative;z-index:1}
 .paper{position:absolute;inset:0;border-radius:22px;background:var(--stage-bg,#FFF7EC);border:1px solid var(--stage-accent,#FF7A45)}
 .paper.p0{box-shadow:0 10px 24px rgba(34,34,34,.14)}
