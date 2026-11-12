@@ -93,7 +93,7 @@ async function onTab(t) {
   if (t.id === 'saya') {
     try {
       const { data: { user } } = await supabase.auth.getUser()
-      router.push(user ? '/buyer/account' : to)
+      router.push(user ? '/buyer/account/dashboard' : to)
       return
     } catch (e) { router.push(to); return }
   }
