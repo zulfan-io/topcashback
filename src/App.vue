@@ -82,4 +82,9 @@ const scrollFunction = () => {
     transform: translateY(0);
   }
 }
+
+.fade-enter-active, .fade-leave-active { transition: opacity .28s cubic-bezier(.22,1,.36,1), transform .28s cubic-bezier(.22,1,.36,1); }
+.fade-enter-from { opacity:0; transform: translateY(8px) scale(.985); }
+.fade-leave-to { opacity:0; transform: translateY(-6px) scale(.99); }
+@media (prefers-reduced-motion: reduce){ .fade-enter-active,.fade-leave-active{ transition:opacity .12s; } .fade-enter-from,.fade-leave-to{ transform:none; } }
 </style>

@@ -5,15 +5,16 @@ meta:
 
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
+import { supabase } from '~/utils/supabase'
 
 useHead({
   title: 'buyer | home',
 })
 const router = useRouter()
 
-onMounted(() => {
-  if (!localStorage.getItem('token'))
-    router.push({ path: '/buyer/login' })
+onMounted(async () => {
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) router.push({ path: '/buyer/login' })
 })
 </script>
 
