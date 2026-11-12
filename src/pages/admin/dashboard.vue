@@ -16,6 +16,7 @@ import VChart, { THEME_KEY } from 'vue-echarts'
 import { provide } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAdmin } from '~/stores/admin'
+import { supabase } from '~/utils/supabase'
 
 const admin = useAdmin()
 const router = useRouter()
@@ -24,9 +25,9 @@ useHead({
   title: 'admin | home',
 })
 
-onBeforeMount(() => {
-  if (!localStorage.getItem('token'))
-    router.push({ path: '/admin/login' })
+onBeforeMount(async () => {
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) router.push({ path: '/admin/login' })
 })
 
 use([
