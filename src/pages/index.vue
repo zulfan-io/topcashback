@@ -19,6 +19,7 @@ import { ref, computed, onMounted } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useCatalog } from '~/stores/catalog'
 import { useRouter } from 'vue-router'
+import { supabase } from '~/utils/supabase'
 import type { Product } from '~/schema/catalog'
 import CProductCardThin from '~/components/CProductCardThin.vue'
 import manifest from '~/data/ports.json'
@@ -86,9 +87,17 @@ function onSelect(p) {
   router.push('/list')
 }
 const TAB_ROUTE = { home:'/', kat:'/buyer/home', game:'/sim', notif:'/buyer/notifications', saya:'/buyer/login' }
-function onTab(t) {
+async function onTab(t) {
   const to = TAB_ROUTE[t.id]
-  if (to) router.push(to)
+  if (!to) return
+  if (t.id === 'saya') {
+    try {
+      const { data: { user } } = await supabase.auth.getUser()
+      router.push(user ? '/buyer/account' : to)
+      return
+    } catch (e) { router.push(to); return }
+  }
+  router.push(to)
 }
 </script>
 
