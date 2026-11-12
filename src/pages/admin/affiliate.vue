@@ -5,8 +5,10 @@ meta:
 
 <script setup>
 import { ref, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
 import { supabase } from '~/utils/supabase'
 
+const router = useRouter()
 const offers = ref([])
 const loading = ref(true)
 const err = ref('')
@@ -57,7 +59,11 @@ async function add() {
     ok.value = 'offer baru #' + data.id
   }
 }
-onMounted(load)
+onMounted(async () => {
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) { router.replace('/admin/login'); return }
+  load()
+})
 </script>
 
 <template>

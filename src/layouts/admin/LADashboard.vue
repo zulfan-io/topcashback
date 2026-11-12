@@ -2,6 +2,7 @@
 import { useRouter } from 'vue-router'
 import { useAdmin } from '~/stores/admin'
 import AuthRequest from '~/services/auth-request'
+import { supabase } from '~/utils/supabase'
 
 const admin = useAdmin()
 const router = useRouter()
@@ -9,11 +10,8 @@ const router = useRouter()
 const adminAvatar = ref('/img/admin/avatar_sample.png')
 
 const signOut = async() => {
-  await AuthRequest.logoutAdmin().then(() => {
-    localStorage.removeItem('token')
-    localStorage.removeItem('admin')
-    router.push({ path: '/admin/login' })
-  })
+  await supabase.auth.signOut()
+  router.push({ path: '/admin/login' })
 }
 
 </script>

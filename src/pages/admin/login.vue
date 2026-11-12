@@ -1,117 +1,64 @@
-<route lang="yaml">
-meta:
-  layout: admin/LALogin
-</route>
-
 <script setup>
+import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import AuthRequest from '~/services/auth-request'
-import { toast } from '~/stores/toast'
-import { useAdmin } from '~/stores/admin'
-import { useLoading } from '~/stores/loading'
-import { handleError } from '~/helpers/error'
-
-useHead({
-  title: 'admin | login',
-})
-const { t } = useI18n()
+import { supabase } from '~/utils/supabase'
 
 const router = useRouter()
-const loading = useLoading()
-const useToast = toast()
-const admin = useAdmin()
+const email = ref('')
+const password = ref('')
+const busy = ref(false)
+const err = ref('')
+const ok = ref('')
 
-onMounted(() => {
-  localStorage.removeItem('token')
-  localStorage.removeItem('admin')
-})
-const payload = reactive({
-  usernameOrEmail: '',
-  password: '',
-})
-
-const handleSubmit = async(e) => {
-  e.preventDefault()
-  loading.isLoading = true
-  await AuthRequest.loginAdmin(payload)
-    .then((res) => {
-      admin.payget = res.data
-      localStorage.setItem('token', res.token)
-      localStorage.setItem('admin', JSON.stringify(res))
-      router.push({ path: '/admin/dashboard' })
-      loading.isLoading = false
-      useToast.updateToast('success', `Admin page is ready! Welcome back, ${payload.usernameOrEmail}!`, true)
-    })
-    .catch((error) => {
-      return handleError(error)
-    })
+async function go() {
+  err.value = ''
+  ok.value = ''
+  if (!email.value || !password.value) { err.value = 'Isi email & password dulu.'; return }
+  busy.value = true
+  const { error } = await supabase.auth.signInWithPassword({ email: email.value, password: password.value })
+  busy.value = false
+  if (error) { err.value = error.message || 'Login gagal. Cek email/password.'; return }
+  ok.value = 'Masuk. Membuka dashboard...'
+  router.push('/admin/affiliate')
 }
 
+onMounted(async () => {
+  const { data: { user } } = await supabase.auth.getUser()
+  if (user) router.replace('/admin/affiliate')
+})
 </script>
 
 <template>
-  <div class="seller_login_view_container grid grid-cols-2">
-    <div class="seller-login-container-left grid text-center pt-10">
-      <h2 class="text-red-500 font-bold text-3xl">
-        {{ t('auth.a-banner') }}
-      </h2>
-      <h6 class="text-md tracking-tight w-full mb-5">
-        {{ t('auth.a-desc') }}
-      </h6>
-      <PSLogin />
-    </div>
-    <div class="seller-login-container-right flex justify-center">
-      <div class="w-4/5 bg-white grid justify-center p-5 rounded-2xl shadow-md shadow-gray-300">
-        <h2 class="text-3xl font-semibold tracking-tight mb-5">
-          {{ t('auth.a-title') }}
-        </h2>
-        <form @submit.prevent="handleSubmit">
-          <div>
-            <input v-model="payload.usernameOrEmail" type="text" class="outline-none rounded-md border-1 border-solid border-gray-300 py-2 px-4 w-full focus:bg-[#E8F0FE] duration-200" placeholder="username or email...">
-          </div>
-          <div>
-            <input v-model="payload.password" type="password" class="outline-none rounded-md border-1 border-solid border-gray-300 py-2 px-4 w-full focus:bg-[#E8F0FE] duration-200" placeholder="password..." autocomplete="true">
-          </div>
-          <div class="flex justify-between text-xs">
-            <div class="flex items-center gap-1 whitespace-nowrap accent-red-500">
-              <input id="remember" type="checkbox">
-              <label for="remember">{{ t('auth.a-remember') }}</label>
-            </div>
-            <p class="text-blue-600 hover:text-blue-800 cursor-pointer font-medium">
-              Forgot password?
-            </p>
-          </div>
-          <div class="bg-red-500 hover:bg-red-600 text-center text-white rounded-md py-2 my-1.5 shadow-md shadow-gray-300 capitalize" @click="handleSubmit">
-            <button>
-              {{ t('auth.a-login') }}
-            </button>
-          </div>
-
-          <div class="grid gap-5">
-            <div class="flex justify-between text-xs pt-5">
-              <p class="opacity-60">
-                Don't have a Shoper account yet?
-              </p>
-              <p class="text-blue-600 hover:text-blue-800 font-medium cursor-pointer">
-                Create account
-              </p>
-            </div>
-            <div class="flex justify-center opacity-40 text-xs">
-              <span>_____________________  OR  _____________________</span>
-            </div>
-            <div class="text-center outline-none rounded-md border-1 border-solid border-gray-300 py-2 px-4 cursor-pointer">
-              <p>Login with Primary/Secondary account</p>
-            </div>
-          </div>
-        </form>
-      </div>
+  <div class="lg-wrap">
+    <div class="lg-card">
+      <div class="lg-brand">shopergo <span>admin</span></div>
+      <h1>Masuk Admin</h1>
+      <p class="lg-sub">CRUD affiliate & dashboard pakai akun Supabase lo.</p>
+      <label class="lg-lb">Email</label>
+      <input v-model="email" type="email" inputmode="email" autocomplete="username" placeholder="email lo" />
+      <label class="lg-lb">Password</label>
+      <input v-model="password" type="password" autocomplete="current-password" placeholder="password lo" @keyup.enter="go" />
+      <div v-if="err" class="lg-msg err">{{ err }}</div>
+      <div v-if="ok" class="lg-msg ok">{{ ok }}</div>
+      <button class="lg-btn" :disabled="busy" @click="go">{{ busy ? 'Memproses…' : 'Login' }}</button>
     </div>
   </div>
 </template>
 
 <style scoped>
-form > div{
-  padding: 0.5rem 0;
-  margin: 0.3rem 0;
-}
+.lg-wrap{ min-height:100vh; display:flex; align-items:center; justify-content:center; padding:24px 16px; background:#0f1115; font-family:system-ui,sans-serif; }
+.lg-card{ width:100%; max-width:380px; background:#171a21; border:1px solid #262b34; border-radius:18px; padding:24px 20px; color:#e8e8e8; box-shadow:0 12px 40px rgba(0,0,0,.4); }
+.lg-brand{ font-size:13px; font-weight:800; letter-spacing:.5px; color:#FF7A45; text-transform:uppercase; }
+.lg-brand span{ color:#00B8A9; }
+.lg-card h1{ font-size:22px; font-weight:800; margin:10px 0 2px; color:#fff; }
+.lg-sub{ font-size:12px; color:#8a909c; margin:0 0 18px; }
+.lg-lb{ display:block; font-size:12px; color:#aab0bb; margin:12px 0 6px; }
+.lg-card input{ width:100%; box-sizing:border-box; background:#0f1115; border:1px solid #2c323d; border-radius:10px; padding:12px 14px; font-size:15px; color:#fff; outline:none; }
+.lg-card input:focus{ border-color:#FF7A45; }
+.lg-msg{ font-size:12px; border-radius:8px; padding:8px 10px; margin-top:12px; }
+.lg-msg.err{ background:#2a1416; color:#ff8a80; border:1px solid #4a1f23; }
+.lg-msg.ok{ background:#10241f; color:#7fe3c8; border:1px solid #1c3f37; }
+.lg-btn{ width:100%; margin-top:18px; background:#FF7A45; color:#fff; border:0; border-radius:12px; padding:13px; font-size:15px; font-weight:700; cursor:pointer; transition:transform .12s, opacity .12s; }
+.lg-btn:active{ transform:scale(.98); }
+.lg-btn:disabled{ opacity:.6; cursor:not-allowed; }
 </style>
