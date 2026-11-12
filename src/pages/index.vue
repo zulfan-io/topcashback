@@ -166,6 +166,7 @@ async function onTab(t) {
             <button class="hub-tile" @click="hubOpen=false; router.push('/sc1')"><span class="ht-ic">&#9733;</span>Status</button>
             <button class="hub-tile" @click="hubOpen=false; router.push('/gallery')"><span class="ht-ic">&#9654;</span>Vlog<span class="ht-soon">beta</span></button>
             <button class="hub-tile" @click="hubOpen=false; $nextTick(()=>{const f=document.querySelector('.feedrow'); (f||document.body).scrollIntoView({behavior:'smooth',block:'start'})})"><span class="ht-ic">&#128250;</span>Review</button>
+            <button class="hub-tile" @click="hubOpen=false; router.push('/ppob')"><span class="ht-ic">&#9889;</span>PPOB</button>
             <button class="hub-tile pink" @click="hubOpen=false; router.push('/sim')"><span class="ht-ic">&#9829;</span>Kencan</button>
           </div>
           <button class="hub-x" @click="hubOpen=false">Tutup</button>

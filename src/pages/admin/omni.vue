@@ -27,6 +27,7 @@ const USER_TILES = [
   { id: 'sim', label: 'Kencan', to: '/sim', ic: '\u2665', hint: 'dating' },
   { id: 'st', label: 'Status', to: '/sc1', ic: '\u2605', hint: 'sosmed' },
   { id: 'vl', label: 'Vlog', to: '/gallery', ic: '\u25B6', hint: 'beta' },
+  { id: 'ppob', label: 'PPOB', to: '/ppob', ic: '\u26A1', hint: 'pulsa/listrik' },
 ]
 
 function go(t) { router.push(t.to) }
