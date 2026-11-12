@@ -66,4 +66,9 @@ const signOut = async() => {
 .am-item:active{ transform:scale(.98); }
 .am-item.am-on{ background:#FFF3E9; color:#FF7A45; }
 .am-ic{ font-size:15px; width:18px; text-align:center; }
+
+@media (max-width:900px){
+  .bg-\[\#F6F6F6\]{ flex-direction:column !important; }
+  .w-100{ width:100% !important; }
+}
 </style>
