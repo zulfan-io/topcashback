@@ -4,6 +4,7 @@ meta:
 </route>
 
 <script setup>
+import { supabase } from '~/utils/supabase'
 import { useRouter } from 'vue-router'
 import ProductRequest from '~/services/product-request'
 import { useAdmin } from '~/stores/admin'
@@ -17,9 +18,9 @@ const admin = useAdmin()
 const useToast = toast()
 const product = useProduct()
 
-onBeforeMount(() => {
-  if (!localStorage.getItem('token'))
-    router.push({ path: '/admin/login' })
+onBeforeMount(async () => {
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) router.push({ path: '/admin/login' })
 })
 
 const inputSearch = ref('')
