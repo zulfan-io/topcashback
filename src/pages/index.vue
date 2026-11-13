@@ -8,6 +8,23 @@ const BI_REG = { IHome, IShop, IApplication, INotify, IAccount }
 const BI_MAP: Record<string,string> = {"home": "IHome", "kat": "IShop", "game": "IApplication", "notif": "INotify", "saya": "IAccount"}
 const BI_CFG: Record<string,{lite:string;base:string;m:string}> = {'home':{lite:'#6EE7B7',base:'#10B981',m:"url(\"data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' aria-hidden='true' role='img' width='1.2em' height='1.2em' preserveAspectRatio='xMidYMid meet' viewBox='0 0 24 24'><path fill='currentColor' d='M3 13h1v7c0 1.103.897 2 2 2h12c1.103 0 2-.897 2-2v-7h1a1 1 0 0 0 .707-1.707l-9-9a.999.999 0 0 0-1.414 0l-9 9A1 1 0 0 0 3 13zm7 7v-5h4v5h-4zm2-15.586l6 6V15l.001 5H16v-5c0-1.103-.897-2-2-2h-4c-1.103 0-2 .897-2 2v5H6v-9.586l6-6z' /></svg>\")"},'kat':{lite:'#9CC4FF',base:'#2F6BFF',m:"url(\"data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' aria-hidden='true' role='img' width='1.2em' height='1.2em' preserveAspectRatio='xMidYMid meet' viewBox='0 0 24 24'><g stroke-width='1.5' fill='none'><path d='M21.818 9.364l-1.694-5.929A.6.6 0 0 0 19.547 3H15.5l.475 5.704a.578.578 0 0 0 .278.45c.39.233 1.152.663 1.747.846c1.016.313 2.5.2 3.346.096a.57.57 0 0 0 .472-.732z' stroke='currentColor' /><path d='M14 10c.568-.175 1.288-.574 1.69-.812a.578.578 0 0 0 .28-.549L15.5 3h-7l-.47 5.639a.578.578 0 0 0 .28.55c.402.237 1.122.636 1.69.811c1.493.46 2.507.46 4 0z' stroke='currentColor' /><path d='M3.876 3.435l-1.694 5.93a.57.57 0 0 0 .472.73c.845.105 2.33.217 3.346-.095c.595-.183 1.358-.613 1.747-.845a.578.578 0 0 0 .278-.451L8.5 3H4.453a.6.6 0 0 0-.577.435z' stroke='currentColor' /><path d='M3 10v9a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-9' stroke='currentColor' /></g></svg>\")"},'game':{lite:'#FF8FB1',base:'#FF5C8A',m:"url(\"data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' aria-hidden='true' role='img' width='1.2em' height='1.2em' preserveAspectRatio='xMidYMid meet' viewBox='0 0 48 48'><path fill='currentColor' d='M10 14a4 4 0 1 0 0-8a4 4 0 0 0 0 8Zm14 0a4 4 0 1 0 0-8a4 4 0 0 0 0 8Zm14 0a4 4 0 1 0 0-8a4 4 0 0 0 0 8ZM10 28a4 4 0 1 0 0-8a4 4 0 0 0 0 8Zm14 0a4 4 0 1 0 0-8a4 4 0 0 0 0 8Zm14 0a4 4 0 1 0 0-8a4 4 0 0 0 0 8ZM10 42a4 4 0 1 0 0-8a4 4 0 0 0 0 8Zm14 0a4 4 0 1 0 0-8a4 4 0 0 0 0 8Zm14 0a4 4 0 1 0 0-8a4 4 0 0 0 0 8Z' /></svg>\")"},'notif':{lite:'#FFE0A3',base:'#FFB300',m:"url(\"data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' aria-hidden='true' role='img' width='1em' height='1em' preserveAspectRatio='xMidYMid meet' viewBox='0 0 32 32'><path fill='currentColor' d='M26 16.586V14h-2v3a1 1 0 0 0 .293.707L27 20.414V22H5v-1.586l2.707-2.707A1 1 0 0 0 8 17v-4a7.985 7.985 0 0 1 12-6.918V3.847a9.896 9.896 0 0 0-3-.796V1h-2v2.05A10.014 10.014 0 0 0 6 13v3.586l-2.707 2.707A1 1 0 0 0 3 20v3a1 1 0 0 0 1 1h7v1a5 5 0 0 0 10 0v-1h7a1 1 0 0 0 1-1v-3a1 1 0 0 0-.293-.707ZM19 25a3 3 0 0 1-6 0v-1h6Z' /><circle cx='26' cy='8' r='4' fill='currentColor' /></svg>\")"},'saya':{lite:'#A7F3D9',base:'#00B894',m:"url(\"data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' aria-hidden='true' role='img' width='1.4em' height='1.4em' preserveAspectRatio='xMidYMid meet' viewBox='0 0 24 24'><path fill='currentColor' d='M16.5 12c1.38 0 2.49-1.12 2.49-2.5S17.88 7 16.5 7a2.5 2.5 0 0 0 0 5zM9 11c1.66 0 2.99-1.34 2.99-3S10.66 5 9 5S6 6.34 6 8s1.34 3 3 3zm7.5 3c-1.83 0-5.5.92-5.5 2.75V18c0 .55.45 1 1 1h9c.55 0 1-.45 1-1v-1.25c0-1.83-3.67-2.75-5.5-2.75zM9 13c-2.33 0-7 1.17-7 3.5V18c0 .55.45 1 1 1h6v-2.25c0-.85.33-2.34 2.37-3.47C10.5 13.1 9.66 13 9 13z' /></svg>\")"},}
 const BI_IDLE = "#9a9a9a"
+import { onMounted, onUnmounted, ref, computed } from 'vue'
+import { usePpob } from '~/stores/ppob'
+import { useSimStage } from '~/stores/simStage'
+import { useSimWallet } from '~/stores/simWallet'
+const ppob = usePpob(); const stg = useSimStage(); const wal = useSimWallet()
+const MERCHANTS = [ {slug:'shopee',pct:40,hot:true}, {slug:'tokopedia',pct:30}, {slug:'tiktok',pct:25}, {slug:'lazada',pct:20}, {slug:'blibli',pct:15}, {slug:'bukalapak',pct:15}, {slug:'gojek',pct:10}, {slug:'grab',pct:10} ]
+const TRAVEL = [ {dom:'traveloka.com',pct:8}, {dom:'tiket.com',pct:6} ]
+const PINTASAN = [ {lb:'Mall',n:8,to:'/buyer/home'}, {lb:'TopUp',n:2,to:'/ppob'}, {lb:'Misi',n:2,to:'/sim/stage'}, {lb:'Wallet',n:0,to:'/sim/wallet'}, {lb:'Travel',n:0,to:'/buyer/home'}, {lb:'Game',n:0,to:'/sim'} ]
+const cd = ref('00:00:00'); let cdt=null
+const saldo = computed(() => { const b = wal.balance; return Number(Array.isArray(b)?0:(b && b.value!==undefined ? b.value : b)) || 0 })
+const slotLeft = computed(() => { const c=stg.dailyCap, u=stg.dailyUsed; const cv=Number(c && c.value!==undefined?c.value:c)||0; const uv=Number(u && u.value!==undefined?u.value:u)||0; return Math.max(0,cv-uv) })
+const ppobTiles = computed(() => { const p=ppob.products; const arr=Array.isArray(p)?p:(p && p.value?p.value:[]); return arr.slice(0,3) })
+const claimedToday = ref(false)
+function tick(){ const n=new Date(); const m=new Date(n); m.setHours(24,0,0,0); const t=Math.max(0,Math.floor((m-n)/1000)); cd.value=[Math.floor(t/3600),Math.floor(t%3600/60),t%60].map(x=>String(x).padStart(2,'0')).join(':') }
+function claimScroll(){ if (claimedToday.value) return; wal.reward(500); wal.claimReward(); claimedToday.value=true; try{ localStorage.setItem('parity_scroll', new Date().toDateString()) }catch(e){} }
+onMounted(() => { tick(); cdt=setInterval(tick,1000); ppob.load(); try{ claimedToday.value = localStorage.getItem('parity_scroll')===new Date().toDateString() }catch(e){} })
+onUnmounted(() => { if (cdt) clearInterval(cdt) })
 function biStyle(t: any) {
   const nm = BI_MAP[t.id]; const s = BI_CFG[t.id]
   if (!nm || !s) return {}
@@ -105,28 +122,67 @@ async function onTab(t) {
 </script>
 
 <template>
-  <div class="dual">
-    <header class="top">
-      <span class="logo">shoper</span>
-      <span class="tag">katalog affiliate + widget pintasan</span>
+  <div class="dual" data-v4-parity="1">
+    <header class="top-air">
+      <span class="logo-air">shopergo</span>
+      <span class="tag-air">cashback aggregator + widget pintasan</span>
       <span class="badge" :class="src">{{ src }}</span>
     </header>
 
-    <div class="storyrail">
-      <StoryCircle v-for="(f, i) in storyFaces" :key="f" :label="f" :src="null" :read="i < 1" :size="54" ring="#FF7A45" />
+    <section class="saldo-card">
+      <div class="sc-l">
+        <span class="sc-k">Saldo Cashback</span>
+        <strong class="sc-v">Rp {{ Number(saldo).toLocaleString('id-ID') }}</strong>
+      </div>
+      <div class="sc-a">
+        <button class="sc-b" @click="router.push('/ppob')">+ Top Up</button>
+        <button class="sc-b ghost" @click="router.push('/sim/wallet')">Tarik</button>
+        <button class="sc-b ghost" @click="router.push('/sim/wallet')">Riwayat</button>
+      </div>
+    </section>
+    <div class="par-row">
+      <span v-for="p in PINTASAN" :key="p.lb" class="par-circle">
+        <StoryCircle :label="p.lb" :src="null" :size="54" ring="#FF7A45" @open="router.push(p.to)" />
+        <i v-if="p.n" class="par-cb">{{ p.n }}</i>
+        <span class="par-lb">{{ p.lb }}</span>
+      </span>
     </div>
-    <section class="chips">
-      <button v-for="b in chips" :key="b" class="chip">{{ b }}</button>
+    <section class="merchant-vivid">
+      <div class="mv-h"><span>Cashback s/d 40%</span><button class="mv-all" @click="router.push('/buyer/home')">Lihat Semua ›</button></div>
+      <div class="mv-g">
+        <button v-for="m in MERCHANTS" :key="m.slug" class="mv-t" @click="router.push('/buyer/home')">
+          <img :src="'https://cdn.simpleicons.org/'+m.slug+'/ffffff'" :alt="m.slug" loading="lazy" />
+          <i class="mv-p">{{ m.pct }}%</i>
+          <i v-if="m.hot" class="mv-hot">HOT</i>
+        </button>
+      </div>
     </section>
 
-    <aside class="dock">
-      <div v-for="w in slots" :key="w.id" class="slot" :class="{ off: !w.enabled }">
-        <span class="ic">{{ w.id.slice(0, 2).toUpperCase() }}</span>
-        <span class="lb">{{ w.kind }}</span>
-        <span v-if="!w.enabled" class="soon">segera</span>
+    <section class="fomo-band">
+      <div class="fb-h"><span class="fb-slot">Tinggal {{ slotLeft }} slot</span><span class="fb-cd">{{ cd }}</span></div>
+      <div class="fb-misi">
+        <span class="fb-t">Misi belanja Shopee</span>
+        <span class="fb-s">Bonus s/d 30RB · reset harian</span>
+        <button class="fb-b" @click="router.push('/sim/stage')">Ikuti</button>
       </div>
-    </aside>
+      <div class="ppob-strip">
+        <button v-for="pr in ppobTiles" :key="pr.code" class="pp-t" @click="router.push('/ppob')">
+          <strong>{{ pr.name }}</strong>
+          <span>Rp {{ Number(pr.price).toLocaleString('id-ID') }}</span>
+          <i>Bayar dulu → instant</i>
+        </button>
+      </div>
+    </section>
 
+    <section class="travel-strip">
+      <div class="tv-h"><span>Travel & Brand</span></div>
+      <div class="tv-r">
+        <button v-for="t in TRAVEL" :key="t.dom" class="tv-t" @click="router.push('/buyer/home')">
+          <img :src="'https://logo.clearbit.com/'+t.dom" :alt="t.dom" loading="lazy" />
+          <i>{{ t.pct }}%</i>
+        </button>
+      </div>
+    </section>
     <section v-for="(row, ri) in feedRows" :key="ri" class="feedrow">
       <div class="lbl">{{ rowLabels[ri] || 'Rekomendasi' }}</div>
       <main class="feed">
@@ -143,18 +199,16 @@ async function onTab(t) {
       </main>
     </section>
 
-    <section v-if="pulsaOn" class="reward">
-      Main game -> kumpulin poin -> <b>pulsa gratis</b> dari owner
+    <section class="payoff">
+      <span class="po-ic">🎉</span>
+      <div class="po-t"><strong>Kamu udah jelajahi semua!</strong><span>Klaim bonus scroll harian</span></div>
+      <button class="po-b" :disabled="claimedToday" @click="claimScroll">{{ claimedToday ? 'Besok lagi' : '+Rp500 KLAIM' }}</button>
     </section>
 
-    <nav class="botnav">
-      <button
-        v-for="t in tabs"
-        :key="t.id"
-        class="btab"
-        :class="{ act: t.on }"
-        @click="onTab(t)"
-      ><span class="bi" :style="biStyle(t)"></span></button>
+    <nav class="nav-air">
+      <button v-for="t in tabs" :key="t.id" class="na-t" :class="{ act: t.on }" @click="onTab(t)">
+        <span class="bi" :style="biStyle(t)"></span>
+      </button>
     </nav>
     <transition name="hub">
       <div v-if="hubOpen" class="hub-bd" @click.self="hubOpen=false">
@@ -174,9 +228,7 @@ async function onTab(t) {
       </div>
     </transition>
 
-    <footer class="gate">
-      Daftar member: <b>{{ capture }}</b> -> database berharga
-    </footer>
+    <footer class="gate-air"><b>{{ capture }}</b> member bergabung · cashback jujur, scarcity nyata</footer>
   </div>
 </template>
 
@@ -238,5 +290,60 @@ async function onTab(t) {
 .hub-enter-from .hub-panel,.hub-leave-to .hub-panel{ transform:translateY(40px) scale(.97); }
 .hub-enter-active .hub-panel,.hub-leave-active .hub-panel{ transition:transform .3s cubic-bezier(.22,1,.36,1); }
 @media (prefers-reduced-motion: reduce){ .hub-enter-active,.hub-leave-active,.hub-enter-active .hub-panel,.hub-leave-active .hub-panel{ transition:opacity .12s; } .hub-enter-from .hub-panel,.hub-leave-to .hub-panel{ transform:none; } }
+
+.top-air{display:flex;align-items:center;gap:8px;padding:calc(10px + env(safe-area-inset-top)) 14px 10px;background:rgba(255,247,236,.86);backdrop-filter:blur(10px);position:sticky;top:0;z-index:20}
+.logo-air{font-weight:800;color:#FF7A45;font-size:20px}
+.tag-air{color:#8a8a8a;font-size:12px;flex:1}
+.saldo-card{margin:12px 14px;padding:14px;border-radius:18px;background:linear-gradient(135deg,#FF7A45,#FF4D3D);color:#fff;display:flex;justify-content:space-between;align-items:center;box-shadow:0 10px 24px rgba(255,77,61,.25)}
+.sc-k{font-size:11px;opacity:.85;display:block}
+.sc-v{font-size:22px;font-weight:800}
+.sc-a{display:flex;gap:6px}
+.sc-b{border:0;border-radius:999px;padding:7px 10px;font-size:11px;font-weight:700;background:#fff;color:#FF4D3D}
+.sc-b.ghost{background:rgba(255,255,255,.18);color:#fff}
+.par-row{display:flex;gap:12px;overflow-x:auto;padding:4px 14px 10px;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.par-row::-webkit-scrollbar{display:none}
+.par-circle{position:relative;flex:0 0 auto;display:flex;flex-direction:column;align-items:center;gap:4px;scroll-snap-align:start}
+.par-cb{position:absolute;top:-4px;right:2px;background:#FF4D3D;color:#fff;font-size:9px;font-style:normal;border-radius:999px;padding:1px 5px;border:2px solid #FFF7EC}
+.par-lb{font-size:10px;color:#6b6b6b}
+.merchant-vivid{margin:6px 14px}
+.mv-h{display:flex;justify-content:space-between;align-items:center;font-weight:700;font-size:14px;color:#2b2b2b}
+.mv-all{border:0;background:none;color:#FF7A45;font-size:12px;font-weight:700}
+.mv-g{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:8px}
+.mv-t{position:relative;border:0;border-radius:14px;padding:14px 6px 10px;background:linear-gradient(160deg,#FF7A45,#FF4D3D);display:flex;flex-direction:column;align-items:center;gap:6px}
+.mv-t img{width:26px;height:26px}
+.mv-p{font-style:normal;font-size:10px;font-weight:800;color:#fff;background:rgba(0,0,0,.22);border-radius:999px;padding:1px 6px}
+.mv-hot{position:absolute;top:4px;left:4px;font-style:normal;font-size:8px;font-weight:800;color:#FF4D3D;background:#fff;border-radius:4px;padding:1px 4px}
+.fomo-band{margin:10px 14px;padding:12px;border-radius:16px;background:#fff;border:1px solid rgba(255,122,69,.25);box-shadow:0 6px 18px rgba(34,34,34,.06)}
+.fb-h{display:flex;justify-content:space-between;align-items:center}
+.fb-slot{font-size:11px;font-weight:800;color:#E63946}
+.fb-cd{font-variant-numeric:tabular-nums;font-weight:800;color:#FF4D3D;font-size:14px}
+.fb-misi{display:flex;align-items:center;gap:8px;margin:8px 0}
+.fb-t{font-size:12px;font-weight:700;flex:1}
+.fb-s{font-size:10px;color:#8a8a8a}
+.fb-b{border:0;border-radius:999px;background:#00B8A9;color:#fff;font-size:11px;font-weight:700;padding:6px 10px}
+.ppob-strip{display:flex;gap:8px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none}
+.ppob-strip::-webkit-scrollbar{display:none}
+.pp-t{flex:0 0 46%;scroll-snap-align:start;border:1px solid rgba(0,184,169,.35);background:rgba(0,184,169,.06);border-radius:12px;padding:8px;display:flex;flex-direction:column;gap:2px;text-align:left}
+.pp-t strong{font-size:12px}
+.pp-t span{font-size:12px;font-weight:800;color:#00B8A9}
+.pp-t i{font-style:normal;font-size:9px;color:#8a8a8a}
+.travel-strip{margin:10px 14px}
+.tv-h{font-weight:700;font-size:14px}
+.tv-r{display:flex;gap:8px;margin-top:8px}
+.tv-t{flex:1;border:0;border-radius:12px;background:#fff;border:1px solid rgba(34,34,34,.08);padding:10px;display:flex;align-items:center;justify-content:space-between}
+.tv-t img{height:22px}
+.tv-t i{font-style:normal;font-size:11px;font-weight:800;color:#FF7A45}
+.payoff{margin:12px 14px;padding:12px;border-radius:16px;background:rgba(0,184,169,.10);border:1px dashed #00B8A9;display:flex;align-items:center;gap:10px}
+.po-ic{font-size:22px}
+.po-t{flex:1;display:flex;flex-direction:column}
+.po-t strong{font-size:13px}
+.po-t span{font-size:11px;color:#6b6b6b}
+.po-b{border:0;border-radius:999px;background:#00B8A9;color:#fff;font-weight:800;font-size:11px;padding:8px 12px}
+.po-b:disabled{background:#c9c9c9}
+.nav-air{position:fixed;left:0;right:0;bottom:0;z-index:30;display:flex;justify-content:space-around;align-items:center;height:calc(60px + env(safe-area-inset-bottom));padding:0 6px env(safe-area-inset-bottom);background:rgba(255,247,236,.82);backdrop-filter:blur(12px);border-top:1px solid rgba(255,122,69,.16)}
+.na-t{border:0;background:none;flex:1;display:flex;justify-content:center;padding:8px 0;border-radius:14px;transition:transform .18s cubic-bezier(.34,1.56,.64,1)}
+.na-t:active{transform:scale(.94)}
+.na-t.act{background:rgba(255,122,69,.12)}
+.gate-air{padding:14px 14px calc(80px + env(safe-area-inset-bottom));text-align:center;font-size:11px;color:#8a8a8a}
 </style>
 
