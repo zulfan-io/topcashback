@@ -14,7 +14,7 @@ const loading = ref(true)
 const err = ref('')
 const ok = ref('')
 const editing = ref({})
-const draft = ref({ title: '', price: '', image_url: '', affiliate_link: '', active: true })
+const draft = ref({ title: '', price: '', image_url: '', url: '', active: true })
 
 async function load() {
   loading.value = true
@@ -24,13 +24,13 @@ async function load() {
   else offers.value = data || []
   loading.value = false
 }
-function startEdit(o) { editing.value[String(o.id)] = o.affiliate_link || '' }
+function startEdit(o) { editing.value[String(o.id)] = o.url || '' }
 function setLink(o, e) { editing.value[String(o.id)] = e.target.value }
 async function saveLink(o) {
   const val = editing.value[String(o.id)]
-  const { error } = await supabase.from('shoper_offers').update({ affiliate_link: val }).eq('id', o.id)
+  const { error } = await supabase.from('shoper_offers').update({ url: val }).eq('id', o.id)
   if (error) err.value = 'save gagal: ' + error.message
-  else { ok.value = 'link tersimpan #' + o.id; o.affiliate_link = val }
+  else { ok.value = 'link tersimpan #' + o.id; o.url = val }
 }
 async function toggleActive(o) {
   const next = !o.active
@@ -48,14 +48,14 @@ async function add() {
     title: draft.value.title || 'Produk',
     price: draft.value.price ? Number(draft.value.price) : null,
     image_url: draft.value.image_url || null,
-    affiliate_link: draft.value.affiliate_link || null,
+    url: draft.value.url || null,
     active: draft.value.active,
   }
   const { data, error } = await supabase.from('shoper_offers').insert(payload).select().single()
   if (error) err.value = 'tambah gagal: ' + error.message
   else {
     offers.value = [data, ...offers.value]
-    draft.value = { title: '', price: '', image_url: '', affiliate_link: '', active: true }
+    draft.value = { title: '', price: '', image_url: '', url: '', active: true }
     ok.value = 'offer baru #' + data.id
   }
 }
@@ -70,7 +70,7 @@ onMounted(async () => {
   <div class="aff-page">
     <header class="aff-head">
       <h1>CRUD Affiliate</h1>
-      <p class="aff-sub">Ngutak-atik <code>shoper_offers.affiliate_link</code> langsung dari dashboard lo. Sinkron & keamanan nyusul (arah Coi).</p>
+      <p class="aff-sub">Ngutak-atik <code>shoper_offers.url</code> langsung dari dashboard lo. Sinkron & keamanan nyusul (arah Coi).</p>
     </header>
     <div v-if="err" class="aff-msg err">{{ err }}</div>
     <div v-if="ok" class="aff-msg ok">{{ ok }}</div>
@@ -81,7 +81,7 @@ onMounted(async () => {
         <input v-model="draft.title" placeholder="judul" />
         <input v-model="draft.price" placeholder="harga" inputmode="numeric" />
         <input v-model="draft.image_url" placeholder="image_url" />
-        <input v-model="draft.affiliate_link" placeholder="affiliate_link (click.accesstrade...)" />
+        <input v-model="draft.url" placeholder="url (click.accesstrade...)" />
         <label class="aff-chk"><input type="checkbox" v-model="draft.active" /> active</label>
         <button class="aff-btn primary" @click="add">+ Simpan</button>
       </div>
@@ -92,14 +92,14 @@ onMounted(async () => {
       <div v-if="loading" class="aff-empty">Loading…</div>
       <div v-else-if="!offers.length" class="aff-empty">Belum ada offer. Tambah di atas, atau seed via dashboard Supabase.</div>
       <table v-else class="aff-table">
-        <thead><tr><th>#</th><th>Judul</th><th>Harga</th><th>Active</th><th>affiliate_link</th><th>Aksi</th></tr></thead>
+        <thead><tr><th>#</th><th>Judul</th><th>Harga</th><th>Active</th><th>url</th><th>Aksi</th></tr></thead>
         <tbody>
           <tr v-for="o in offers" :key="String(o.id)">
             <td>{{ o.id }}</td>
             <td>{{ o.title || '—' }}</td>
             <td>{{ o.price != null ? 'Rp' + o.price : '—' }}</td>
             <td><button class="aff-btn sm" @click="toggleActive(o)">{{ o.active ? '✓' : '✗' }}</button></td>
-            <td><input class="aff-link" :value="editing[String(o.id)] ?? (o.affiliate_link || '')" @focus="startEdit(o)" @input="setLink(o, $event)" /></td>
+            <td><input class="aff-link" :value="editing[String(o.id)] ?? (o.url || '')" @focus="startEdit(o)" @input="setLink(o, $event)" /></td>
             <td class="aff-act">
               <button class="aff-btn sm primary" @click="saveLink(o)">Save</button>
               <button class="aff-btn sm danger" @click="del(o)">Hapus</button>
@@ -136,4 +136,15 @@ onMounted(async () => {
 .aff-act{ display:flex; gap:6px; }
 .aff-empty{ padding:18px; text-align:center; color:#888; font-size:13px; background:#fafafa; border-radius:12px; }
 @media (max-width:640px){ .aff-table{ font-size:12px; } .aff-link{ font-size:11px; } }
+
+/* Fusion restyle dashboard (element-selector, PASTI nempel tanpa nebak class) */
+table{width:100%;border-collapse:collapse;background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 2px 12px rgba(255,122,69,.12)}
+th{background:linear-gradient(135deg,#FF7A45,#FF4D3D);color:#fff;font-weight:800;padding:10px 8px;font-size:13px;text-align:left}
+td{padding:9px 8px;border-bottom:1px solid #f3e3d3;font-size:13px;color:#2b2b2b}
+tr:hover td{background:#fff3e9}
+input,select,textarea{border:1px solid #ffd3b3;border-radius:10px;padding:8px 10px;font-size:13px;background:#fff;color:#2b2b2b}
+input:focus,select:focus{outline:none;border-color:#FF7A45;box-shadow:0 0 0 3px rgba(255,122,69,.18)}
+button{border-radius:10px;padding:7px 12px;font-weight:700;font-size:12px;cursor:pointer;border:0;background:#FF7A45;color:#fff}
+button:hover{background:#FF4D3D}
+label{font-size:12px;font-weight:700;color:#8a5a2b}
 </style>
