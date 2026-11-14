@@ -13,6 +13,12 @@ import { usePpob } from '~/stores/ppob'
 import { useSimStage } from '~/stores/simStage'
 import { useSimWallet } from '~/stores/simWallet'
 const ppob = usePpob(); const stg = useSimStage(); const wal = useSimWallet()
+const KOL_TIER1 = [
+  {lb:'TikTok 1',to:'https://atid.me/go/opiVSHqd'},
+  {lb:'TikTok 2',to:'https://atid.me/go/bytUlhw7'},
+  {lb:'Microblog',to:'https://atid.me/go/sh0FFz0q'},
+  {lb:'FB Emak',to:'https://atid.me/go/AyA2TrNG'}
+]
 const MERCHANTS = [ {slug:'shopee',pct:40,hot:true}, {slug:'tokopedia',pct:30}, {slug:'tiktok',pct:25}, {slug:'lazada',pct:20}, {slug:'blibli',pct:15}, {slug:'bukalapak',pct:15}, {slug:'gojek',pct:10}, {slug:'grab',pct:10} ]
 const TRAVEL = [ {dom:'traveloka.com',pct:8}, {dom:'tiket.com',pct:6} ]
 const PINTASAN = [ {lb:'Mall',n:8,to:'/buyer/home'}, {lb:'TopUp',n:2,to:'/ppob'}, {lb:'Misi',n:2,to:'/sim/stage'}, {lb:'Wallet',n:0,to:'/sim/wallet'}, {lb:'Travel',n:0,to:'/buyer/home'}, {lb:'Game',n:0,to:'/sim'} ]
@@ -147,6 +153,14 @@ async function onTab(t) {
         <span class="par-lb">{{ p.lb }}</span>
       </span>
     </div>
+    <section class="kol-tier1">
+      <div class="kt-h"><span>Shopee KOL Tier 1 · cashback tertinggi</span><i class="kt-badge">TIER 1</i></div>
+      <div class="kt-r">
+        <a v-for="k in KOL_TIER1" :key="k.lb" class="kt-t" :href="k.to" target="_blank" rel="noopener sponsored">
+          <strong>{{ k.lb }}</strong><span>Salin & sebar ›</span>
+        </a>
+      </div>
+    </section>
     <section class="merchant-vivid">
       <div class="mv-h"><span>Cashback s/d 40%</span><button class="mv-all" @click="router.push('/buyer/home')">Lihat Semua ›</button></div>
       <div class="mv-g">
@@ -345,5 +359,13 @@ async function onTab(t) {
 .na-t:active{transform:scale(.94)}
 .na-t.act{background:rgba(255,122,69,.12)}
 .gate-air{padding:14px 14px calc(80px + env(safe-area-inset-bottom));text-align:center;font-size:11px;color:#8a8a8a}
+
+.kol-tier1{margin:6px 14px}
+.kt-h{display:flex;justify-content:space-between;align-items:center;font-weight:800;font-size:14px;color:#2b2b2b}
+.kt-badge{font-style:normal;font-size:9px;font-weight:800;color:#fff;background:linear-gradient(135deg,#FF7A45,#FF4D3D);border-radius:6px;padding:2px 6px}
+.kt-r{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:8px}
+.kt-t{text-decoration:none;border:0;border-radius:14px;padding:12px 10px;background:linear-gradient(160deg,#FFF7EC,#fff);border:1px solid rgba(255,122,69,.3);display:flex;flex-direction:column;gap:2px;color:#2b2b2b}
+.kt-t strong{font-size:13px;color:#FF4D3D}
+.kt-t span{font-size:10px;color:#8a8a8a}
 </style>
 
