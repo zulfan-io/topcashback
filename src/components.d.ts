@@ -186,6 +186,7 @@ declare module 'vue' {
     PCheckoutBot: typeof import('./components/partterns/PCheckoutBot.vue')['default']
     PNotFound: typeof import('./components/partterns/PNotFound.vue')['default']
     PNotNotify: typeof import('./components/partterns/PNotNotify.vue')['default']
+    PresenceDot: typeof import('./components/sim/PresenceDot.vue')['default']
     PSLogin: typeof import('./components/partterns/seller/PSLogin.vue')['default']
     PSRegister: typeof import('./components/partterns/seller/PSRegister.vue')['default']
     README: typeof import('./components/README.md')['default']
@@ -193,8 +194,15 @@ declare module 'vue' {
     RProductCard: typeof import('./components/rendering/RProductCard.vue')['default']
     RProductCardGrid: typeof import('./components/rendering/RProductCardGrid.vue')['default']
     SHead: typeof import('./components/seller/SHead.vue')['default']
+    SimBottomNav: typeof import('./components/sim/SimBottomNav.vue')['default']
+    SimCard: typeof import('./components/sim/SimCard.vue')['default']
+    SimWalletChip: typeof import('./components/sim/SimWalletChip.vue')['default']
     SLMenu: typeof import('./components/seller/SLMenu.vue')['default']
+    SocialRail: typeof import('./components/sim/SocialRail.vue')['default']
+    StageBadge: typeof import('./components/sim/StageBadge.vue')['default']
     StoryCircle: typeof import('./components/StoryCircle.vue')['default']
+    SwipeDeck: typeof import('./components/sim/SwipeDeck.vue')['default']
+    WalletChip: typeof import('./components/sim/WalletChip.vue')['default']
   }
 }
 

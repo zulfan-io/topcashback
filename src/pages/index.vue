@@ -373,3 +373,9 @@ async function onTab(t) {
 
 
 <style>html,body{margin:0;padding:0;background:#FFF7EC;}#app{min-height:100vh;background:#FFF7EC;}</style>
+
+<style>
+html,body,#app{background:#FFF7EC !important;margin:0;padding:0;}
+.dual{max-width:1280px !important;margin:0 auto !important;padding:0 0 76px !important;background:#FFF7EC !important;}
+@media (max-width:767px){.dual{max-width:none !important;margin:0 !important;padding:0 0 76px !important;}}
+</style>

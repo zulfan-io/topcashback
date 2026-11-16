@@ -17,7 +17,7 @@ function open(o){window.open(o.url,'_blank','noopener')}
 <section class="gh" :class="{compact}">
   <template v-if="compact">
     <div v-if="feat(hot)" class="hero" :key="feat(hot).id" @click="open(feat(hot))">
-      <img :src="feat(hot).image_url" :alt="feat(hot).title" loading="lazy"/>
+      <img class="hbg" :src="feat(hot).image_url" alt="" aria-hidden="true"/><img class="hfg" :src="feat(hot).image_url" :alt="feat(hot).title" loading="lazy"/>
       <div class="scrim"/><span class="chip">🔥 HOT · CASHBACK 0.6%</span>
       <div class="ht"><b>{{feat(hot).title}}</b><small>Top-up instant · rotasi 6 jam</small></div>
     </div>
@@ -28,7 +28,7 @@ function open(o){window.open(o.url,'_blank','noopener')}
       <div v-if="(byCat[cat]||[]).length" class="fold">
         <header><h3><i>{{ic}}</i>{{title}}</h3><span class="live">● LIVE</span></header>
         <div v-if="feat(byCat[cat])" class="hero" :key="feat(byCat[cat]).id" @click="open(feat(byCat[cat]))">
-          <img :src="feat(byCat[cat]).image_url" :alt="feat(byCat[cat]).title" loading="lazy"/>
+          <img class="hbg" :src="feat(byCat[cat]).image_url" alt="" aria-hidden="true"/><img class="hfg" :src="feat(byCat[cat]).image_url" :alt="feat(byCat[cat]).title" loading="lazy"/>
           <div class="scrim"/><span class="chip">CASHBACK 0.6%</span>
           <div class="ht"><b>{{feat(byCat[cat]).title}}</b><small>Deep-link · tracked</small></div>
         </div>
@@ -58,4 +58,8 @@ function open(o){window.open(o.url,'_blank','noopener')}
 .card span{display:block;font-size:10px;margin-top:6px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .card em{position:absolute;top:6px;right:6px;font-style:normal;font-size:9px;font-weight:800;color:var(--grn);background:rgba(124,252,154,.12);padding:2px 6px;border-radius:999px}
 @keyframes fade{from{opacity:0;transform:scale(1.02)}to{opacity:1;transform:scale(1)}}
+
+.hero .hbg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:blur(18px) brightness(.55);transform:scale(1.15);}
+.hero .hfg{position:relative;width:100%;height:100%;object-fit:contain;object-position:center;}
+.card img{object-position:center top;}
 </style>
