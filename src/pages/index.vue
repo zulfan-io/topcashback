@@ -10,6 +10,7 @@ const BI_CFG: Record<string,{lite:string;base:string;m:string}> = {'home':{lite:
 const BI_IDLE = "#9a9a9a"
 import { onMounted, onUnmounted, ref, computed } from 'vue'
 import { usePpob } from '~/stores/ppob'
+import GameHot from '~/components/GameHot.vue'
 import { useSimStage } from '~/stores/simStage'
 import { useSimWallet } from '~/stores/simWallet'
 const ppob = usePpob(); const stg = useSimStage(); const wal = useSimWallet()
@@ -21,7 +22,7 @@ const KOL_TIER1 = [
 ]
 const MERCHANTS = [ {slug:'shopee',pct:40,hot:true}, {slug:'tokopedia',pct:30}, {slug:'tiktok',pct:25}, {slug:'lazada',pct:20}, {slug:'blibli',pct:15}, {slug:'bukalapak',pct:15}, {slug:'gojek',pct:10}, {slug:'grab',pct:10} ]
 const TRAVEL = [ {dom:'traveloka.com',pct:8}, {dom:'tiket.com',pct:6} ]
-const PINTASAN = [ {lb:'Mall',n:8,to:'/buyer/home'}, {lb:'TopUp',n:2,to:'/ppob'}, {lb:'Misi',n:2,to:'/sim/stage'}, {lb:'Wallet',n:0,to:'/sim/wallet'}, {lb:'Travel',n:0,to:'/buyer/home'}, {lb:'Game',n:0,to:'/sim'} ]
+const PINTASAN = [ {lb:'Mall',n:8,to:'/buyer/home'}, {lb:'TopUp',n:2,to:'/ppob'}, {lb:'Misi',n:2,to:'/sim/stage'}, {lb:'Wallet',n:0,to:'/sim/wallet'}, {lb:'Travel',n:0,to:'/buyer/home'}, {lb:'Game',n:0,to:'/game'} ]
 const cd = ref('00:00:00'); let cdt=null
 const saldo = computed(() => { const b = wal.balance; return Number(Array.isArray(b)?0:(b && b.value!==undefined ? b.value : b)) || 0 })
 const slotLeft = computed(() => { const c=stg.dailyCap, u=stg.dailyUsed; const cv=Number(c && c.value!==undefined?c.value:c)||0; const uv=Number(u && u.value!==undefined?u.value:u)||0; return Math.max(0,cv-uv) })
@@ -179,6 +180,7 @@ async function onTab(t) {
         <span class="fb-s">Bonus s/d 30RB · reset harian</span>
         <button class="fb-b" @click="router.push('/sim/stage')">Ikuti</button>
       </div>
+      <GameHot compact />
       <div class="ppob-strip">
         <button v-for="pr in ppobTiles" :key="pr.code" class="pp-t" @click="router.push('/ppob')">
           <strong>{{ pr.name }}</strong>
