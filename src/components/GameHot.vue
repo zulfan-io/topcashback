@@ -1,13 +1,14 @@
 <script setup>
 import { ref, onMounted, onUnmounted, computed } from 'vue'
 import { supabase } from '~/utils/supabase'
+import Icon from '~/components/Icon.vue'
 const props=defineProps({compact:{type:Boolean,default:false}})
 const rows=ref([]); const tick=ref(0); let iv=null
 onMounted(async()=>{ const {data}=await supabase.from('shoper_offers').select('*').eq('network','game').eq('active',true)
   rows.value=(data||[]).map(r=>{const m=typeof r.meta_json==='string'?JSON.parse(r.meta_json||'{}'):(r.meta_json||{});return {...r,cat:m.cat||'cowok'}})
   iv=setInterval(()=>tick.value++,4000) })
 onUnmounted(()=>clearInterval(iv))
-const FOLDS=[['cowok','🎮','Game Cowok · Hot'],['cewek','💖','Game Cewek · Gen Z'],['voucher','🎁','Voucher Game'],['genz','📺','Streaming Gen Z'],['stream','🎬','Drama & Olahraga'],['pc','💻','Game PC'],['partner','🤝','Partner Resmi']]
+const FOLDS=[['cowok','gamepad','Game Cowok · Hot'],['cewek','heart','Game Cewek · Gen Z'],['voucher','gift','Voucher Game'],['genz','tv','Streaming Gen Z'],['stream','film','Drama & Olahraga'],['pc','monitor','Game PC'],['partner','users','Partner Resmi']]
 const byCat=computed(()=>{const m={};for(const r of rows.value)(m[r.cat]=m[r.cat]||[]).push(r);return m})
 const hot=computed(()=>[...(byCat.value.cowok||[]),...(byCat.value.cewek||[])])
 function cur(l){return (l&&l.length)?l[tick.value%l.length]:null}
@@ -19,7 +20,7 @@ function open(o){window.open(o.url,'_blank','noopener')}
   <template v-if="compact">
     <div v-if="cur(hot)" class="hero" :key="cur(hot).id" @click="open(cur(hot))">
       <img class="hbg" :src="cur(hot).image_url" alt=""/><img class="hfg" :src="cur(hot).image_url" :alt="cur(hot).title"/>
-      <div class="scrim"/><span class="chip">🔥 HOT · CASHBACK 0.6%</span>
+      <div class="scrim"/><span class="chip">HOT · CASHBACK 0.6%</span>
       <div class="ht"><b>{{cur(hot).title}}</b><small>Top-up instant · carousel live</small></div>
     </div>
     <div class="mq left"><div class="mq-track"><button v-for="(o,i) in dbl(hot)" :key="o.id+'-'+i" class="card" @click="open(o)"><img :src="o.image_url" :alt="o.title"/><span>{{o.title}}</span></button></div></div>
@@ -27,10 +28,10 @@ function open(o){window.open(o.url,'_blank','noopener')}
   <template v-else>
     <div v-for="([cat,ic,title],fi) in FOLDS" :key="cat">
       <div v-if="(byCat[cat]||[]).length" class="fold">
-        <header><h3><i>{{ic}}</i>{{title}}</h3><span class="live">● LIVE</span></header>
+        <header><h3><Icon :name="ic" :size="16"/>{{title}}</h3><span class="live">● LIVE</span></header>
         <div v-if="cur(byCat[cat])" class="hero" :key="cur(byCat[cat]).id" @click="open(cur(byCat[cat]))">
           <img class="hbg" :src="cur(byCat[cat]).image_url" alt=""/><img class="hfg" :src="cur(byCat[cat]).image_url" :alt="cur(byCat[cat]).title"/>
-          <div class="scrim"/><span class="chip">⚡ CASHBACK 0.6%</span>
+          <div class="scrim"/><span class="chip">CASHBACK 0.6%</span>
           <div class="ht"><b>{{cur(byCat[cat]).title}}</b><small>Deep-link · tracked</small></div>
         </div>
         <div class="mq" :class="fi%2? 'right':'left'"><div class="mq-track"><button v-for="(o,i) in dbl(byCat[cat])" :key="o.id+'-'+i" class="card" @click="open(o)"><img :src="o.image_url" :alt="o.title"/><span>{{o.title}}</span><em>0.6%</em></button></div></div>

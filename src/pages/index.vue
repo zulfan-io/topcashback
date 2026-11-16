@@ -11,6 +11,7 @@ const BI_IDLE = "#9a9a9a"
 import { onMounted, onUnmounted, ref, computed } from 'vue'
 import { usePpob } from '~/stores/ppob'
 import GameHot from '~/components/GameHot.vue'
+import TripHot from '~/components/TripHot.vue'
 import { useSimStage } from '~/stores/simStage'
 import { useSimWallet } from '~/stores/simWallet'
 const ppob = usePpob(); const stg = useSimStage(); const wal = useSimWallet()
@@ -181,6 +182,7 @@ async function onTab(t) {
         <button class="fb-b" @click="router.push('/sim/stage')">Ikuti</button>
       </div>
       <GameHot compact />
+      <TripHot />
       <div class="ppob-strip">
         <button v-for="pr in ppobTiles" :key="pr.code" class="pp-t" @click="router.push('/ppob')">
           <strong>{{ pr.name }}</strong>
