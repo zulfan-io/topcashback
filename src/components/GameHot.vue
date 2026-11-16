@@ -7,7 +7,7 @@ const rows=ref([]); const tick=ref(0); const hs=ref(0); let iv=null; const clean
 const BONUS={'mobile-legends':'50+50 Diamond','efootball':'-13% · 134.415','top-eleven':'-11% · 89.000','free-fire':'Bonus diamond','genshin-impact':'Bonus top-up pertama'}
 const PROMO={'mobile-legends':'Diamond Ganda top-up pertama','efootball':'Hemat 13%','top-eleven':'Hemat 11%'}
 onMounted(async()=>{ const {data}=await supabase.from('shoper_offers').select('*').eq('network','game').eq('active',true)
-  rows.value=(data||[]).map(r=>{const m=typeof r.meta_json==='string'?JSON.parse(r.meta_json||'{}'):(r.meta_json||{});return {...r,cat:m.cat||'cowok',bonus:m.bonus||BONUS[r.external_id]||''}})
+  rows.value=(data||[]).map(r=>{const m=typeof r.meta_json==='string'?JSON.parse(r.meta_json||'{}'):(r.meta_json||{});return {...r,cat:m.cat||'cowok',bonus:m.bonus||BONUS[r.external_id]||'',brief:m.brief||'',dens:m.dens||[]}})
   iv=setInterval(()=>tick.value++,6000)
   await nextTick()
   document.querySelectorAll('.gh .mq').forEach((el,i)=>cleanups.push(initMarquee(el, i%2?1:-1))) })
@@ -40,6 +40,7 @@ function cur(l){return (l&&l.length)?l[tick.value%l.length]:null}
 function dbl(l){return (l||[]).concat(l||[])}
 function cta(c){return c==='voucher'?'Beli Voucher':(c==='genz'||c==='stream')?'Tonton Sekarang':'Top Up Sekarang'}
 function open(o){window.open(o.url,'_blank','noopener')}
+function minp(o){return o.dens&&o.dens.length?Math.min.apply(null,o.dens.map(d=>+d.p)).toLocaleString('id-ID'):''}
 function he(e){const dx=e.clientX-hs.value; if(dx>40)tick.value--; else if(dx<-40)tick.value++}
 </script>
 <template>
@@ -50,7 +51,7 @@ function he(e){const dx=e.clientX-hs.value; if(dx>40)tick.value--; else if(dx<-4
       <span class="chip">{{ PROMO[cur(hot).external_id]||'CASHBACK 0.6%' }}</span>
       <div class="ht"><b>{{cur(hot).title}}</b><button class="cta" @click="open(cur(hot))">{{cta(cur(hot).cat)}} →</button></div>
     </div>
-    <div class="mq"><div class="mq-track"><button v-for="(o,i) in dbl(hot)" :key="o.id+'-'+i" class="card" @click="open(o)"><img :src="o.image_url" :alt="o.title" loading="lazy" decoding="async"/><span>{{o.title}}</span><i v-if="o.bonus" class="bonus">{{o.bonus}}</i><em class="buy">Beli</em></button></div></div>
+    <div class="mq"><div class="mq-track"><button v-for="(o,i) in dbl(hot)" :key="o.id+'-'+i" class="card" @click="open(o)"><img :src="o.image_url" :alt="o.title" loading="lazy" decoding="async"/><span>{{o.title}}</span><i v-if="minp(o)" class="mulai">mulai Rp{{minp(o)}}</i><i v-if="o.bonus" class="bonus">{{o.bonus}}</i><em class="buy">Beli</em></button></div></div>
   </template>
   <template v-else>
     <div v-for="([cat,ic,title],fi) in FOLDS" :key="cat">
@@ -61,7 +62,7 @@ function he(e){const dx=e.clientX-hs.value; if(dx>40)tick.value--; else if(dx<-4
           <span class="chip">{{ PROMO[cur(byCat[cat]).external_id]||'CASHBACK 0.6%' }}</span>
           <div class="ht"><b>{{cur(byCat[cat]).title}}</b><button class="cta" @click="open(cur(byCat[cat]))">{{cta(cat)}} →</button></div>
         </div>
-        <div class="mq"><div class="mq-track"><button v-for="(o,i) in dbl(byCat[cat])" :key="o.id+'-'+i" class="card" @click="open(o)"><img :src="o.image_url" :alt="o.title" loading="lazy" decoding="async"/><span>{{o.title}}</span><i v-if="o.bonus" class="bonus">{{o.bonus}}</i><em class="buy">{{cta(cat).split(' ')[0]}}</em></button></div></div>
+        <div class="mq"><div class="mq-track"><button v-for="(o,i) in dbl(byCat[cat])" :key="o.id+'-'+i" class="card" @click="open(o)"><img :src="o.image_url" :alt="o.title" loading="lazy" decoding="async"/><span>{{o.title}}</span><i v-if="minp(o)" class="mulai">mulai Rp{{minp(o)}}</i><i v-if="o.bonus" class="bonus">{{o.bonus}}</i><em class="buy">{{cta(cat).split(' ')[0]}}</em></button></div></div>
       </div>
     </div>
   </template>
@@ -87,6 +88,7 @@ function he(e){const dx=e.clientX-hs.value; if(dx>40)tick.value--; else if(dx<-4
 .card img{width:92px;height:92px;object-fit:cover;object-position:center top;border-radius:12px;pointer-events:none}
 .card span{display:block;font-size:10px;margin-top:6px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .bonus{position:absolute;top:6px;left:6px;font-style:normal;font-size:8px;font-weight:800;color:#fff;background:var(--acc2);padding:2px 5px;border-radius:6px;max-width:92px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mulai{position:absolute;bottom:44px;left:6px;font-style:normal;font-size:8px;font-weight:700;color:#9fd0ff;background:rgba(47,107,255,.18);padding:2px 5px;border-radius:6px}
 .buy{position:absolute;bottom:30px;right:6px;font-style:normal;font-size:9px;font-weight:800;color:var(--grn);background:rgba(124,252,154,.15);padding:2px 6px;border-radius:999px}
 @keyframes fade{from{opacity:0}to{opacity:1}}
 </style>
