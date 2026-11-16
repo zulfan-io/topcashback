@@ -249,7 +249,7 @@ async function onTab(t) {
 </template>
 
 <style scoped>
-.dual { max-width: 1280px; margin: 0 auto; padding: 12px clamp(12px, 3vw, 32px) 64px; font-family: system-ui, sans-serif; color: #1a1a1a; background: #f7f7f7; min-height: 100vh; }
+.dual { max-width: none; margin: 0; padding: 0 0 76px; font-family: system-ui, sans-serif; color: #1a1a1a; background: #FFF7EC; min-height: 100vh; }
 .top { display: flex; align-items: baseline; gap: 8px; padding: 8px 0; border-bottom: 1px solid #e6e6e6; }
 .logo { font-weight: 800; color: #FF7A45; font-size: 20px; }
 .tag { font-size: 12px; color: #888; }
@@ -371,3 +371,5 @@ async function onTab(t) {
 .kt-t span{font-size:10px;color:#8a8a8a}
 </style>
 
+
+<style>html,body{margin:0;padding:0;background:#FFF7EC;}#app{min-height:100vh;background:#FFF7EC;}</style>
