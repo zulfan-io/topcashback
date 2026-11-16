@@ -12,6 +12,9 @@ import { onMounted, onUnmounted, ref, computed } from 'vue'
 import { usePpob } from '~/stores/ppob'
 import GameHot from '~/components/GameHot.vue'
 import TripHot from '~/components/TripHot.vue'
+import Icon from '~/components/Icon.vue'
+import { useSwipeBack } from '~/composables/useSwipeBack'
+useSwipeBack()
 import { useSimStage } from '~/stores/simStage'
 import { useSimWallet } from '~/stores/simWallet'
 const ppob = usePpob(); const stg = useSimStage(); const wal = useSimWallet()
@@ -218,7 +221,7 @@ async function onTab(t) {
     </section>
 
     <section class="payoff">
-      <span class="po-ic">🎉</span>
+      <span class="po-ic"><Icon name="gift" :size="20"/></span>
       <div class="po-t"><strong>Kamu udah jelajahi semua!</strong><span>Klaim bonus scroll harian</span></div>
       <button class="po-b" :disabled="claimedToday" @click="claimScroll">{{ claimedToday ? 'Besok lagi' : '+Rp500 KLAIM' }}</button>
     </section>
