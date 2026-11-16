@@ -46,7 +46,7 @@ export const useCatalog = defineStore('catalog', () => {
     try {
       const { data, error } = await supabase
         .from('shoper_offers')
-        .select('*').neq('network','game')
+        .select('*').neq('network','game').neq('network','ppob')
         .eq('active', true)
         .limit(24)
       if (!error && data && data.length) {
