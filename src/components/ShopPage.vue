@@ -14,9 +14,11 @@ const P=defineProps({
 const route=useRoute(); const router=useRouter()
 const rows=ref([]); const state=ref('load'); const q=ref(''); const cat=ref('all'); const geo=ref('all')
 const sort=ref('pop'); const view=ref('all'); const saved=ref([]); const detail=ref(null); const qty=ref(1)
-const pick=ref(false); const sel=ref([]); const limit=ref(24); const toast=ref(null); const now=ref(Date.now())
+const pick=ref(false); const sel=ref([]); const limit=ref(12); const toast=ref(null); const now=ref(Date.now())
 const gridEl=ref(null); const sheetY=ref(0); const dragY=ref(null)
 const KEY=computed(()=>'shop_saved_'+P.network)
+const BG={fusion:'#FFF7EC',ocean:'#04222B',sky:'#041E3A'}
+function paint(){const b=BG[P.hue]||'#FFF7EC';document.documentElement.style.background=b;document.body.style.background=b}
 let clock=null,tT=null,io=null,undoBuf=null
 function rp(n){return 'Rp'+Number(n||0).toLocaleString('id-ID')}
 function pad(n){return String(n).padStart(2,'0')}
@@ -44,6 +46,7 @@ async function load(){
   state.value=rows.value.length?'ok':'empty'
 }
 onMounted(async()=>{
+  paint()
   try{const s=localStorage.getItem(KEY.value);if(s)saved.value=JSON.parse(s)||[]}catch(_){}
   if(P.network==='traveloka'){try{const o=localStorage.getItem('tv_saved_v1');if(o){const a=JSON.parse(o)||[];if(a.length){saved.value=Array.from(new Set([...saved.value,...a]));persist()}}}catch(_){}}
   await load()
@@ -52,7 +55,7 @@ onMounted(async()=>{
   if(hasPrice.value)clock=setInterval(()=>now.value=Date.now(),1000)
   await nextTick();reveal()
 })
-onUnmounted(()=>{clearInterval(clock);clearTimeout(tT);io&&io.disconnect();document.body.style.overflow=''})
+onUnmounted(()=>{document.documentElement.style.background='#FFF7EC';document.body.style.background='#FFF7EC';clearInterval(clock);clearTimeout(tT);io&&io.disconnect();document.body.style.overflow=''})
 function persist(){try{localStorage.setItem(KEY.value,JSON.stringify(saved.value))}catch(_){}}
 function flash(msg,undo){clearTimeout(tT);toast.value={msg,undo:!!undo};tT=setTimeout(()=>{toast.value=null;undoBuf=null},4200)}
 function isSaved(id){return saved.value.includes(id)}
@@ -169,7 +172,7 @@ function sUp(){if(sheetY.value>120)closeDetail();sheetY.value=0;dragY.value=null
     <div class="dh"><h2><Icon name="flame" :size="16"/>Deal Harian</h2><span class="timer"><Icon name="clock" :size="12"/>{{cd}}</span></div>
     <div class="dstrip">
       <button v-for="o in dealRows" :key="'d'+o.id" class="dc" @click="openDetail(o)">
-        <img :src="o.image_url" :alt="o.title" loading="lazy" decoding="async"/>
+        <img :src="o.image_url" :alt="o.title" loading="lazy" decoding="async" fetchpriority="low"/>
         <span class="dp">{{rp(o.price)}}</span><span class="dn">{{o.title}}</span>
         <em v-if="cb(o)" class="dcb">+{{rp(cb(o))}}</em>
       </button>
@@ -205,7 +208,7 @@ function sUp(){if(sheetY.value>120)closeDetail();sheetY.value=0;dragY.value=null
   <div v-else class="grid" ref="gridEl">
     <article v-for="o in shown" :key="o.id" class="pc" :class="{sel:sel.includes(o.id)}" @click="tapCard(o)">
       <div class="pw">
-        <img :src="o.image_url" :alt="o.title" loading="lazy" decoding="async"/>
+        <img :src="o.image_url" :alt="o.title" loading="lazy" decoding="async" fetchpriority="low"/>
         <span v-if="o.list" class="poff">-{{Math.round((1-o.price/o.list)*100)}}%</span>
         <span v-else-if="o.bonus" class="poff alt">{{o.bonus}}</span>
         <button class="psave" :class="{on:isSaved(o.id)}" @click.stop="toggleSave(o)" aria-label="Simpan"><Icon name="bookmark" :size="14"/></button>
@@ -346,7 +349,7 @@ function sUp(){if(sheetY.value>120)closeDetail();sheetY.value=0;dragY.value=null
 @media(min-width:960px){.grid{grid-template-columns:repeat(4,1fr);gap:14px}}
 @media(min-width:1240px){.grid{grid-template-columns:repeat(5,1fr)}}
 .pc{background:var(--surf);border:1px solid var(--line);border-radius:16px;overflow:hidden;cursor:pointer;content-visibility:auto;contain-intrinsic-size:auto 260px;
- opacity:0;transform:translateY(12px);transition:opacity .38s ease,transform .38s cubic-bezier(.22,1,.36,1),border-color .16s}
+ transition:border-color .16s,box-shadow .16s}
 .pc.in{opacity:1;transform:none}
 .pc:active{border-color:var(--a1)}
 .pc.sel{border-color:var(--a1);box-shadow:0 0 0 2px color-mix(in srgb,var(--a1) 40%,transparent)}
@@ -394,7 +397,7 @@ function sUp(){if(sheetY.value>120)closeDetail();sheetY.value=0;dragY.value=null
 .grab{padding:10px 0 4px;display:grid;place-items:center;cursor:grab;touch-action:none}
 .grab i{width:44px;height:4px;border-radius:99px;background:var(--a1);opacity:.6}
 .sx{position:absolute;top:12px;right:12px;z-index:3;width:32px;height:32px;display:grid;place-items:center;border:0;border-radius:11px;background:color-mix(in srgb,var(--bg) 72%,transparent);color:var(--ink);cursor:pointer}
-.simg{height:190px;flex:0 0 auto;background:color-mix(in srgb,var(--ink) 6%,var(--surf))}
+.simg{height:min(34vh,220px);flex:0 0 auto;background:color-mix(in srgb,var(--ink) 6%,var(--surf))}
 .simg img{width:100%;height:100%;object-fit:contain}
 .sbody{flex:1;overflow-y:auto;padding:14px 16px 8px}
 .scat{font-size:9.5px;font-weight:900;color:var(--on);background:linear-gradient(135deg,var(--a1),var(--a2));padding:3px 9px;border-radius:99px}

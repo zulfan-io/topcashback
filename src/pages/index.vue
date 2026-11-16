@@ -10,6 +10,7 @@ const BI_CFG: Record<string,{lite:string;base:string;m:string}> = {'home':{lite:
 const BI_IDLE = "#9a9a9a"
 import { onMounted, onUnmounted, ref, computed } from 'vue'
 import { usePpob } from '~/stores/ppob'
+import BrandRail from '~/components/BrandRail.vue'
 import Icon from '~/components/Icon.vue'
 import { useSwipeBack } from '~/composables/useSwipeBack'
 useSwipeBack()
@@ -32,7 +33,7 @@ const ppobTiles = computed(() => { const p=ppob.products; const arr=Array.isArra
 const claimedToday = ref(false)
 function tick(){ const n=new Date(); const m=new Date(n); m.setHours(24,0,0,0); const t=Math.max(0,Math.floor((m-n)/1000)); cd.value=[Math.floor(t/3600),Math.floor(t%3600/60),t%60].map(x=>String(x).padStart(2,'0')).join(':') }
 function claimScroll(){ if (claimedToday.value) return; wal.reward(500); wal.claimReward(); claimedToday.value=true; try{ localStorage.setItem('parity_scroll', new Date().toDateString()) }catch(e){} }
-onMounted(() => { tick(); cdt=setInterval(tick,1000); ppob.load(); try{ claimedToday.value = localStorage.getItem('parity_scroll')===new Date().toDateString() }catch(e){} })
+onMounted(() => { document.documentElement.style.background='#FFF7EC'; document.body.style.background='#FFF7EC'; tick(); cdt=setInterval(tick,1000); ppob.load(); try{ claimedToday.value = localStorage.getItem('parity_scroll')===new Date().toDateString() }catch(e){} })
 onUnmounted(() => { if (cdt) clearInterval(cdt) })
 function biStyle(t: any) {
   const nm = BI_MAP[t.id]; const s = BI_CFG[t.id]
@@ -165,14 +166,7 @@ async function onTab(t) {
       </div>
     </section>
     <section class="merchant-vivid">
-      <div class="mv-h"><span>Cashback s/d 40%</span><button class="mv-all" @click="router.push('/mall')">Lihat Semua ›</button></div>
-      <div class="mv-g">
-        <button v-for="m in MERCHANTS" :key="m.slug" class="mv-t" @click="router.push('/mall')">
-          <img :src="'https://cdn.simpleicons.org/'+m.slug+'/ffffff'" :alt="m.slug" loading="lazy" />
-          <i class="mv-p">{{ m.pct }}%</i>
-          <i v-if="m.hot" class="mv-hot">HOT</i>
-        </button>
-      </div>
+      <BrandRail />
     </section>
 
     <section class="fomo-band">
@@ -373,10 +367,10 @@ async function onTab(t) {
 </style>
 
 
-<style>html,body{margin:0;padding:0;background:#FFF7EC;}#app{min-height:100vh;background:#FFF7EC;}</style>
+<style>html,body{margin:0;padding:0;}#app{min-height:100vh;}</style>
 
 <style>
-html,body,#app{background:#FFF7EC !important;margin:0;padding:0;}
+html,body{margin:0;padding:0;}
 .dual{max-width:1280px !important;margin:0 auto !important;padding:0 0 76px !important;background:#FFF7EC !important;}
 @media (max-width:767px){.dual{max-width:none !important;margin:0 !important;padding:0 0 76px !important;}}
 </style>
