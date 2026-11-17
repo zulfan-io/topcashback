@@ -4,20 +4,21 @@ import { useRouter } from 'vue-router'
 import { supabase } from '~/utils/supabase'
 import Icon from '~/components/Icon.vue'
 const router=useRouter()
-const state=ref('load'); const daily=ref([]); const funnel=ref([]); const top=ref([]); const orang=ref([]); const sesi=ref(null)
+const state=ref('load'); const daily=ref([]); const funnel=ref([]); const top=ref([]); const orang=ref([]); const profil=ref([]); const sesi=ref(null)
 const tot=computed(()=>{const t={views:0,clicks:0,buys:0,orang:0};for(const d of daily.value){t.views+=d.views||0;t.clicks+=d.clicks||0;t.buys+=d.buys||0;t.orang=Math.max(t.orang,d.orang||0)}return t})
 async function load(){
   state.value='load'
   try{
     const {data}=await supabase.auth.getSession(); sesi.value=data.session||null
     if(!sesi.value){state.value='guest';return}
-    const [a,b,c,d]=await Promise.all([
+    const [a,b,c,d,e]=await Promise.all([
       supabase.from('crm_daily').select('*').limit(14),
       supabase.from('crm_funnel').select('*'),
       supabase.from('crm_top').select('*').limit(20),
-      supabase.from('crm_orang').select('*').limit(20)])
+      supabase.from('crm_orang').select('*').limit(20),
+      supabase.from('crm_profil').select('*').limit(50)])
     if(a.error){state.value='locked';return}
-    daily.value=a.data||[]; funnel.value=b.data||[]; top.value=c.data||[]; orang.value=d.data||[]
+    daily.value=a.data||[]; funnel.value=b.data||[]; top.value=c.data||[]; orang.value=d.data||[]; profil.value=e.data||[]
     state.value=(daily.value.length||funnel.value.length)?'ok':'empty'
   }catch(_){state.value='locked'}
 }
@@ -50,6 +51,11 @@ function d(x){return x?new Date(x).toLocaleDateString('id-ID',{day:'2-digit',mon
     <section class="blk"><h3>Harian</h3>
       <table><thead><tr><th>Hari</th><th>Lihat</th><th>Pesan</th><th>Orang</th></tr></thead>
       <tbody><tr v-for="r in daily" :key="r.hari"><td>{{d(r.hari)}}</td><td>{{f(r.views)}}</td><td>{{f(r.buys)}}</td><td>{{f(r.orang)}}</td></tr></tbody></table>
+    </section>
+    <section class="blk"><h3>Emas: kontak sukarela ({{profil.length}})</h3>
+      <table><thead><tr><th>Nama</th><th>WhatsApp</th><th>Kota</th><th>Pesan</th></tr></thead>
+      <tbody><tr v-for="r in profil" :key="r.uid"><td class="t">{{r.nama||'-'}}</td><td class="t">{{r.phone||'-'}}</td><td class="t">{{r.kota||'-'}}</td><td>{{f(r.buys)}}</td></tr></tbody></table>
+      <small class="note">Dikasih sukarela lewat consent di /akun. Buat pengingat cashback & retensi. NOL diperjualbelikan (UU PDP 27/2022).</small>
     </section>
     <section class="blk"><h3>Orang (first-party)</h3>
       <table><thead><tr><th>Siapa</th><th>Event</th><th>Pesan</th><th>Hari aktif</th></tr></thead>

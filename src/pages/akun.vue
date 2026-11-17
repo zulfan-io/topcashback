@@ -5,6 +5,22 @@ import { supabase } from '~/utils/supabase'
 import Icon from '~/components/Icon.vue'
 const router=useRouter()
 const session=ref(null); const email=ref(''); const busy=ref(false); const msg=ref(''); const saved=ref({})
+const nama=ref(''); const phone=ref(''); const kota=ref(''); const wa=ref(false); const pbusy=ref(false); const pmsg=ref(''); const ploaded=ref(false)
+async function loadProfil(){
+  if(!session.value)return
+  const {data}=await supabase.from('profiles').select('*').eq('uid',session.value.user.id).maybeSingle()
+  if(data){nama.value=data.nama||'';phone.value=data.phone||'';kota.value=data.kota||'';wa.value=!!data.wa_opt_in}
+  ploaded.value=true
+}
+async function simpanProfil(){
+  if(!session.value){pmsg.value='Masuk dulu buat menyimpan.';return}
+  const hp=phone.value.replace(/[^0-9+]/g,'')
+  if(hp && hp.replace('+','').length<9){pmsg.value='Nomor WhatsApp kelihatan kurang lengkap.';return}
+  pbusy.value=true;pmsg.value=''
+  const {error}=await supabase.from('profiles').upsert({uid:session.value.user.id,nama:nama.value.trim()||null,phone:hp||null,kota:kota.value.trim()||null,wa_opt_in:wa.value,sumber:'akun',diubah:new Date().toISOString()},{onConflict:'uid'})
+  pmsg.value=error?('Gagal simpan: '+error.message):'Tersimpan. Cuma lo dan tim yang bisa lihat.'
+  pbusy.value=false
+}
 const LINKS=[['mall','store','Mall Cashback'],['game','gamepad','Game & Voucher'],['travel','compass','Traveloka Xperience'],['trip','plane','Trip.com'],['ppob','zap','PPOB']]
 const total=computed(()=>Object.values(saved.value).reduce((a,b)=>a+b,0))
 onMounted(async()=>{
@@ -13,6 +29,7 @@ onMounted(async()=>{
   try{const o=localStorage.getItem('tv_saved_v1');if(o)m.travel=Math.max(m.travel||0,(JSON.parse(o)||[]).length)}catch(_){}
   saved.value=m
   try{const {data}=await supabase.auth.getSession();session.value=data.session||null}catch(_){}
+  await loadProfil()
 })
 async function masuk(){
   if(!email.value.includes('@')){msg.value='Masukkan email yang valid.';return}
@@ -21,7 +38,7 @@ async function masuk(){
     msg.value=error?error.message:'Tautan masuk dikirim. Buka email lo, klik tautannya.'}catch(e){msg.value='Gagal kirim tautan.'}
   busy.value=false
 }
-async function keluar(){try{await supabase.auth.signOut();session.value=null;msg.value='Sudah keluar.'}catch(_){}}
+async function keluar(){try{await supabase.auth.signOut();session.value=null;ploaded.value=false;msg.value='Sudah keluar.'}catch(_){}}
 </script>
 <template>
 <main class="ak">
@@ -53,6 +70,19 @@ async function keluar(){try{await supabase.auth.signOut();session.value=null;msg
     </template>
     <template v-else><button class="out" @click="keluar">Keluar</button></template>
     <p v-if="msg" class="msg">{{msg}}</p>
+  </section>
+  <section v-if="session" class="auth">
+    <h3>Biar cashback nggak hangus</h3>
+    <p>Kami ingatkan lewat WhatsApp kalau saldo masuk, misi hampir lewat, atau merek yang lo tunggu dibuka. NOL spam, berhenti kapan aja.</p>
+    <div class="pform">
+      <input v-model="nama" type="text" placeholder="Nama panggilan" aria-label="Nama"/>
+      <input v-model="phone" type="tel" inputmode="tel" placeholder="Nomor WhatsApp (08…)" aria-label="WhatsApp"/>
+      <input v-model="kota" type="text" placeholder="Kota (biar promo lokal pas)" aria-label="Kota"/>
+      <label class="ck"><input v-model="wa" type="checkbox"/><span>Saya setuju dihubungi lewat WhatsApp soal cashback & promo. Data tidak dibagikan ke pihak lain.</span></label>
+      <button class="pbtn" :disabled="pbusy||!wa" @click="simpanProfil">{{pbusy?'Menyimpan…':'Aktifkan pengingat'}}</button>
+      <p v-if="pmsg" class="msg">{{pmsg}}</p>
+      <small class="priv">Nomor & email lo terenkripsi di database, cuma bisa dibaca akun lo sendiri dan tim internal. NOL dijual, NOL tampil publik. Lo bisa hapus kapan aja.</small>
+    </div>
   </section>
   <section class="info">
     <h3>Cara cashback jalan</h3>
@@ -87,5 +117,12 @@ async function keluar(){try{await supabase.auth.signOut();session.value=null;msg
 .row button,.out{border:0;border-radius:11px;padding:10px 14px;font-weight:900;font-size:12px;color:#fff;background:linear-gradient(135deg,#FF7A45,#FF4D3D);cursor:pointer}
 .row button:disabled{opacity:.6}
 .msg{margin:10px 0 0;font-size:11.5px;color:#B34700;font-weight:700}
+.pform{display:flex;flex-direction:column;gap:8px}
+.pform input[type=text],.pform input[type=tel]{border:1px solid #eadfd0;border-radius:11px;padding:10px 12px;font-size:13px;outline:none;background:#FFF7EC;color:#1a1a1a}
+.ck{display:flex;gap:8px;align-items:flex-start;font-size:10.5px;color:#7b7268;line-height:1.45}
+.ck input{margin-top:2px;accent-color:#FF4D3D}
+.pbtn{border:0;border-radius:11px;padding:11px;font-weight:900;font-size:12.5px;color:#fff;background:linear-gradient(135deg,#FF7A45,#FF4D3D);cursor:pointer}
+.pbtn:disabled{opacity:.5}
+.priv{font-size:9.5px;color:#9a8f82;line-height:1.45}
 .info ol{margin:0 0 10px;padding-left:18px;font-size:12px;line-height:1.7;color:#4a4239}
 </style>
