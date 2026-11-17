@@ -23,8 +23,7 @@ const KOL_TIER1 = [
   {lb:'Microblog',to:'https://atid.me/go/sh0FFz0q'},
   {lb:'FB Emak',to:'https://atid.me/go/AyA2TrNG'}
 ]
-const MERCHANTS = [ {slug:'shopee',pct:40,hot:true}, {slug:'tokopedia',pct:30}, {slug:'tiktok',pct:25}, {slug:'lazada',pct:20}, {slug:'blibli',pct:15}, {slug:'bukalapak',pct:15}, {slug:'gojek',pct:10}, {slug:'grab',pct:10} ]
-const TRAVEL = [ {dom:'traveloka.com',pct:8}, {dom:'tiket.com',pct:6} ]
+
 const PINTASAN = [ {lb:'Mall',n:0,to:'/mall'}, {lb:'TopUp',n:2,to:'/ppob'}, {lb:'Misi',n:2,to:'/sim/stage'}, {lb:'Wallet',n:0,to:'/sim/wallet'}, {lb:'Travel',n:0,to:'/travel'}, {lb:'Trip',n:0,to:'/trip'}, {lb:'Game',n:0,to:'/game'} ]
 const cd = ref('00:00:00'); let cdt=null
 const saldo = computed(() => { const b = wal.balance; return Number(Array.isArray(b)?0:(b && b.value!==undefined ? b.value : b)) || 0 })
@@ -186,12 +185,6 @@ async function onTab(t) {
     </section>
 
     <section class="travel-strip">
-      <div class="tv-r">
-        <button v-for="t in TRAVEL" :key="t.dom" class="tv-t" @click="router.push('/mall')">
-          <img :src="'https://logo.clearbit.com/'+t.dom" :alt="t.dom" loading="lazy" />
-          <i>{{ t.pct }}%</i>
-        </button>
-      </div>
     </section>
     <section v-for="(row, ri) in feedRows" :key="ri" class="feedrow">
       <div class="lbl">{{ rowLabels[ri] || 'Rekomendasi' }}</div>
