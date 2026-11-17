@@ -68,7 +68,7 @@ function notify(){
 </section>
 </template>
 <style scoped>
-.br{padding:0;max-width:none;margin:0;width:100%}
+.br{padding:0;max-width:none;margin:0;width:100vw;margin-left:calc(50% - 50vw)}
 .brc{border:0;border-radius:0;border-top:3px solid;border-bottom:3px solid;border-color:#FF4D3D;background:linear-gradient(180deg,#ffffff,#FFF3E9 70%,#FFE9D6);padding:14px 14px 16px;box-shadow:0 12px 34px rgba(255,77,61,.14)}
 .bh{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:10px}
 .bh h3{margin:0;font-size:17px;letter-spacing:-.3px;font-weight:900;color:#1a1a1a;letter-spacing:-.2px}

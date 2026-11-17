@@ -11,6 +11,9 @@ const BI_IDLE = "#9a9a9a"
 import { onMounted, onUnmounted, ref, computed } from 'vue'
 import { usePpob } from '~/stores/ppob'
 import BrandRail from '~/components/BrandRail.vue'
+import RotatingFeed from '~/components/RotatingFeed.vue'
+import BrandMarquee from '~/components/BrandMarquee.vue'
+import AppNav from '~/components/AppNav.vue'
 import GameHot from '~/components/GameHot.vue'
 import Icon from '~/components/Icon.vue'
 import { useSwipeBack } from '~/composables/useSwipeBack'
@@ -171,13 +174,7 @@ onMounted(() => {
         <button class="sc-b ghost" @click="router.push('/sim/wallet')">Riwayat</button>
       </div>
     </section>
-    <div class="par-row">
-      <span v-for="p in PINTASAN" :key="p.lb" class="par-circle">
-        <StoryCircle :label="p.lb" :src="null" :size="54" ring="#FF7A45" @open="router.push(p.to)" />
-        <i v-if="p.n" class="par-cb">{{ p.n }}</i>
-        <span class="par-lb">{{ p.lb }}</span>
-      </span>
-    </div>
+      <BrandMarquee />
     <section class="kol-tier1">
       <div class="kt-h"><span>Shopee KOL Tier 1 · cashback tertinggi</span><i class="kt-badge">TIER 1</i></div>
       <div class="kt-r">
@@ -256,6 +253,7 @@ onMounted(() => {
 
     <footer class="gate-air"><b>{{ capture }}</b> member bergabung · cashback jujur, scarcity nyata</footer>
   </div>
+  <AppNav />
 </template>
 
 <style scoped>
@@ -386,6 +384,6 @@ onMounted(() => {
 
 <style>
 html,body{margin:0;padding:0;}
-.dual{max-width:1280px !important;margin:0 auto !important;padding:0 0 76px !important;background:#FFF7EC !important;}
+.dual{max-width:1280px;margin-left:auto;margin-right:auto;max-width:1280px !important;margin:0 auto !important;padding:0 0 76px !important;background:#FFF7EC !important;}
 @media (max-width:767px){.dual{max-width:none !important;margin:0 !important;padding:0 0 76px !important;}}
 </style>
