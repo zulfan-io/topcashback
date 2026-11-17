@@ -3,6 +3,8 @@ import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { supabase } from '~/utils/supabase'
 import Icon from '~/components/Icon.vue'
+import { useTrack } from '~/composables/useTrack'
+const { track } = useTrack()
 const router=useRouter(); const counts=ref({}); const sheet=ref(false); const ready=ref(false)
 const LIVE=[
  {k:'shopee',name:'Shopee',to:'/mall',rate:'8,82%',logo:'https://cdn.simpleicons.org/shopee/ffffff',mono:true,sub:'Marketplace harian'},
@@ -22,7 +24,7 @@ onMounted(async()=>{
   const m={}; for(const r of (data||[])) m[r.network]=(m[r.network]||0)+1
   counts.value=m; ready.value=true
 })
-function go(t){router.push(t.to)}
+function go(t){track('click',{network:t.k,path:t.to});router.push(t.to)}
 </script>
 <template>
 <section class="br">

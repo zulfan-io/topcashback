@@ -3,6 +3,8 @@ import { ref, computed, onMounted, onUnmounted, nextTick, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { supabase } from '~/utils/supabase'
 import Icon from '~/components/Icon.vue'
+import { useTrack } from '~/composables/useTrack'
+const { track } = useTrack()
 const P=defineProps({
   network:{type:String,required:true},
   brand:{type:String,required:true},
@@ -41,7 +43,8 @@ async function load(){
       rating:m.rating||'',sold:m.sold||'',
       list:(m.price_list&&m.price_list>r.price)?m.price_list:0,
       rate:m.rate_max||r.commission||0,
-      dens:Array.isArray(m.dens)?m.dens:[]}
+      dens:Array.isArray(m.dens)?m.dens:[],
+      save:m.save_pct||0,net:m.net_price||0,vnote:m.value_note||''}
   })
   state.value=rows.value.length?'ok':'empty'
 }
@@ -61,7 +64,7 @@ function flash(msg,undo){clearTimeout(tT);toast.value={msg,undo:!!undo};tT=setTi
 function isSaved(id){return saved.value.includes(id)}
 function toggleSave(o){
   if(isSaved(o.id)){saved.value=saved.value.filter(x=>x!==o.id);flash('Dihapus dari simpanan')}
-  else{saved.value=[...saved.value,o.id];flash('Tersimpan · '+String(o.title).slice(0,26))}
+  else{saved.value=[...saved.value,o.id];track('save',{network:P.network,offer_id:o.external_id});flash('Tersimpan · '+String(o.title).slice(0,26))}
   persist()
 }
 const cats=computed(()=>{
@@ -116,9 +119,9 @@ function reveal(){
   io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{rootMargin:'140px'})
   gridEl.value.querySelectorAll('.pc:not(.in)').forEach(el=>io.observe(el))
 }
-function openDetail(o){detail.value=o;qty.value=1;sheetY.value=0;document.body.style.overflow='hidden'}
+function openDetail(o){track('view',{network:P.network,offer_id:o.external_id},{once:true});detail.value=o;qty.value=1;sheetY.value=0;document.body.style.overflow='hidden'}
 function closeDetail(){detail.value=null;document.body.style.overflow='';if(route.query.p)router.replace(router.currentRoute.value.path)}
-function buy(o){window.open(o.url,'_blank','noopener')}
+function buy(o){track('buy',{network:P.network,offer_id:o.external_id,meta:{price:o.price||0,qty:qty.value}});window.open(o.url,'_blank','noopener')}
 async function share(o){
   const url=location.origin+router.currentRoute.value.path+'?p='+encodeURIComponent(o.external_id)
   try{if(navigator.share){await navigator.share({title:o.title,text:o.title,url});return}}catch(_){}
@@ -209,7 +212,8 @@ function sUp(){if(sheetY.value>120)closeDetail();sheetY.value=0;dragY.value=null
     <article v-for="o in shown" :key="o.id" class="pc" :class="{sel:sel.includes(o.id)}" @click="tapCard(o)">
       <div class="pw">
         <img :src="o.image_url" :alt="o.title" loading="lazy" decoding="async" fetchpriority="low"/>
-        <span v-if="o.list" class="poff">-{{Math.round((1-o.price/o.list)*100)}}%</span>
+        <span v-if="o.save" class="poff">hemat {{Math.round(o.save)}}%</span>
+        <span v-else-if="o.list" class="poff">-{{Math.round((1-o.price/o.list)*100)}}%</span>
         <span v-else-if="o.bonus" class="poff alt">{{o.bonus}}</span>
         <button class="psave" :class="{on:isSaved(o.id)}" @click.stop="toggleSave(o)" aria-label="Simpan"><Icon name="bookmark" :size="14"/></button>
         <span v-if="pick" class="pcheck"><Icon v-if="sel.includes(o.id)" name="check" :size="13"/></span>
@@ -262,6 +266,7 @@ function sUp(){if(sheetY.value>120)closeDetail();sheetY.value=0;dragY.value=null
             <div><span class="spl">Harga</span><b>{{rp(detail.price)}}</b><span v-if="detail.list" class="sstrike">{{rp(detail.list)}}</span></div>
             <span v-if="cb(detail)" class="scb"><Icon name="sparkle" :size="12"/>cashback s/d {{rp(cb(detail))}}</span>
           </div>
+          <p v-if="detail.vnote" class="svalue"><Icon name="sparkle" :size="13"/>{{detail.vnote}}</p>
           <p class="sdesc">{{detail.brief||'Penawaran resmi mitra. Detail lengkap, jadwal, dan ketentuan tampil di halaman pemesanan.'}}</p>
           <div v-if="detail.dens.length" class="sdens">
             <span class="sdl">Pilihan nominal</span>
@@ -408,6 +413,7 @@ function sUp(){if(sheetY.value>120)closeDetail();sheetY.value=0;dragY.value=null
 .sprice b{font-size:21px;font-weight:900;color:var(--gold)}
 .sstrike{display:block;font-size:10.5px;color:var(--mute);text-decoration:line-through}
 .scb{display:flex;gap:5px;align-items:center;font-size:10px;font-weight:900;color:var(--on);background:linear-gradient(135deg,var(--a1),var(--a2));padding:5px 9px;border-radius:99px}
+.svalue{display:flex;gap:7px;align-items:center;margin:0 0 10px;padding:9px 11px;border-radius:12px;font-size:12px;font-weight:800;color:var(--on);background:linear-gradient(135deg,var(--a1),var(--a2))}
 .sdesc{margin:0 0 13px;font-size:12.5px;line-height:1.6;color:var(--mute)}
 .sdens{margin-bottom:12px}
 .sdl{display:block;font-size:10px;font-weight:800;color:var(--mute);margin-bottom:6px}
