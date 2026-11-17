@@ -68,12 +68,12 @@ function notify(){
 </section>
 </template>
 <style scoped>
-.br{padding:12px 14px 2px;max-width:1280px;margin:0 auto}
-.brc{border:1px solid #eadfd0;background:#fff;border-radius:18px;padding:12px;box-shadow:0 6px 18px rgba(179,71,0,.06)}
+.br{padding:0;max-width:none;margin:0;width:100%}
+.brc{border:0;border-radius:0;border-top:3px solid;border-bottom:3px solid;border-color:#FF4D3D;background:linear-gradient(180deg,#ffffff,#FFF3E9 70%,#FFE9D6);padding:14px 14px 16px;box-shadow:0 12px 34px rgba(255,77,61,.14)}
 .bh{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:10px}
-.bh h3{margin:0;font-size:15px;font-weight:900;color:#1a1a1a;letter-spacing:-.2px}
+.bh h3{margin:0;font-size:17px;letter-spacing:-.3px;font-weight:900;color:#1a1a1a;letter-spacing:-.2px}
 .bh small{display:block;font-size:9.5px;color:#9a8f82;margin-top:2px;font-weight:700}
-.btrust{flex:0 0 auto;display:flex;gap:4px;align-items:center;font-size:9px;font-weight:900;color:#0a6b5e;background:#D8F5DC;padding:4px 8px;border-radius:999px}
+.btrust{box-shadow:0 4px 12px rgba(0,184,154,.25);flex:0 0 auto;display:flex;gap:4px;align-items:center;font-size:9px;font-weight:900;color:#0a6b5e;background:#D8F5DC;padding:4px 8px;border-radius:999px}
 .doors{display:flex;gap:8px;overflow-x:auto;padding-bottom:6px;scrollbar-width:thin;scrollbar-color:#FF7A45 #f3e9dc}
 .doors::-webkit-scrollbar{height:5px}
 .doors::-webkit-scrollbar-track{background:#f3e9dc;border-radius:99px}

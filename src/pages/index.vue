@@ -129,13 +129,34 @@ async function onTab(t) {
   hubOpen.value = false
   router.push(to)
 }
+
+onMounted(() => {
+  const tip=document.createElement('div'); tip.id='holdtip';
+  tip.setAttribute('style','position:fixed;left:50%;bottom:calc(96px + env(safe-area-inset-bottom));transform:translateX(-50%) translateY(10px);z-index:99;background:#10201C;color:#EAF7F7;font:600 12px/1.45 system-ui,sans-serif;padding:10px 15px;border-radius:13px;box-shadow:0 12px 32px rgba(0,0,0,.4);opacity:0;pointer-events:none;transition:opacity .18s,transform .18s;max-width:82vw;text-align:center');
+  document.body.appendChild(tip); let tt=null;
+  const hide=()=>{tip.style.opacity='0';tip.style.transform='translateX(-50%) translateY(10px)'};
+  const show=t=>{tip.textContent=t;tip.style.opacity='1';tip.style.transform='translateX(-50%) translateY(0)';clearTimeout(tt);tt=setTimeout(hide,2300)};
+  const bind=(el,text)=>{let p=null;el.addEventListener('pointerdown',()=>{p=setTimeout(()=>show(text),450)});['pointerup','pointerleave','pointercancel'].forEach(ev=>el.addEventListener(ev,()=>clearTimeout(p)))};
+  [['.sc-b','Saldo cashback: Top Up isi saldo, Tarik cairkan, Riwayat lihat transaksi'],
+   ['.door','Pintu toko resmi: tap buat masuk katalog merek ini'],
+   ['.bw','Mitra resmi Accesstrade: tap masuk katalog, tahan buat keterangan'],
+   ['.btab','Navigasi bawah: pindah halaman utama'],
+   ['.cta','Beli / top-up: keluar ke halaman resmi mitra, cashback tercatat'],
+   ['.th-cta','Jelajah semua destinasi Traveloka yang sudah hidup']].forEach(([sel,text])=>{
+    document.querySelectorAll(sel).forEach(el=>bind(el,text))});
+  document.addEventListener('click',e=>{const b=e.target&&e.target.closest?e.target.closest('button'):null;
+    if(b&&(b.textContent||'').trim()==='Ikuti'){e.preventDefault();e.stopPropagation();location.assign('/mall')}},true);
+  document.querySelectorAll('button').forEach(b=>{if((b.textContent||'').trim()==='Ikuti')bind(b,'Ikuti misi = belanja lewat Mall resmi, cashback masuk saldo')});
+  setTimeout(()=>{document.querySelectorAll('*').forEach(el=>{const t=(el.textContent||'').trim();
+    if((t==='Habis'||t==='0 terjual'||t==='0.0')&&el.children.length===0)el.remove()})},1600);
+});
 </script>
 
 <template>
   <div class="dual" data-v4-parity="1">
     <header class="top-air">
       <span class="logo-air">shopergo</span>
-      <span class="tag-air">cashback aggregator + widget pintasan</span>
+      <span class="tag-air"></span>
       <span class="badge" :class="src">{{ src }}</span>
     </header>
 
