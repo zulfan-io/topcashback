@@ -9,6 +9,9 @@ export const BRANDS: Brand[] = [
   { key:'blibli', name:'Blibli', sub:'Elektronik & rumah', tagline:'Penawaran resmi Blibli.', logo:'/brands/blibli.svg', hue:'sky', ic:'store', rate:'70', live:false, to:'/shop/blibli' },
   { key:'tiktokshop', name:'TikTok Shop', sub:'Belanja sosial', tagline:'Penawaran resmi TikTok Shop.', logo:'/brands/tiktokshop.svg', hue:'fusion', ic:'tv', rate:'25,23', live:false, to:'/shop/tiktokshop' },
   { key:'bukalapak', name:'Bukalapak', sub:'Warung & UMKM', tagline:'Penawaran resmi Bukalapak.', logo:'/brands/bukalapak.svg', hue:'fusion', ic:'store', rate:'', live:false, to:'/shop/bukalapak' },
+  { key:'tiket', name:'tiket.com', sub:'Tiket & atraksi', tagline:'Penawaran resmi tiket.com.', logo:'/brands/tiket.svg', hue:'sky', ic:'ticket', rate:'', live:false, to:'/shop/tiket' },
+  { key:'klook', name:'Klook', sub:'Atraksi global', tagline:'Penawaran resmi Klook.', logo:'/brands/klook.svg', hue:'fusion', ic:'compass', rate:'7,2', live:false, to:'/shop/klook' },
+  { key:'pelago', name:'Pelago', sub:'Wisata pilihan', tagline:'Penawaran resmi Pelago.', logo:'/brands/pelago.svg', hue:'ocean', ic:'globe', rate:'5,6', live:false, to:'/shop/pelago' },
 ]
 export const LIVE = BRANDS.filter(b=>b.live)
 export const SOON = BRANDS.filter(b=>!b.live)
