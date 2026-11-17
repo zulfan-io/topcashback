@@ -11,6 +11,7 @@ const BI_IDLE = "#9a9a9a"
 import { onMounted, onUnmounted, ref, computed } from 'vue'
 import { usePpob } from '~/stores/ppob'
 import BrandRail from '~/components/BrandRail.vue'
+import GameHot from '~/components/GameHot.vue'
 import Icon from '~/components/Icon.vue'
 import { useSwipeBack } from '~/composables/useSwipeBack'
 useSwipeBack()
@@ -165,6 +166,7 @@ async function onTab(t) {
       </div>
     </section>
     <section class="merchant-vivid">
+      <GameHot compact />
       <BrandRail />
     </section>
 
