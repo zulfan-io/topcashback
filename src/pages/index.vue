@@ -186,7 +186,6 @@ async function onTab(t) {
     </section>
 
     <section class="travel-strip">
-      <div class="tv-h"><span>Travel & Brand</span></div>
       <div class="tv-r">
         <button v-for="t in TRAVEL" :key="t.dom" class="tv-t" @click="router.push('/mall')">
           <img :src="'https://logo.clearbit.com/'+t.dom" :alt="t.dom" loading="lazy" />

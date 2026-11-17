@@ -35,7 +35,7 @@ function go(t){track('click',{network:t.k,path:t.to});router.push(t.to)}
 
   <div class="bgrid">
     <button v-for="b in LIVE" :key="b.k" class="bt" @click="go(b)">
-      <span class="blogo" :class="{plain:b.mono}"><img :src="b.logo" :alt="b.name" loading="lazy" decoding="async"/></span>
+      <span class="blogo"><img :src="b.logo" :alt="b.name" loading="lazy" decoding="async"/></span>
       <span class="bname">{{b.name}}</span>
       <span class="bsub">{{b.sub}}</span>
       <span class="brate">{{b.rate}}</span>
@@ -81,9 +81,9 @@ function go(t){track('click',{network:t.k,path:t.to});router.push(t.to)}
 .bt::after{content:'';position:absolute;right:-26px;top:-26px;width:88px;height:88px;border-radius:50%;background:rgba(255,255,255,.12)}
 .bt:active{transform:scale(.965);box-shadow:0 4px 12px rgba(255,77,61,.3)}
 .blogo{position:relative;width:46px;height:46px;display:grid;place-items:center;border-radius:14px;background:#fff;margin-bottom:7px;box-shadow:0 3px 10px rgba(0,0,0,.16)}
-.blogo.plain{background:rgba(255,255,255,.18);box-shadow:none}
-.blogo img{width:30px;height:30px;object-fit:contain;display:block}
-.blogo.plain img{width:32px;height:32px}
+
+.blogo img{width:32px;height:32px;object-fit:contain;display:block}
+
 .bname{position:relative;font-size:15px;font-weight:900;letter-spacing:-.2px}
 .bsub{position:relative;font-size:9.5px;opacity:.9;line-height:1.3}
 .brate{position:relative;margin-top:8px;font-size:13px;font-weight:900;color:#B34700;background:#FFE0C2;padding:3px 10px;border-radius:999px}

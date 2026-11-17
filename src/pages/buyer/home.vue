@@ -1,44 +1,6 @@
-<route lang="yaml">
-meta:
-  layout: buyer/LBHome
-</route>
-
-<script setup lang="ts">
+<script setup>
+import { onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { supabase } from '~/utils/supabase'
-
-useHead({
-  title: 'buyer | home',
-})
-const router = useRouter()
-
-onMounted(async () => {
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) router.push({ path: '/buyer/login' })
-})
+const r=useRouter(); onMounted(()=>r.replace('/mall'))
 </script>
-
-<template>
-  <div>
-    <CBSwipper />
-    <CBCategory />
-    <CBBanner />
-    <!-- <CBFlashSales />
-    <CBDemo1 />
-    <CBOurProducts />
-    <CBTrending />
-    <CBTopProducts />
-    <CBMonthSale />
-    <CBDealArrivals />
-    <CBDemo3 /> -->
-    <!-- <div class="flex justify-center">
-      <CBToday />
-    </div> -->
-    <div class="flex justify-center">
-      <CBFeature />
-    </div>
-    <!-- <CSlick /> -->
-    <CBDemo2 />
-    <CBService />
-  </div>
-</template>
+<template><div style="min-height:100vh;background:#FFF7EC"></div></template>

@@ -6,7 +6,7 @@ const { t } = useI18n()
   <div class="container dark:text-white flex justify-center items-center gap-3 pl-5">
     <div class="dropdown">
       <div class="dropdown__select">
-        <a href="/buyer/home"><span class="dropdown__selected flex items-center gap-1"><IHome />{{ t('header.home') }}</span></a>
+        <a href="/mall"><span class="dropdown__selected flex items-center gap-1"><IHome />{{ t('header.home') }}</span></a>
       </div>
     </div>
     <div class="dropdown dark:bg-black">
