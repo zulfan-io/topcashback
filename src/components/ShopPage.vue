@@ -177,7 +177,7 @@ function sUp(){if(sheetY.value>120)closeDetail();sheetY.value=0;dragY.value=null
       <button v-for="o in dealRows" :key="'d'+o.id" class="dc" @click="openDetail(o)">
         <img :src="o.image_url" :alt="o.title" loading="lazy" decoding="async" fetchpriority="low"/>
         <span class="dp">{{rp(o.price)}}</span><span class="dn">{{o.title}}</span>
-        <em v-if="cb(o)" class="dcb">+{{rp(cb(o))}}</em>
+        
       </button>
     </div>
   </section>
@@ -223,7 +223,7 @@ function sUp(){if(sheetY.value>120)closeDetail();sheetY.value=0;dragY.value=null
         <span v-if="o.city||o.country" class="ploc"><Icon name="pin" :size="10"/>{{o.city||o.country}}</span>
         <div class="prow">
           <span class="pprice">{{o.price?rp(o.price):'Lihat promo'}}</span>
-          <span v-if="cb(o)" class="pcb">+{{rp(cb(o))}}</span>
+          
         </div>
         <span v-if="o.list" class="pstrike">{{rp(o.list)}}</span>
         <span class="pnote">
@@ -264,7 +264,7 @@ function sUp(){if(sheetY.value>120)closeDetail();sheetY.value=0;dragY.value=null
           <div v-if="detail.city||detail.country" class="sloc"><Icon name="pin" :size="13"/>{{detail.city||detail.country}}</div>
           <div v-if="detail.price" class="sprice">
             <div><span class="spl">Harga</span><b>{{rp(detail.price)}}</b><span v-if="detail.list" class="sstrike">{{rp(detail.list)}}</span></div>
-            <span v-if="cb(detail)" class="scb"><Icon name="sparkle" :size="12"/>cashback s/d {{rp(cb(detail))}}</span>
+            
           </div>
           <p v-if="detail.vnote" class="svalue"><Icon name="sparkle" :size="13"/>{{detail.vnote}}</p>
           <p class="sdesc">{{detail.brief||'Penawaran resmi mitra. Detail lengkap, jadwal, dan ketentuan tampil di halaman pemesanan.'}}</p>
@@ -276,7 +276,7 @@ function sUp(){if(sheetY.value>120)closeDetail();sheetY.value=0;dragY.value=null
             <div class="stp"><button @click="qty=Math.max(1,qty-1)" aria-label="Kurangi"><Icon name="minus" :size="14"/></button><b>{{qty}}</b><button @click="qty=Math.min(10,qty+1)" aria-label="Tambah"><Icon name="plus" :size="14"/></button></div>
           </div>
           <div v-if="detail.price" class="stotal"><span>Perkiraan total</span><b>{{rp(detail.price*qty)}}</b></div>
-          <div v-if="cb(detail)" class="stotal cb2"><span>Perkiraan cashback</span><b>+{{rp(cb(detail)*qty)}}</b></div>
+          
           <ul class="slist">
             <li><Icon name="check" :size="13"/>Penawaran resmi mitra terverifikasi</li>
             <li><Icon name="check" :size="13"/>Konfirmasi & pembayaran di halaman mitra</li>

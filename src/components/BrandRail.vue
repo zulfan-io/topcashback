@@ -16,7 +16,7 @@ onMounted(async()=>{
   counts.value=m; ready.value=true
 })
 function go(b){track('click',{network:b.key,path:b.to});router.push(b.to)}
-function tap(b){ if(b.live) go(b); else {sheet.value=b; track('want_open',{network:b.key})} }
+function tap(b){const to=b.brands||('/shop/'+b.key);track('click',{network:b.key,path:to});router.push(to)}
 function notify(){
   const b=sheet.value; if(!b)return
   if(!wanted.value.includes(b.key)){wanted.value=[...wanted.value,b.key];try{localStorage.setItem('brand_want',JSON.stringify(wanted.value))}catch(_){}}
@@ -28,13 +28,13 @@ function notify(){
 <section class="br">
   <div class="brc">
     <header class="bh">
-      <div><h3>Cashback resmi</h3><small>{{BRANDS.length}} mitra · logo asli · rate campaign</small></div>
+      <div><h3>Cashback resmi</h3></div>
       <span class="btrust"><Icon name="check" :size="12"/>terverifikasi</span>
     </header>
     <div class="doors">
       <button v-for="b in LIVE" :key="b.key" class="door" @click="go(b)">
         <span class="dlogo"><img :src="b.logo" :alt="b.name" loading="lazy" decoding="async"/></span>
-        <span class="dtxt"><b>{{b.name}}</b><small><template v-if="ready">{{counts[b.key]||0}} item · </template>s/d {{b.rate}}%</small></span>
+        <span class="dtxt"><b>{{b.name}}</b><small><template v-if="ready">{{counts[b.key]||0}} item resmi</template><template v-else>memuat…</template></small></span>
         <Icon name="chevron" :size="15"/>
       </button>
     </div>
@@ -43,7 +43,7 @@ function notify(){
       <button v-for="b in BRANDS" :key="'w'+b.key" class="bw" :class="{live:b.live,on:wanted.includes(b.key)}" @click="tap(b)">
         <span class="bwi"><img :src="b.logo" :alt="b.name" loading="lazy" decoding="async"/></span>
         <span class="bwn">{{b.name}}</span>
-        <span class="bwp">{{b.rate?('s/d '+b.rate+'%'):'rate menyusul'}}</span>
+        <span class="bwp">{{b.live?'katalog resmi':'segera'}}</span>
         <span class="bws">
           <template v-if="b.live"><Icon name="chevron" :size="9"/></template>
           <template v-else><Icon :name="wanted.includes(b.key)?'check':'bell'" :size="9"/></template>
