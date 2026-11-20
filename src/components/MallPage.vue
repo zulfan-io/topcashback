@@ -5,6 +5,7 @@ import { supabase } from '~/utils/supabase'
 import Icon from '~/components/Icon.vue'
 import AppNav from '~/components/AppNav.vue'
 import { byKey } from '~/config/brands'
+function NETOF(k){return k==='tiktokshop'?'tiktok':k==='tokopedia'?'tokopedia':k}
 const P=defineProps({network:{type:String,required:true}})
 const router=useRouter()
 const meta=computed(()=>byKey(P.network)||{name:P.network,logo:'',sub:'Katalog resmi',hue:'fusion'})
@@ -13,9 +14,9 @@ const state=ref('load'); const seg=ref('produk'); const q=ref(''); const sort=re
 async function load(){
   state.value='load'
   const [a,b,c]=await Promise.all([
-    supabase.from('shoper_offers').select('*').eq('network',P.network).eq('active',true).limit(400),
-    supabase.from('merchant_brands').select('*').eq('network',P.network).eq('active',true).limit(600),
-    supabase.from('merchant_promos').select('*').eq('network',P.network).eq('active',true).limit(200)])
+    supabase.from('shoper_offers').select('*').eq('network',NETOF(P.network)).eq('active',true).limit(400),
+    supabase.from('merchant_brands').select('*').eq('network',NETOF(P.network)).eq('active',true).limit(600),
+    supabase.from('merchant_promos').select('*').eq('network',NETOF(P.network)).eq('active',true).limit(200)])
   items.value=(a.data||[]).map(r=>{const m=typeof r.meta_json==='string'?JSON.parse(r.meta_json||'{}'):(r.meta_json||{})
     return {...r,title:r.name||r.title,price:r.price||r.original_price,list:+(m.price_list||r.original_price||0),city:m.city||'',sold:+(m.sold||0)}})
   brands.value=b.data||[]; promos.value=c.data||[]
