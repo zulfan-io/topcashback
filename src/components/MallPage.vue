@@ -76,9 +76,7 @@ const shownPromo=computed(()=>{const t=q.value.trim().toLowerCase();return promo
         <span class="nm">{{r.title}}</span>
         <span class="pr" v-if="r.price">{{rp(r.price)}}</span>
         <span class="st" v-if="r.list>r.price">{{rp(r.list)}}</span>
-        <!-- __cardInfo: nama+toko minimal dari DB; komisi TETAP tidak dirender -->
-        <b v-if="n.name" style="display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;margin:8px 10px 0;font-size:12px;line-height:1.4;color:#3d2c1e">{{n.name}}</b>
-        <small v-if="n.store_name" style="display:block;margin:2px 10px 0;font-size:11px;color:#9a7b60">{{n.store_name}}</small>
+                <small v-if="r.store_name" style="display:block;margin:4px 10px 0;font-size:11px;color:#9a7b60;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{r.store_name}}</small>
         <span class="go">Lihat di {{meta.name}}<Icon name="chevron" :size="12"/></span>
       </button>
     </div>
