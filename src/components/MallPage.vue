@@ -1,4 +1,5 @@
 <script setup>
+import { tap, share } from '~/composables/useFeed'
 import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { supabase } from '~/utils/supabase'
@@ -8,6 +9,16 @@ import { byKey } from '~/config/brands'
 function NETOF(k){return k==='tiktokshop'?'tiktok':k==='tokopedia'?'tokopedia':k}
 const P=defineProps({network:{type:String,required:true}})
 const router=useRouter()
+
+function fmtPrice(n) {
+  if (!n) return ''
+  return 'Rp' + Number(n).toLocaleString('id-ID')
+}
+function calcDiscount(price, original) {
+  if (!price || !original || original <= price) return 0
+  return Math.round((1 - price / original) * 100)
+}
+
 const meta=computed(()=>byKey(P.network)||{name:P.network,logo:'',sub:'Katalog resmi',hue:'fusion'})
 const items=ref([]); const brands=ref([]); const promos=ref([])
 const state=ref('load'); const seg=ref('produk'); const q=ref(''); const sort=ref('pop')
@@ -151,4 +162,8 @@ const shownPromo=computed(()=>{const t=q.value.trim().toLowerCase();return promo
 .msg b{font-size:15px;color:#1a1a1a}.msg small{font-size:12px;max-width:300px;line-height:1.5}
 .btn{margin-top:4px;border:0;border-radius:999px;padding:10px 20px;font-weight:900;font-size:12px;color:#fff;background:linear-gradient(135deg,var(--a),var(--a2));cursor:pointer}
 .note{max-width:1280px;margin:14px auto 0;padding:0 16px;font-size:9.5px;color:#9a8f82;line-height:1.5}
+
+.price-block { display: flex; align-items: baseline; gap: 6px; margin: 4px 0; }
+.price-block .pr { font-size: 14px; font-weight: 700; color: #ff5722; }
+.price-block .st { font-size: 11px; color: #999; text-decoration: line-through; }
 </style>
