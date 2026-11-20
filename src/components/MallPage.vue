@@ -17,7 +17,7 @@ async function load(){
     supabase.from('merchant_brands').select('*').eq('network',P.network).eq('active',true).limit(600),
     supabase.from('merchant_promos').select('*').eq('network',P.network).eq('active',true).limit(200)])
   items.value=(a.data||[]).map(r=>{const m=typeof r.meta_json==='string'?JSON.parse(r.meta_json||'{}'):(r.meta_json||{})
-    return {...r,list:+(m.price_list||0),city:m.city||'',sold:+(m.sold||0)}})
+    return {...r,title:r.name||r.title,price:r.price||r.original_price,list:+(m.price_list||r.original_price||0),city:m.city||'',sold:+(m.sold||0)}})
   brands.value=b.data||[]; promos.value=c.data||[]
   seg.value = items.value.length?'produk':(brands.value.length?'brand':(promos.value.length?'promo':'produk'))
   state.value=(items.value.length||brands.value.length||promos.value.length)?'ok':'empty'
