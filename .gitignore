@@ -25,3 +25,8 @@ keystore.b64
 public/pwa-192x192.png
 public/pwa-512x512.png
 at_cookie.txt
+0,
+=
+*.bak.*
+tiktok_p1.json
+*.har
