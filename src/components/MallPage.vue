@@ -84,7 +84,7 @@ const shownPromo=computed(()=>{const t=q.value.trim().toLowerCase();return promo
       <button v-for="r in shownItem" :key="r.id" class="card" @click="out(r.url)">
         <span class="pw"><img :src="r.image_url" :alt="r.title" loading="lazy" decoding="async"/>
           <i v-if="r.discount_pct" class="off">-{{r.discount_pct}}%</i></span>
-        <span class="nm">{{r.title}}</span>
+        <span class="nm">{{r.description || r.title}}</span>
         <span class="pr" v-if="r.price">{{fmtPrice(r.price)}}</span>
         <span class="st" v-if="r.original_price>r.price">{{fmtPrice(r.original_price)}}</span>
                 <small v-if="r.store_name" style="display:block;margin:4px 10px 0;font-size:11px;color:#9a7b60;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{r.store_name}}</small>
@@ -102,7 +102,7 @@ const shownPromo=computed(()=>{const t=q.value.trim().toLowerCase();return promo
     <div v-else class="grid">
       <button v-for="r in shownPromo" :key="r.id" class="card" @click="out(r.url)">
         <span class="pw" v-if="r.image_url"><img :src="r.image_url" :alt="r.title" loading="lazy" decoding="async"/></span>
-        <span class="nm">{{r.title}}</span>
+        <span class="nm">{{r.description || r.title}}</span>
         <span class="pr" v-if="r.price">{{fmtPrice(r.price)}}</span>
         <span class="ex" v-if="r.ends">s/d {{r.ends}}</span>
         <span class="go">Pakai promo<Icon name="chevron" :size="12"/></span>
