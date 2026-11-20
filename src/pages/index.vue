@@ -156,6 +156,9 @@ onMounted(() => {
 </script>
 
 <template>
+  <section class="promo-strip">
+    <PromoCard v-for="p in promos" :key="p.id" :promo="p" @claim="trackClick" />
+  </section>
   <div class="dual" data-v4-parity="1">
     <header class="top-air">
       <span class="logo-air">shopergo</span>
