@@ -1,5 +1,4 @@
 <script setup>
-import { tap, share } from '~/composables/useFeed'
 import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { supabase } from '~/utils/supabase'
