@@ -29,7 +29,7 @@ async function load(){
     supabase.from('merchant_brands').select('*').eq('network',NETOF(P.network)).eq('active',true).limit(600),
     supabase.from('merchant_promos').select('*').eq('network',NETOF(P.network)).eq('active',true).limit(200)])
   items.value=(a.data||[]).map(r=>{const m=typeof r.meta_json==='string'?JSON.parse(r.meta_json||'{}'):(r.meta_json||{})
-    return {...r,title:r.name||r.title,price:r.price||r.original_price,original_price:r.original_price,list:+(m.price_list||r.original_price||0),city:m.city||'',sold:+(m.sold||0)}})
+    return {...r,title:r.name||r.title,price:r.price||r.original_price,original_price:r.original_price,list:+(m.price_list||r.original_price||0),city:m.city||'',sold:+(r.sold||m.sold||0),rating:+(r.rating||0)}})
   brands.value=b.data||[]; promos.value=c.data||[]
   seg.value = items.value.length?'produk':(brands.value.length?'brand':(promos.value.length?'promo':'produk'))
   state.value=(items.value.length||brands.value.length||promos.value.length)?'ok':'empty'
@@ -130,13 +130,13 @@ const shownPromo=computed(()=>{const t=q.value.trim().toLowerCase();return promo
 .stats div{flex:1;background:#fff;border:1px solid #eadfd0;border-radius:13px;padding:9px 11px}
 .stats b{display:block;font-size:17px;font-weight:900;color:var(--a2)}
 .stats span{font-size:9.5px;color:#7b7268;font-weight:700}
-.rail{display:flex;gap:8px;overflow-x:auto;padding:12px 14px;max-width:1280px;margin:0 auto}
+.rail{display:flex;gap:8px;overflow-x:auto;padding: 12px clamp(12px, 4vw, 32px);max-width:1280px;margin:0 autoscroll-padding-inline: clamp(12px, 4vw, 32px); -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 12px, #000 calc(100% - 12px), transparent 100%); mask-image: linear-gradient(90deg, transparent 0, #000 12px, #000 calc(100% - 12px), transparent 100%); }
 .rail button{flex:0 0 92px;display:flex;flex-direction:column;align-items:center;gap:5px;border:0;background:none;cursor:pointer;padding:0}
 .ri{width:50px;height:50px;display:grid;place-items:center;border-radius:17px;background:#fff;border:1px solid #eadfd0;color:var(--a)}
 .rail button.on .ri{background:linear-gradient(140deg,var(--a),var(--a2));color:#fff;border-color:transparent}
 .rl{font-size:9.5px;font-weight:800;color:#1a1a1a;text-align:center;line-height:1.15}
 .rn{font-style:normal;font-size:9px;font-weight:800;color:#fff;background:var(--a);border-radius:99px;padding:1px 6px}
-.tools{padding:0 14px 10px;max-width:1280px;margin:0 auto}
+.tools{padding: 0 clamp(12px, 4vw, 32px) 10px;max-width:1280px;margin:0 auto}
 .sel{display:flex;gap:7px;align-items:center;background:#fff;border:1px solid #eadfd0;border-radius:11px;padding:8px 11px;color:#9a8f82}
 .sel select{flex:1;background:none;border:0;outline:none;color:#1a1a1a;font-size:12px;font-weight:800}
 .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;padding:0 12px;max-width:1280px;margin:0 auto}

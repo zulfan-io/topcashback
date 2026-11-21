@@ -12,7 +12,7 @@ const done = ref(false)
 
 function mapOffer(o) {
   const price = o.price != null ? Number(o.price) : null
-  return { id: o.id, name: o.title || 'Produk', image: o.image_url || null, sold: 0, rating: 0, price, stock: 0, variants: [], wholesale: [], models: price != null ? [{ id: o.id, sku: 'AFF' + o.id, price, stock: 0, variation_index: [], is_default: true, product_id: o.id }] : [] }
+  return { id: o.id, name: o.title || 'Produk', image: o.image_url || null, sold: o.sold || 0, rating: o.rating || 0, price, stock: 0, variants: [], wholesale: [], models: price != null ? [{ id: o.id, sku: 'AFF' + o.id, price, stock: 0, variation_index: [], is_default: true, product_id: o.id }] : [] }
 }
 
 const loveCounts = ref({})

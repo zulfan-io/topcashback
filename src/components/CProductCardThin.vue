@@ -33,8 +33,10 @@ const out = computed(() => (props.product.stock || 0) <= 0)
         <span class="sd">{{ soldText }} terjual</span>
       </div>
       <div class="act">
-        <button class="act-b" @click.stop="emit('love', props.product)">&#9825; {{ loveCount || 0 }}</button>
-        <button class="act-b" @click.stop="emit('share', props.product)">&#8618; {{ shareCount || 0 }}</button>
+      <div class="fab-row">
+        <button class="fab love" @click.stop="emit('love', props.product)">&#9825;<span class="n" v-if="loveCount > 0">{{ loveCount }}</span></button>
+        <button class="fab share" @click.stop="emit('share', props.product)">&#8618;<span class="n" v-if="shareCount > 0">{{ shareCount }}</span></button>
+      </div>
       </div>
     </div>
   </article>
@@ -54,7 +56,15 @@ const out = computed(() => (props.product.stock || 0) <= 0)
 .rt { font-size: 11px; color: #f5a623; font-weight: 700; }
 .sd { font-size: 11px; color: #888; }
 .act { display: flex; gap: 8px; margin-top: 6px; }
-.act-b { flex: 1; border: 1px solid #eee; background: #fafafa; border-radius: 8px; padding: 4px 0; font-size: 11px; color: #666; cursor: pointer; transition: background .15s, color .15s; }
-.act-b:active { background: #FFE9DF; color: #FF7A45; }
+.img-wrap { position: relative; aspect-ratio: 1; overflow: hidden; border-radius: 8px; margin-bottom: 8px; }
+.img-wrap img { width: 100%; height: 100%; object-fit: cover; }
+.fab-row { position: absolute; top: 8px; right: 8px; display: flex; gap: 6px; z-index: 2; }
+.fab { width: 34px; height: 34px; border-radius: 50%; border: 1px solid rgba(0,0,0,.06);
+  background: rgba(255,255,255,.88); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+  box-shadow: 0 2px 8px rgba(0,0,0,.14); display: grid; place-items: center;
+  font-size: 15px; color: #1a1a1a; -webkit-text-stroke: .9px currentColor; font-weight: 900; cursor: pointer; transition: transform .15s; }
+.fab:active { transform: scale(.92); }
+.fab .n { position: absolute; bottom: -6px; right: -4px; background: #10B981; color: #fff;
+  font-size: 9px; font-weight: 800; padding: 1px 5px; border-radius: 999px; -webkit-text-stroke: 0; }
 </style>
 

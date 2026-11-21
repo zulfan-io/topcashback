@@ -69,12 +69,12 @@ function notify(){
 </template>
 <style scoped>
 .br{padding:0 clamp(12px,3vw,32px);max-width:none;margin:0;width:100%;box-sizing:border-box}
-.brc{border:0;border-radius:0;border-top:3px solid;border-bottom:3px solid;border-color:#FF4D3D;background:linear-gradient(180deg,#ffffff,#FFF3E9 70%,#FFE9D6);padding:14px 14px 16px;box-shadow:0 12px 34px rgba(255,77,61,.14)}
+.brc{border:0;border-radius:0;border-top:3px solid;border-bottom:3px solid;border-color:#FF4D3D;background:linear-gradient(180deg,#ffffff,#FFF3E9 70%,#FFE9D6);padding: 14px clamp(12px, 4vw, 32px) 16px;box-shadow:0 12px 34px rgba(255,77,61,.14)}
 .bh{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:10px}
 .bh h3{margin:0;font-size:17px;letter-spacing:-.3px;font-weight:900;color:#1a1a1a;letter-spacing:-.2px}
 .bh small{display:block;font-size:9.5px;color:#9a8f82;margin-top:2px;font-weight:700}
 .btrust{box-shadow:0 4px 12px rgba(0,184,154,.25);flex:0 0 auto;display:flex;gap:4px;align-items:center;font-size:9px;font-weight:900;color:#0a6b5e;background:#D8F5DC;padding:4px 8px;border-radius:999px}
-.doors{display:flex;gap:8px;overflow-x:auto;padding-bottom:6px;scrollbar-width:thin;scrollbar-color:#FF7A45 #f3e9dc}
+.doors{display:flex;gap:8px;overflow-x:auto;padding-bottom:6px;scrollbar-width:thin;scrollbar-color:#FF7A45 #f3e9dcscroll-padding-inline: clamp(12px, 4vw, 32px); -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 12px, #000 calc(100% - 12px), transparent 100%); mask-image: linear-gradient(90deg, transparent 0, #000 12px, #000 calc(100% - 12px), transparent 100%); }
 .doors::-webkit-scrollbar{height:5px}
 .doors::-webkit-scrollbar-track{background:#f3e9dc;border-radius:99px}
 .doors::-webkit-scrollbar-thumb{background:linear-gradient(90deg,#FF7A45,#FF4D3D);border-radius:99px}
@@ -111,7 +111,7 @@ function notify(){
 .bsheet p{margin:0 0 14px;font-size:12px;line-height:1.6;color:#7b7268}
 .bsb{display:flex;gap:8px;align-items:center;justify-content:center;width:100%;border:0;border-radius:13px;padding:13px;font-size:13px;font-weight:900;color:#fff;background:linear-gradient(135deg,#FF7A45,#FF4D3D);cursor:pointer}
 .bsg{width:100%;margin-top:8px;border:1px solid #eadfd0;border-radius:13px;padding:11px;font-size:12px;font-weight:800;color:#B34700;background:#fff;cursor:pointer}
-.btoast{position:fixed;left:14px;right:14px;bottom:calc(78px + env(safe-area-inset-bottom));z-index:90;display:flex;gap:8px;align-items:center;background:#0d3b46;color:#EAF7F7;border-radius:13px;padding:12px 14px;font-size:12px;font-weight:700;box-shadow:0 12px 30px rgba(0,0,0,.4)}
+.btoast{position:fixed;left:14px;right:14px;bottom:calc(78px + env(safe-area-inset-bottom));z-index:90;display:flex;gap:8px;align-items:center;background:#0d3b46;color:#EAF7F7;border-radius:13px;padding: 12px clamp(12px, 4vw, 32px);font-size:12px;font-weight:700;box-shadow:0 12px 30px rgba(0,0,0,.4)}
 .bs-enter-active,.bs-leave-active{transition:opacity .22s}
 .bs-enter-active .bsheet,.bs-leave-active .bsheet{transition:transform .26s cubic-bezier(.22,1,.36,1)}
 .bs-enter-from,.bs-leave-to{opacity:0}

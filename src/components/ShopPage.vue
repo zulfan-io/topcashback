@@ -317,7 +317,7 @@ function sUp(){if(sheetY.value>120)closeDetail();sheetY.value=0;dragY.value=null
 .hstats div{flex:1;min-width:72px;background:var(--surf);border:1px solid var(--line);border-radius:13px;padding:8px 10px}
 .hstats b{display:block;font-size:15px;font-weight:900;color:var(--a1)}
 .hstats span{font-size:9.5px;color:var(--mute);font-weight:700}
-.rail{display:flex;gap:8px;overflow-x:auto;padding:12px 14px;scroll-snap-type:x proximity;max-width:1280px;margin:0 auto}
+.rail{display:flex;gap:8px;overflow-x:auto;padding: 12px clamp(12px, 4vw, 32px);scroll-snap-type:x proximity;max-width:1280px;margin:0 autoscroll-padding-inline: clamp(12px, 4vw, 32px); -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 12px, #000 calc(100% - 12px), transparent 100%); mask-image: linear-gradient(90deg, transparent 0, #000 12px, #000 calc(100% - 12px), transparent 100%); }
 .rail button{flex:0 0 80px;scroll-snap-align:start;display:flex;flex-direction:column;align-items:center;gap:5px;border:0;background:none;color:var(--mute);cursor:pointer;padding:0}
 .ri{width:50px;height:50px;display:grid;place-items:center;border-radius:17px;background:var(--surf);border:1px solid var(--line);color:var(--a1);transition:transform .16s,background .16s}
 .rail button:active .ri{transform:scale(.92)}
@@ -325,17 +325,17 @@ function sUp(){if(sheetY.value>120)closeDetail();sheetY.value=0;dragY.value=null
 .rl{font-size:10.5px;font-weight:800;color:var(--ink);text-align:center;line-height:1.15}
 .rn{font-style:normal;font-size:9px;font-weight:800;color:var(--on);background:var(--a1);border-radius:99px;padding:1px 6px}
 .deal{margin:2px 0 6px;padding:12px 0 14px;background:color-mix(in srgb,var(--gold) 12%,transparent);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
-.dh{display:flex;justify-content:space-between;align-items:center;padding:0 14px 10px;max-width:1280px;margin:0 auto}
+.dh{display:flex;justify-content:space-between;align-items:center;padding: 0 clamp(12px, 4vw, 32px) 10px;max-width:1280px;margin:0 auto}
 .dh h2{display:flex;gap:7px;align-items:center;margin:0;font-size:15px;font-weight:900}
 .timer{display:flex;gap:5px;align-items:center;font-size:12px;font-weight:900;font-variant-numeric:tabular-nums;color:#2b1600;background:linear-gradient(135deg,var(--gold),#FF8A3D);padding:4px 10px;border-radius:999px}
-.dstrip{display:flex;gap:10px;overflow-x:auto;padding:0 14px 4px;scroll-snap-type:x mandatory;max-width:1280px;margin:0 auto}
+.dstrip{display:flex;gap:10px;overflow-x:auto;padding: 0 clamp(12px, 4vw, 32px) 4px;scroll-snap-type:x mandatory;max-width:1280px;margin:0 auto}
 .dc{flex:0 0 126px;scroll-snap-align:start;position:relative;border:1px solid var(--line);background:var(--surf);border-radius:14px;padding:7px;cursor:pointer;color:var(--ink);text-align:left}
 .dc:active{transform:scale(.95)}
 .dc img{width:100%;height:80px;object-fit:cover;border-radius:10px}
 .dp{display:block;font-size:12.5px;font-weight:900;color:var(--gold);margin-top:6px}
 .dn{display:block;font-size:9.5px;line-height:1.25;height:2.5em;overflow:hidden;color:var(--mute);margin-top:2px}
 .dcb{position:absolute;top:11px;right:11px;font-style:normal;font-size:8px;font-weight:900;color:var(--on);background:linear-gradient(135deg,var(--a1),var(--a2));padding:2px 5px;border-radius:99px}
-.tools{max-width:1280px;margin:0 auto;padding:12px 14px 0}
+.tools{max-width:1280px;margin:0 auto;padding: 12px clamp(12px, 4vw, 32px) 0}
 .chips{display:flex;gap:7px;overflow-x:auto;padding-bottom:9px}
 .chips button{flex:0 0 auto;display:flex;gap:5px;align-items:center;border:1px solid var(--line);background:var(--surf);color:var(--ink);border-radius:999px;padding:7px 13px;font-size:11.5px;font-weight:800;cursor:pointer}
 .chips button.on{background:linear-gradient(135deg,var(--a1),var(--a2));border-color:transparent;color:var(--on)}
@@ -346,7 +346,7 @@ function sUp(){if(sheetY.value>120)closeDetail();sheetY.value=0;dragY.value=null
 .sel select option{background:var(--surf);color:var(--ink)}
 .pickb{display:flex;gap:6px;align-items:center;border:1px solid var(--line);background:var(--surf);color:var(--ink);border-radius:11px;padding:8px 13px;font-size:12px;font-weight:800;cursor:pointer}
 .pickb.on{background:linear-gradient(135deg,var(--a1),var(--a2));color:var(--on);border-color:transparent}
-.resline{display:flex;justify-content:space-between;align-items:center;max-width:1280px;margin:0 auto;padding:11px 14px 9px;font-size:11.5px;color:var(--mute)}
+.resline{display:flex;justify-content:space-between;align-items:center;max-width:1280px;margin:0 auto;padding: 11px clamp(12px, 4vw, 32px) 9px;font-size:11.5px;color:var(--mute)}
 .resline b{color:var(--a1);font-size:13px}
 .rst{border:0;background:none;color:var(--gold);font-size:11.5px;font-weight:800;cursor:pointer}
 .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;max-width:1280px;margin:0 auto;padding:0 12px}
@@ -393,7 +393,7 @@ function sUp(){if(sheetY.value>120)closeDetail();sheetY.value=0;dragY.value=null
 .bulk button{display:flex;gap:5px;align-items:center;border:0;border-radius:10px;padding:8px 11px;font-size:11px;font-weight:900;color:var(--on);background:linear-gradient(135deg,var(--a1),var(--a2));cursor:pointer}
 .bulk button.danger{background:linear-gradient(135deg,var(--a2),#FF8A3D);color:#fff}
 .bulk button.ghost{background:color-mix(in srgb,var(--ink) 8%,transparent);color:var(--ink)}
-.toast{position:fixed;left:12px;right:12px;bottom:calc(70px + env(safe-area-inset-bottom));z-index:60;display:flex;gap:10px;align-items:center;justify-content:space-between;background:var(--surf);border:1px solid var(--a1);border-radius:13px;padding:11px 14px;font-size:12px;box-shadow:0 12px 30px rgba(0,0,0,.3)}
+.toast{position:fixed;left:12px;right:12px;bottom:calc(70px + env(safe-area-inset-bottom));z-index:60;display:flex;gap:10px;align-items:center;justify-content:space-between;background:var(--surf);border:1px solid var(--a1);border-radius:13px;padding: 11px clamp(12px, 4vw, 32px);font-size:12px;box-shadow:0 12px 30px rgba(0,0,0,.3)}
 .toast button{border:0;background:none;color:var(--gold);font-weight:900;font-size:12px;cursor:pointer}
 .fade-enter-active,.fade-leave-active{transition:opacity .22s,transform .22s}
 .fade-enter-from,.fade-leave-to{opacity:0;transform:translateY(10px)}
@@ -429,7 +429,7 @@ function sUp(){if(sheetY.value>120)closeDetail();sheetY.value=0;dragY.value=null
 .slist{list-style:none;margin:12px 0 4px;padding:0;display:flex;flex-direction:column;gap:7px}
 .slist li{display:flex;gap:8px;align-items:flex-start;font-size:11.5px;color:var(--mute);line-height:1.4}
 .slist li :deep(svg){flex:0 0 auto;margin-top:1px;color:var(--a1)}
-.sact{flex:0 0 auto;display:flex;gap:8px;align-items:center;padding:11px 14px calc(12px + env(safe-area-inset-bottom));border-top:1px solid var(--line);background:var(--bg)}
+.sact{flex:0 0 auto;display:flex;gap:8px;align-items:center;padding: 11px clamp(12px, 4vw, 32px) calc(12px + env(safe-area-inset-bottom));border-top:1px solid var(--line);background:var(--bg)}
 .sico{width:44px;height:44px;flex:0 0 auto;display:grid;place-items:center;border:1px solid var(--line);border-radius:13px;background:var(--surf);color:var(--ink);cursor:pointer}
 .sico.on{background:linear-gradient(135deg,var(--gold),var(--a2));color:#fff;border-color:transparent}
 .sbuy{flex:1;border:0;border-radius:13px;padding:14px;font-size:13.5px;font-weight:900;color:var(--on);background:linear-gradient(135deg,var(--a1),var(--a2));cursor:pointer}
