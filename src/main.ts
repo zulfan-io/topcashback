@@ -29,3 +29,4 @@ export const createApp = ViteSSG(
   },
 )
 // force redeploy 1794370194
+import './assets/offside-guard.css';
