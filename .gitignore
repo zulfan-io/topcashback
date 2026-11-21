@@ -30,3 +30,6 @@ at_cookie.txt
 *.bak.*
 tiktok_p1.json
 *.har
+resp_*.json
+raw_products.json
+enrich.sql
