@@ -52,7 +52,7 @@ const shownPromo=computed(()=>{const t=q.value.trim().toLowerCase();return promo
 <template>
 <main class="mp">
   <header class="bar">
-    <button class="ib" @click="router.push('/')" aria-label="Kembali"><Icon name="back" :size="18"/></button>
+    
     <label class="sb"><Icon name="search" :size="15"/><input v-model="q" type="search" :placeholder="'Cari di '+meta.name+'…'" aria-label="Cari"/></label>
     <button class="ib" @click="router.push('/akun')" aria-label="Akun"><Icon name="users" :size="18"/></button>
   </header>

@@ -21,20 +21,19 @@ const out = computed(() => (props.product.stock || 0) <= 0)
 <template>
   <article class="thin" @click="emit('select', props.product)">
     <div class="ph">
-      <img v-if="props.product.image" :src="props.product.image" :alt="props.product.name" />
+      <span class="pw"><img v-if="props.product.image" :src="props.product.image" :alt="props.product.name" /><span class="fab-row"><button class="fab" @click.stop="emit('love', props.product)">&#9825; {{ loveCount || 0 }}</button><button class="fab" @click.stop="emit('share', props.product)">&#8618; {{ shareCount || 0 }}</button></span></span>
       <img v-else :src="'https://picsum.photos/seed/shoper-' + props.product.id + '/400/400'" alt="" loading="lazy" />
-      <span v-if="out" class="badge">Habis</span>
+      
     </div>
     <div class="body">
       <h3 class="nm">{{ props.product.name }}</h3>
       <p class="pr">{{ priceText }}</p>
       <div class="mt">
-        <span class="rt">{{ (props.product.rating || 0).toFixed(1) }}</span>
+        
         <span class="sd">{{ soldText }} terjual</span>
       </div>
       <div class="act">
-        <button class="act-b" @click.stop="emit('love', props.product)">&#9825; {{ loveCount || 0 }}</button>
-        <button class="act-b" @click.stop="emit('share', props.product)">&#8618; {{ shareCount || 0 }}</button>
+
       </div>
     </div>
   </article>
@@ -56,5 +55,11 @@ const out = computed(() => (props.product.stock || 0) <= 0)
 .act { display: flex; gap: 8px; margin-top: 6px; }
 .act-b { flex: 1; border: 1px solid #eee; background: #fafafa; border-radius: 8px; padding: 4px 0; font-size: 11px; color: #666; cursor: pointer; transition: background .15s, color .15s; }
 .act-b:active { background: #FFE9DF; color: #FF7A45; }
+
+.pw{position:relative;display:block;}
+.pw img{width:100%;display:block;border-radius:10px;}
+.fab-row{position:absolute;top:8px;right:8px;display:flex;gap:6px;z-index:3;}
+.fab{width:34px;height:34px;border-radius:50%;border:1px solid rgba(0,0,0,.06);background:rgba(255,255,255,.9);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);box-shadow:0 2px 8px rgba(0,0,0,.15);display:grid;place-items:center;font-size:15px;font-weight:900;color:#1a1a1a;-webkit-text-stroke:.9px currentColor;cursor:pointer;padding:0;}
+.fab:active{transform:scale(.92);}
 </style>
 

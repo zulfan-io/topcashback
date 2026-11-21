@@ -74,7 +74,7 @@ onBeforeUnmount(() => { if (io) io.disconnect() })
   <div class="lst">
     <header class="lhead">
       <button class="back" @click="router.back()">Kembali</button>
-      <span class="lttl">Katalog</span>
+      
     </header>
     <main class="lgrid">
       <CProductCardThin v-for="p in items" :key="p.id" :product="p" @select="onSelect" @love="onLove" @share="onShare" :love-count="loveCounts[p.id] || 0" :share-count="shareCounts[p.id] || 0" />
