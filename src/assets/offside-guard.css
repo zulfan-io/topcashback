@@ -1,0 +1,9 @@
+/* root clip: bunuh ruang hitam (toast/motion/loading gak bisa bocor) */
+html,body{overflow-x:clip;max-width:100%;}
+#__nuxt,main,.dual{max-width:100%;overflow-x:clip;}
+/* min-content grid gak boleh dibengkakin media/teks */
+img,video,svg,canvas{max-width:100%;height:auto;}
+.card,.pc,.dc,.grid,.nm,.pr,.st{min-width:0;}
+.nm,.pr,.st,.discount,.go{overflow-wrap:anywhere;}
+/* marquee/banner clip sendiri biar nowrap-nya gak tumpah */
+[class*="marquee"],[class*="mq-"],[class*="banner"]{overflow-x:clip;}

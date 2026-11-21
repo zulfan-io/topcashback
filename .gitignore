@@ -33,3 +33,9 @@ tiktok_p1.json
 resp_*.json
 raw_products.json
 enrich.sql
+raw_har.json
+review_data.txt
+enrich_tiktok.sql
+enrich_tokopedia.sql
+raw_live.json
+enrich_final.txt
