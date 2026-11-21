@@ -43,10 +43,10 @@ function open(r){window.open(r.url,'_blank','noopener')}
 <style scoped>
 .rf{max-width:1280px;margin:0 auto;padding:6px 0 20px}
 .rf-s{margin:0 0 16px}
-.rf-s header{display:flex;justify-content:space-between;align-items:center;padding: 0 clamp(12px, 4vw, 32px) 8px}
+.rf-s header{display:flex;justify-content:space-between;align-items:center;padding:0 14px 8px}
 .rf-s h3{margin:0;font-size:15px;font-weight:900;color:#1a1a1a}
 .rf-more{display:flex;gap:3px;align-items:center;border:0;background:none;color:#FF4D3D;font-size:11px;font-weight:800;cursor:pointer}
-.rf-row{display:flex;gap:10px;overflow-x:auto;padding: 0 clamp(12px, 4vw, 32px) 6px;scroll-snap-type:x proximity;scrollbar-width:thin;scrollbar-color:#FF7A45 #f3e9dcscroll-padding-inline: clamp(12px, 4vw, 32px); -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 12px, #000 calc(100% - 12px), transparent 100%); mask-image: linear-gradient(90deg, transparent 0, #000 12px, #000 calc(100% - 12px), transparent 100%); }
+.rf-row{display:flex;gap:10px;overflow-x:auto;padding:0 14px 6px;scroll-snap-type:x proximity;scrollbar-width:thin;scrollbar-color:#FF7A45 #f3e9dc}
 .rf-row::-webkit-scrollbar{height:5px}
 .rf-row::-webkit-scrollbar-thumb{background:linear-gradient(90deg,#FF7A45,#FF4D3D);border-radius:99px}
 .rf-c{flex:0 0 132px;scroll-snap-align:start;position:relative;border:1px solid #eadfd0;background:#fff;border-radius:14px;padding:7px;cursor:pointer;text-align:left}

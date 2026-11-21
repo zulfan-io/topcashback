@@ -388,5 +388,5 @@ onMounted(() => {
 <style>
 html,body{margin:0;padding:0;}
 .dual{max-width:1280px;margin-left:auto;margin-right:auto;max-width:1280px !important;margin:0 auto !important;padding:0 0 76px !important;background:#FFF7EC !important;}
-
+@media (max-width:767px){.dual{max-width:none !important;margin:0 !important;padding:0 0 76px !important;}}
 </style>
