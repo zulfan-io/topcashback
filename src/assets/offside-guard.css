@@ -6,7 +6,17 @@ img,video,svg,canvas{max-width:100%;height:auto;}
 .card,.pc,.dc,.grid,.nm,.pr,.st{min-width:0;}
 .nm,.pr,.st,.discount,.go{overflow-wrap:anywhere;}
 /* marquee/banner clip sendiri biar nowrap-nya gak tumpah */
-[class*="marquee"],[class*="mq-"],[class*="banner"]{overflow-x:clip;}
+/* clip hanya untuk marquee di luar komponen game/travel/trust-wall */
+:not(.trust-wall):not(.th):not(.gh):not(.game-hot) > [class*="marquee"],
+:not(.trust-wall):not(.th):not(.gh):not(.game-hot) > [class*="mq-"],
+:not(.trust-wall):not(.th):not(.gh):not(.game-hot) > [class*="banner"]{overflow-x:clip;}
+
+/* whitelist khusus buat travel/game/trust-wall: biar marquee & link bebas clip */
+.th, .th *, .gh, .gh *, .game-hot, .game-hot *, .trust-wall, .trust-wall *,
+[class*="gold-link"], [class*="gold-link"] *, [class*="link-emas"], [class*="link-emas"] * {
+  overflow-x: visible !important;
+  overflow: visible !important;
+}
 
 
 /* === FLOATING FAB untuk tombol Love/Share (CSS only, tanpa ubah HTML) === */
